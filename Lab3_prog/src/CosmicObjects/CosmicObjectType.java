@@ -7,5 +7,7 @@ public enum CosmicObjectType {
     GALAXY,
     SATELLITE,
     COMET,
-    NEBULA
+    NEBULA,
+    СONSTELLATION,
+    FIRMAMENT
 }

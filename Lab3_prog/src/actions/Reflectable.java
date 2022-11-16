@@ -1,5 +1,5 @@
 package actions;
 
 public interface Reflectable {
-    void toShine(int otherLight);
+    String reflect(int otherLight);
 }

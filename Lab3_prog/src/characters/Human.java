@@ -1,5 +1,7 @@
 package characters;
 import CosmicObjects.*;
+import actions.Viewable;
+
 public abstract class Human {
     private String name;
     private String id;
@@ -16,6 +18,26 @@ public abstract class Human {
         return this.name;
     }
 
+    public String getLocation(){
+        return this.location.getViewPoint();
+    }
+
+    public void see(Viewable target, CosmicObject viewPoint){
+        System.out.println(this.name + " увидел " + target.getView(viewPoint));
+    }
+
+    public void read(String text){
+        System.out.println(this.name + " прочитал " + text);
+    }
+
+    public void write(String text){
+        System.out.println(this.name + " написал " + text);
+    }
+
+    public void draw(String figure){
+        System.out.println(this.name + " нарисовал " + figure);
+    }
+
     @Override
     public int hashCode() {
         return (id != null ? id.hashCode() : 0);
@@ -27,6 +49,5 @@ public abstract class Human {
                 + "Имя персонажа = '" + this.getName() + '\''
                 + " Айдишник = " + Integer.toString(this.hashCode() - 48)
                 + '}';
-
     }
 }

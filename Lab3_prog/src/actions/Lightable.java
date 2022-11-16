@@ -1,5 +1,5 @@
 package actions;
 
 public interface Lightable {
-    int light();
+    String light(int light);
 }

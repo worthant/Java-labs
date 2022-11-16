@@ -1,43 +1,66 @@
 package CosmicObjects;
 
 public abstract class CosmicObject {
-    private int btightness;
-    private String name;
-    private double radius;
-    private double mass;
-    private int id;
-    private CosmicObjectType type;
+    protected int brightness;
+    protected String name;
+    protected double radius;
+    protected double mass;
+    protected String id;
+    protected CosmicObjectType type;
+    protected String time;
 
-    public CosmicObject(String name, double radius, double mass, CosmicObjectType type, int id, int brightness) {
-        this.btightness = brightness;
+    public CosmicObject(String name, CosmicObjectType type){
+        this.name = name;
+        this.type = type;
+    }
+
+    public CosmicObject(String name, double radius, double mass, CosmicObjectType type, String id, int brightness, String time) {
+        this.brightness = brightness;
         this.name = name;
         this.radius = radius;
         this.mass = mass;
         this.type = type;
         this.id = id;
+        this.time = time;
+    }
+
+    public String getViewPoint(){
+        return this.name;
+    }
+
+    public String getTime(){
+        return this.time;
+    }
+
+    public String setTime(String time){
+        return this.time = time;
     }
 
     public String getName(){
         return this.name;
     }
 
-    public double getRadius(){
-        return this.radius;
+    public void getRadius(){
+        System.out.println(this.radius);
     }
 
-    public double getMass(){
-        return this.mass;
+    public void getMass(){
+        System.out.println(this.mass);
     }
 
-    public int getId(){
-        return this.id;
+    public void getId(){
+        System.out.println(this.id);
     }
 
-    public CosmicObjectType getType(){
-        return this.type;
+    public void getType(){
+        System.out.println(this.type);
     }
 
-    public int getBrightness(){
-        return this.btightness;
+    public String getBrightness(){
+        if (this.brightness < 2) {
+            return "темно";
+        } else {
+            return "светло";
+        }
     }
 }

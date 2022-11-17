@@ -1,20 +1,24 @@
 package CosmicObjects;
 
-public abstract class CosmicObject {
-    protected int brightness;
-    protected String name;
-    protected double radius;
-    protected double mass;
-    protected String id;
-    protected CosmicObjectType type;
-    protected String time;
+import actions.Lightable;
+import actions.Reflectable;
+import characters.Human;
+
+public abstract class CosmicObject implements Lightable, Reflectable {
+    private int brightness;
+    private String name;
+    private double radius;
+    private double mass;
+    private int id;
+    private CosmicObjectType type;
+    private String time;
 
     public CosmicObject(String name, CosmicObjectType type){
         this.name = name;
         this.type = type;
     }
 
-    public CosmicObject(String name, double radius, double mass, CosmicObjectType type, String id, int brightness, String time) {
+    public CosmicObject(String name, double radius, double mass, CosmicObjectType type, int id, int brightness, String time) {
         this.brightness = brightness;
         this.name = name;
         this.radius = radius;
@@ -40,6 +44,10 @@ public abstract class CosmicObject {
         return this.name;
     }
 
+    public String light(){ return " ";}
+
+    public String reflect(){ return " ";}
+
     public void getRadius(){
         System.out.println(this.radius);
     }
@@ -62,5 +70,32 @@ public abstract class CosmicObject {
         } else {
             return "светло";
         }
+    }
+    @Override
+    public int hashCode() {
+        return 1000 * this.name.hashCode() - 7;
+    }
+
+    @Override
+    public String toString() {
+        return "Person: {"
+                + "Parson name = '" + this.getName() + '\''
+                + " Айдишник = " + this.hashCode()
+                + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        if (!(o instanceof CosmicObject)) {
+            return false;
+        }
+        CosmicObject c = (CosmicObject) o;
+        return (id == c.id);
     }
 }

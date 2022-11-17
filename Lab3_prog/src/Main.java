@@ -1,24 +1,21 @@
 import CosmicObjects.*;
 import Sky.Sky;
-import characters.Fuksy;
-import characters.ProfessorZvizdochkin;
-import characters.Seledochka;
-import characters.Znaika;
+import characters.*;
 
 public class Main {
     public static void main(String[] args) {
         // создаю космические объекты
-        Earth earth = new Earth("Земля", "1", 2, 6371, 5.97*(10^6), "day");
-        Moon moon = new Moon("Луна", "2", 1, 1737.4, 7.36*(10^4), "day");
-        Sun sun = new Sun("Солнце", "3", 50, 696340, 1.99*(10^12), "day");
-        Firmament firmanent = new Firmament("Небесный свод");
-        Constellations constellations = new Constellations("Создвездие");
+        CosmicObject earth = new Earth("Земля", 1, 2, 6371, 5.97*(10^6), "day");
+        CosmicObject moon = new Moon("Луна", 2, 1, 1737.4, 7.36*(10^4), "day");
+        CosmicObject sun = new Sun("Солнце", 3, 50, 696340, 1.99*(10^12), "day");
+        CosmicObject firmanent = new Firmament("Небесный свод");
+        CosmicObject constellations = new Constellations("Создвездие");
 
         // создаю персонажей
-        Fuksy per1 = new Fuksy("Фукки", "4", earth);
-        ProfessorZvizdochkin per2 = new ProfessorZvizdochkin("ПрофессорЗвёздочкин", "5", earth);
-        Seledochka per3 = new Seledochka("Селёдочка", "6", earth);
-        Znaika per4 = new Znaika("Знайка", "7", earth);
+        Human per1 = new Fuksy("Фукки", 4, earth);
+        Human per2 = new ProfessorZvizdochkin("ПрофессорЗвёздочкин", 5, earth);
+        Human per3 = new Seledochka("Селёдочка", 6, earth);
+        Human per4 = new Znaika("Знайка", 7, earth);
 
         // демонстрация функционала моего микромирка
         System.out.println();

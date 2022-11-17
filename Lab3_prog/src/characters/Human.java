@@ -1,14 +1,15 @@
 package characters;
+
 import CosmicObjects.*;
 import actions.Viewable;
 
 public abstract class Human {
     private String name;
-    private String id;
+    private int id;
     private CosmicObject location;
 
 
-    public Human(String name, String id, CosmicObject location) {
+    public Human(String name, int id, CosmicObject location) {
         this.name = name;
         this.id = id;
         this.location = location;
@@ -18,36 +19,36 @@ public abstract class Human {
         return this.name;
     }
 
-    public String getLocation(){
+    public String getLocation() {
         return this.location.getViewPoint();
     }
 
-    public void see(Viewable target, CosmicObject viewPoint){
+    public void see(Viewable target, CosmicObject viewPoint) {
         System.out.println(this.name + " увидел " + target.getView(viewPoint));
     }
 
-    public void read(String text){
+    public void read(String text) {
         System.out.println(this.name + " прочитал " + text);
     }
 
-    public void write(String text){
+    public void write(String text) {
         System.out.println(this.name + " написал " + text);
     }
 
-    public void draw(String figure){
+    public void draw(String figure) {
         System.out.println(this.name + " нарисовал " + figure);
     }
 
-      @Override
+    @Override
     public int hashCode() {
-        return (id != null ? id.hashCode() : 0);
+        return 1000 * this.name.hashCode() - 7;
     }
 
     @Override
     public String toString() {
         return "Person: {"
                 + "Parson name = '" + this.getName() + '\''
-                + " Айдишник = " + Integer.toString(this.hashCode())
+                + " Айдишник = " + this.hashCode()
                 + '}';
     }
 
@@ -55,6 +56,9 @@ public abstract class Human {
     public boolean equals(Object o) {
         if (o == this) {
             return true;
+        }
+        if (o == null) {
+            return false;
         }
         if (!(o instanceof Human)) {
             return false;

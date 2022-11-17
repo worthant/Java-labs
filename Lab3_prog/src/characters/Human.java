@@ -38,16 +38,28 @@ public abstract class Human {
         System.out.println(this.name + " нарисовал " + figure);
     }
 
-    @Override
+      @Override
     public int hashCode() {
         return (id != null ? id.hashCode() : 0);
     }
 
     @Override
     public String toString() {
-        return "Character Data: {"
-                + "Имя персонажа = '" + this.getName() + '\''
-                + " Айдишник = " + Integer.toString(this.hashCode() - 48)
+        return "Person: {"
+                + "Parson name = '" + this.getName() + '\''
+                + " Айдишник = " + Integer.toString(this.hashCode())
                 + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Human)) {
+            return false;
+        }
+        Human c = (Human) o;
+        return (id == c.id);
     }
 }

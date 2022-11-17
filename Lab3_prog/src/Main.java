@@ -50,7 +50,12 @@ public class Main {
         per2.see(new Sky(), constellations);
         per3.see(new Sky(), constellations);
 
-        //
+        // проверка toString
+        System.out.println();
+        System.out.println(per1);
+        System.out.println(per2);
+        System.out.println(per3);
+        System.out.println(per4);
 
     }
 }

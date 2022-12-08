@@ -1,0 +1,358 @@
+@startuml Classes Model
+
+enum Properties
+enum Liquids
+enum Meals
+
+abstract class Positioned {
+    # Point pos
+    + Point getPosition() 
+    + void setPosition() 
+}
+
+class IncorectSize extends Exception{}
+
+class IncorectSituation extends RuntimeException{}
+
+Creature -- Properties
+abstract class Creature extends Positioned implements Hearable, Energed, Silent, Standing, Descriptable, Runnable{
+    # String name
+    # int creatureSize
+    # int energy
+    # Properties personality
+
+    + Properties[] getProperties()
+    + String stand()
+    + String describe()
+    + void setCreatureSize(int) throws IncorectSize
+    + int getCreatureSize()
+    + void setEnergy(int)
+    + String sayNothing()
+    + String say()  
+    + int getEnergy()
+    + String getName() 
+    + void setName() 
+    + void setProperties()
+    + void eat()
+    + void run(int, int)
+    + String hear(String) 
+}
+
+abstract class Human extends Creature{}
+
+abstract class Animal extends Creature{}
+
+abstract class Location extends Positioned implements Descriptable{
+    # String name
+    # Point pos2
+
+    + String getName()
+    + String describe()
+    + Point getPosition2()
+    + boolean checkConsist()
+}
+
+abstract class Thing   {
+    # Creature owner
+    # String name
+
+    + void setName()
+    + Creature getOwner()
+    + String describe()
+
+}
+
+' Meal -- Properties
+' abstract class Meal implements Descriptable{
+'     # String name
+'     # int kkal
+'     # Properties[] characteristics
+
+'     + int getKkal
+'     + String getName
+'     + Properties[] getProperties()
+' }
+
+interface Pourable {
+    + String pour(Liquids, Thing) 
+}
+
+interface Swallowable {
+    + void swallow(Liquids)
+}
+
+interface Pushable {
+    + void push(Positioned)
+}
+
+interface Flipable {
+    + String flip(Thing, int)
+}
+
+interface Throwable {
+    + void throwing(Thing, Creature)
+}
+
+
+interface Explainable {
+    + String explain(Creature, String)
+}
+
+' interface Persuadable {
+'     + String persuade(Creature)
+' }
+
+interface Beepable {
+    + void beep()
+}
+
+interface Hearable {
+    + String hear(String)
+}
+
+interface Convertable {
+    + void convert(Properties[])
+}
+
+interface Growlable {
+    + String growl()
+}
+
+interface Energed{
+    + relax(int duration)
+    + work(int duration)
+    + boolean isTired()
+    
+}
+
+interface Runnable {
+    + void run(int, int)
+}
+
+interface Descriptable {
+    + String describe()
+}
+
+interface Silent {
+    + String sayNothing()
+}
+
+interface Standing {
+    + String stand()
+}
+
+interface Waiting {
+    + String waiting(int, Creature)
+}
+
+interface Snortable {
+    + void snort()
+}
+
+class Point {
+    # int x
+    # int y
+    # int z
+    + int getX()
+    + int getY()
+    + int getZ()
+}
+
+Puh -- Properties
+class Puh extends Creature implements Waiting {
+    + String say()
+    + void relax(int)
+    + void work(int)
+    + boolean isTired()
+    + String waiting(int, Creature)
+}
+
+Pyatachok -- Properties
+class Pyatachok extends Creature implements Waiting, Beepable{
+    # boolean confidance
+
+    + void work(int)
+    + boolean isTired()
+    + String waiting(int, Creature)
+    + String say()
+    + void relax(int)
+    + void beep()
+    
+
+
+    ' hear(String sound) {
+    '     if (this.confidance) {
+    '         return "I don`t hear anythiong"
+    '     }
+    '     !return "I hear " + sound    
+    ' }
+
+}
+
+Rabbit -- Properties
+class Rabbit extends Animal implements Snortable{
+    + void work(int)
+    + boolean isTired()
+    + String say()
+    + void relax(int)
+    + String snort()
+}
+
+Ru -- Properties
+class Ru extends Animal implements Pushable, Flipable, Explainable, Swallowable, Throwable{
+
+    + void swallow(Liquids)
+    + void push(Creature)
+    + void throwing(Thing, Creature)
+    + String flip(Thing, int)
+    + Explainable(Creature, String)
+    + void work(int)
+    + boolean isTired()
+    + void relax(int)
+    + String say()
+
+}
+
+Tigra -- Properties
+class Tigra extends Creature implements Pushable, Flipable, Explainable, Swallowable, Convertable, Growlable, Throwable{
+
+    + String growl()
+    + void swallow(Liquids)
+    + void push(Creature)
+    + void throwing(Thing, Creature)
+    + String flip(Thing, int)
+    + Explainable(Creature, String)
+    + void convert(Properties[])
+    + void work(int)
+    + boolean isTired() throws IncorectSituation
+    + void relax(int)
+    + String say()
+
+}
+
+Kenga -- Properties
+class Kenga extends Creature implements Pourable, Explainable {
+
+    + Explainable(Creature, String)
+    + String pour(Liquids, Thing) 
+    + String cook(Meals)
+    + void work(int)
+    + boolean isTired()
+    + String say()
+    + void relax(int)
+}
+
+KrisRobin -- Properties
+class KrisRobin extends Human {
+
+    + void work(int)
+    + boolean isTired()
+    + String say()
+    + void relax(int)
+}
+
+class Pit extends Location implements Runnable{
+    + boolean checkConsist(Physical physical)
+    + String describe()
+    + run()
+}
+
+class Fog extends Location{
+    + boolean checkConsist(Physical physical)
+    + String describe()
+    
+}
+
+class House extends Location{
+
+    # String material
+
+    + boolean checkConsist(Physical physical)
+    + String describe()
+    + String getMaterial
+
+
+}
+
+class Door extends House implements Descriptable{
+    # String material
+
+    + String describe()
+}
+
+class Forest extends Location {
+    # Tree[] trees
+
+    + Tree[] getTrees
+    + boolean checkConsist(Physical physical)
+    + String describe()
+    
+}
+
+Forest -- Tree
+class Tree extends Positioned {
+    # String name
+
+    + String getName()
+}
+
+class Pot extends Thing implements Pushable{
+
+    + void push(Positioned)
+
+    ' push(Positoned obj) {
+    '     if (obj instanceof Pot) {
+    '         return "Bonk"
+    '     } 
+    '     return "Chponk"
+    ' }
+}
+
+class Chair extends Thing{
+    # Creature owner
+    # String name
+
+    + void setName()
+    + Creature getOwner()
+    + String describe()
+}
+
+class Cone extends Thing{
+
+    # Creature owner
+    # String name
+
+    + void setName()
+    + Creature getOwner()
+    + String describe()
+}
+
+class Basket extends Thing{
+
+    # Creature owner
+    # String name
+
+    + void setName()
+    + Creature getOwner()
+    + String describe()
+}
+
+
+class Cup extends Thing{
+
+    # Creature owner
+    # String name
+
+    + void setName()
+    + Creature getOwner()
+    + String describe()
+}
+
+' class Water extends Meal {
+'     + int getKkal
+'     + String getName
+'     + Properties[] getProperties()
+' }
+
+
+

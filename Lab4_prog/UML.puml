@@ -254,65 +254,26 @@ together {
     class Seledochka
 }
 
+
 /'--------------------------------
 |            Tricolor            |
 --------------------------------'/
 
-class Color {
+
+enum Color {
     - String name
+    + Color(String name)
     + getName()
-}
-
-Color -left- Black
-Color - White
-Color -left- Blue 
-Color - Red
-Color -down- LightCherry
-Color -down- Purple
-Color -down- DarkPurple
-Color -right- EmeraldGreen 
-Color -left- Green 
-Color -down- BrightBlue
-
-class Black {
-    + Black()
-}
-
-class White {
-    + White()
-}
-
-class Blue {
-    + Blue()
-}
-
-class Red {
-    + Red()
-    + fightWith()
-}
-
-class LightCherry {
-    + LightCherry()
-}
-
-class Purple {
-    + Purple()
-}
-
-class DarkPurple {
-    + DarkPurple()
-}
-
-class EmeraldGreen {
-    + EmeraldGreen()
-}
-
-class Green {
-    + Green()
-}
-
-class BrightBlue {
-    + BrightBlue()
+    BLACK
+    WHITE
+    BLUE
+    RED
+    LIGHTCHERRY
+    PURPLE
+    DARKPURPLE
+    EMERALDGREEN 
+    GREEN 
+    BRIGHTBLUE 
 }
 
 

@@ -153,6 +153,19 @@ An enum is a kind of class and an annotation is a kind of interface.
 Every array also belongs to a class that is reflected as a Class object that is shared by all arrays with the same element type and number of dimensions. 
 The primitive Java types (boolean, byte, char, short, int, long, float, and double), and the keyword void are also represented as Class objects. 
 
+Борис Дворкин, [04.01.2023 12:48]
+А также,
+В третьих, если говорить о различии в нашей ситуации, 
+с точки зрения JVM, для лямбды не создаётся дополнительного .class файла, как это происходит для анонимного класса, поэтому оно работает быстрее
+
+Борис Дворкин, [04.01.2023 12:48]
+соответственно, анонимный класс сначала компилируется, а потом создается его экземпляр
+
+Борис Дворкин, [04.01.2023 12:48]
+а лямбда-выражение создается на этапе выполнения с помощью механизма  invokedynamic и класса Lambda Metafactory
+
+то есть оно может сразу обернуться в объект без обычной загрузки и верификации класса
+
 1) Разновидности вложенных классов java (Статические вложенные, внутренние, локальные, анонимные)
 2) Exceptions (checked exception, error exception, runtime exception) - деление на checked/unchecked
 3) reflection API

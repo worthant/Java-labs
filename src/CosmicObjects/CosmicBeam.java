@@ -18,9 +18,6 @@ public class CosmicBeam extends CosmicObject implements Affect {
         return this.getName() + " светит с силой " + light;
     }
 
-    //TODO
-    // Check that affect logic, it could be incorrect
-
     public String affect(int affect, CosmicObject surface){ // это метод, внутри которого будет локальный класс
         class GiveSpecialAbility {       // это сам локальный класс
             private int affect;

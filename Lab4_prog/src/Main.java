@@ -1,6 +1,8 @@
 import Colors.Color;
 import CosmicObjects.*;
 import Exceptions.SoundException;
+import Exceptions.UncheckedIOException;
+import Exceptions.WeightException;
 import Humans.Astronauts;
 import Humans.Human;
 import Instruments.*;
@@ -12,6 +14,7 @@ public class Main {
     public static void main(String[] args) {
 
         /** Generating my damn world */
+
         try {
             System.out.println("\nGenerating Universe...\n");
             // cosmic objects (huge!)
@@ -136,10 +139,20 @@ public class Main {
             System.out.println(geoHammer.bang(mountains));
 
             // exception!!!
+            spaceSuit.setWeight(0);
             moon.sound();
+
+
 
         } catch (SoundException e) {
             System.err.println(e.getMessage());
+        } catch (WeightException e) {
+            try {
+                System.err.println(e.getMessage());
+                throw new UncheckedIOException(e);
+            } catch (UncheckedIOException ex) {
+                System.err.println(ex.getMessage());
+            }
         } finally {
             System.out.println("\nSound exception works, holy moly what a disaster could've happened\n");
         }

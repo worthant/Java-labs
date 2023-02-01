@@ -1,6 +1,5 @@
 package Instruments;
 
-import CosmicObjects.CosmicObject;
 import PlanetObjects.PlanetObject;
 
 /** This class really helps mining some Ore. */

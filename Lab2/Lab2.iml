@@ -7,7 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Lab2_prog" level="project" />
     <orderEntry type="library" name="Pokemon" level="project" />
+    <orderEntry type="library" name="Lab2_prog" level="project" />
   </component>
 </module>

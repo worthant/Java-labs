@@ -25,7 +25,7 @@ public class Human implements Comparable<Human> {
         }
         return 0;
     }
-    
+
     @Override
     public String toString() {
         return "Human: " +

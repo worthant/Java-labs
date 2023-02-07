@@ -27,12 +27,14 @@ public class Coordinates {
         this.y = y;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Coordinates coordinates = (Coordinates) o;
-        return coordinates.x == x && Double.compare(coordinates.y, y) == 0;
+    public int compareTo(Coordinates o) {
+        if (o == null) {
+            return 1;
+        }
+        int result = Integer.compare(this.x, o.x);
+        if (result == 0)
+            return Double.compare(this.y, o.y);
+        return result;
     }
 
     @Override

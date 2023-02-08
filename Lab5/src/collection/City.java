@@ -2,7 +2,7 @@ package collection;
 
 import java.util.Date;
 
-public class City implements Comparable<City>{
+public class City implements Comparable<City> {
     private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
@@ -117,16 +117,34 @@ public class City implements Comparable<City>{
         this.governor = governor;
     }
 
-    // TODO: Write compareTo method for all other collections to be capable of coding compareTo method in City class
-
-    // TODO: Finish compareTo method
-
     @Override
     public int compareTo(City o) {
         int result = this.name.compareTo(o.name);
         if (result == 0)
+            result = this.area - o.area;
+        if (result == 0)
             result = this.coordinates.compareTo(o.coordinates);
-        return 0;
+        if (result == 0)
+            result = this.population.compareTo(o.population);
+        if (result == 0)
+            result = this.creationDate.compareTo(o.creationDate);
+        if (result == 0)
+            result = this.standardOfLiving.compareTo(o.standardOfLiving);
+        if (result == 0)
+            result = this.government.compareTo(o.government);
+        if (result == 0) {
+            if (climate != null)
+                result = this.climate.compareTo(o.climate);
+            else if (o.climate != null)
+                result = -o.climate.compareTo(this.climate);
+        }
+        if (result == 0) {
+            if (governor != null)
+                result = this.governor.compareTo(o.governor);
+            else if (o.governor != null)
+                result = -o.governor.compareTo(this.governor);
+        }
+        return result;
     }
 
     // TODO: Write proper toString method

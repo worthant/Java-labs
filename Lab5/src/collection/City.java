@@ -147,5 +147,25 @@ public class City implements Comparable<City> {
         return result;
     }
 
-    // TODO: Write proper toString method
+    @Override
+    public String toString() {
+        String result;
+        result = "City: " +
+                "id = " + id +
+                ", name = '" + name + "'" +
+                ", coordinates = " + coordinates.toString() +
+                ", creationDate = " + creationDate.toString() +
+                ", area = " + area +
+                ", population = " + population +
+                ", metersAboveSeaLevel = " + metersAboveSeaLevel +
+                ", government = " + government +
+                ", standardOfLiving = " + standardOfLiving;
+
+        if (climate == null || governor == null) {
+            result += ", climate = null" + ", governor = null";
+        } else {
+            result += ", climate = " + climate + ", governor = " + governor;
+        }
+        return result;
+    }
 }

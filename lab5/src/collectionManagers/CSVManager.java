@@ -4,13 +4,14 @@ import collection.City.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.TreeSet;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 
 
@@ -43,7 +44,7 @@ public class CSVManager implements Managers{
 //                    if (!row[11].isEmpty()) {
 //                        Human governor = new Human(row[11].trim());
 //                    }
-                Human governor = new Human(fields.get("governorName"));
+                Human governor = new Human(fields.get("governor"));
                 cities.add(new City(id, name, coordinates, creationDate, area, population, metersAboveSeaLevel, climate, government, standardOfLiving, governor));
             }
         } catch (FileNotFoundException | NumberFormatException e) {
@@ -53,6 +54,29 @@ public class CSVManager implements Managers{
         }
 
         return cities;
+    }
+
+    @Override
+    public void write(String pathToDataFile, TreeSet<City> cities) {
+        try {
+            FileWriter fileWriter = new FileWriter(pathToDataFile);
+            CSVPrinter csvPrinter = new CSVPrinter(fileWriter, CSVFormat.DEFAULT
+                    .withHeader("id", "name", "x", "y",
+                            "area", "population", "metersAboveSeaLevel", "climate", "government",
+                            "standardOfLiving", "governor"));
+
+            for (City city : cities) {
+                csvPrinter.printRecord(city.getId(), city.getName(), city.getCoordinates().getX(),
+                        city.getCoordinates().getY(), city.getCreationDate(), city.getArea(),
+                        city.getPopulation(), city.getMetersAboveSeaLevel(), city.getClimate(),
+                        city.getGovernment(), city.getStandardOfLiving(), city.getGovernor());
+            }
+
+            csvPrinter.flush();
+            csvPrinter.close();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
     }
 }
 

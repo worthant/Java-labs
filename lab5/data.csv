@@ -1,3 +1,3 @@
-id,name,x,y,area,population,metersAboveSeaLevel,climate,government,standardOfLiving,governorName
-1,Sevastopol,16,15,450,1345768,41,STEPPE,ANARCHY,NIGHTMARE,Artem
-234,Moscow,2143,4356,2135,28376412,650,TROPICAL_SAVANNA,DEMARCHY,VERY_HIGH,Vasiliy
+id,name,x,y,area,population,metersAboveSeaLevel,climate,government,standardOfLiving,governor
+234,Moscow,2143,4356.0,2023-02-20,2135,28376412,650.0,TROPICAL_SAVANNA,DEMARCHY,VERY_HIGH,Vasiliy
+1,Sevastopol,16,15.0,2023-02-20,450,1345768,41.0,STEPPE,ANARCHY,NIGHTMARE,Artem

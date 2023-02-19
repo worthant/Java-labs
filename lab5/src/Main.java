@@ -1,4 +1,5 @@
 import collectionManagers.CollectionManager;
+import user.UserManager;
 
 public class Main {
     public static void main(String[] args) {
@@ -7,5 +8,9 @@ public class Main {
         /** load collection using environment key */
         CollectionManager loader = new CollectionManager();
         loader.loadCollection(envKey);
+
+        while (UserManager.isWorking()) {
+            UserManager.requestCommand();
+        }
     }
 }

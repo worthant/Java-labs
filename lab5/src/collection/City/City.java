@@ -7,8 +7,8 @@ public class City implements Comparable<City> {
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
     private java.util.Date creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
-    private int area; //Значение поля должно быть больше 0
-    private Integer population; //Значение поля должно быть больше 0, Поле не может быть null
+    private Integer area; //Значение поля должно быть больше 0
+    private int population; //Значение поля должно быть больше 0, Поле не может быть null
     private Double metersAboveSeaLevel;
     private Climate climate; //Поле может быть null
 
@@ -17,7 +17,7 @@ public class City implements Comparable<City> {
     private StandardOfLiving standardOfLiving; //Поле не может быть null
     private Human governor; //Поле может быть null
 
-    public City(long id, String name, Coordinates coordinates, Date creationDate, int area, Integer population, Double metersAboveSeaLevel, Climate climate, Government government, StandardOfLiving standardOfLiving, Human governor) {
+    public City(long id, String name, Coordinates coordinates, Date creationDate, Integer area, int population, Double metersAboveSeaLevel, Climate climate, Government government, StandardOfLiving standardOfLiving, Human governor) {
         this.id = id;
         this.name = name;
         this.coordinates = coordinates;
@@ -127,7 +127,7 @@ public class City implements Comparable<City> {
         if (result == 0)
             result = this.coordinates.compareTo(o.coordinates);
         if (result == 0)
-            result = this.population.compareTo(o.population);
+            result = Integer.compare(this.population, o.population);
         if (result == 0)
             result = this.creationDate.compareTo(o.creationDate);
         if (result == 0)

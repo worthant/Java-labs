@@ -11,10 +11,10 @@
 - [x] create CollectionManager
 - [x] create Managers interface
 - [x] create .csv file
-- [ ] make `serialization` from TreeSet collection to .csv (for save command)
-  - [ ] create write method in Managers interface
-  - [ ] create write method in CollectionManager
-  - [ ] create write method in CSVManager
+- [x] make `serialization` from TreeSet collection to .csv (for save command)
+  - [x] create write method in Managers interface
+  - [x] create write method in CollectionManager
+  - [x] create write method in CSVManager
 - [x] make `deserialization` from .csv to TreeSet collection (for show and add commands)
   - [x] create read method in Managers interface
   - [x] create read method in CollectionManager
@@ -22,7 +22,9 @@
 
 #  
   
-- [ ] create userManager
+- [x] create userManager
+  - [x] create working workflow
+  - [ ] complete it
   
 #
 
@@ -34,7 +36,7 @@
   - [ ] create update id command
   - [ ] create remove_by_id command
   - [ ] create clear command
-  - [ ] create save command
+  - [x] create save command
   - [ ] create execute_script file_name command
   - [ ] create exit command
   - [ ] create add_if_min command

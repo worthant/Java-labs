@@ -10,6 +10,7 @@
 - [ ] create checking for ^D and other unexpected symbols in std:in
 - [ ] Make sure the  execute_script in execute_script doesn't run indefinitely
 - [ ] make UML diagram using plantUML
+- [ ] generate javadoc for everything
 - [ ] make report in .docx and .pdf
 
 

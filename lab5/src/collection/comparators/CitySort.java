@@ -1,6 +1,6 @@
 package collection.comparators;
 
-import collection.City;
+import collection.City.City;
 
 import java.util.Comparator;
 

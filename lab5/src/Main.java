@@ -1,4 +1,3 @@
-import collection.CollectionManager;
 import collectionManagers.CollectionLoader;
 
 public class Main {

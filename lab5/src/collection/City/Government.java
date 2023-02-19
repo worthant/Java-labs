@@ -1,4 +1,4 @@
-package collection;
+package collection.City;
 
 public enum Government {
     ANARCHY,

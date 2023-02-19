@@ -1,6 +1,6 @@
-package collection;
+package collection.City;
 
-public enum StandartOfLiving {
+public enum StandardOfLiving {
     ULTRA_HIGH,
     VERY_HIGH,
     HIGH,

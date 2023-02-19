@@ -1,6 +1,6 @@
 package collectionManagers;
 
-import collection.City;
+import collection.City.City;
 
 import java.io.IOException;
 import java.util.TreeSet;

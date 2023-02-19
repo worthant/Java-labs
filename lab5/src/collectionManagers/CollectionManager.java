@@ -1,6 +1,6 @@
-package collection;
+package collectionManagers;
 
-import collection.City;
+import collection.City.City;
 
 import java.util.TreeSet;
 

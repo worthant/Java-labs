@@ -1,4 +1,4 @@
-package collection;
+package collection.City;
 
 import java.util.Objects;
 

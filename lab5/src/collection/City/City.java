@@ -1,9 +1,9 @@
-package collection;
+package collection.City;
 
 import java.util.Date;
 
 public class City implements Comparable<City> {
-    private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+    private long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
     private java.util.Date creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
@@ -14,10 +14,10 @@ public class City implements Comparable<City> {
 
     private int height; //Какое-то поле
     private Government government; //Поле не может быть null
-    private StandartOfLiving standardOfLiving; //Поле не может быть null
+    private StandardOfLiving standardOfLiving; //Поле не может быть null
     private Human governor; //Поле может быть null
 
-    public City(int id, String name, Coordinates coordinates, Date creationDate, int area, Integer population, Double metersAboveSeaLevel, Climate climate, Government government, StandartOfLiving standardOfLiving, Human governor) {
+    public City(long id, String name, Coordinates coordinates, Date creationDate, int area, Integer population, Double metersAboveSeaLevel, Climate climate, Government government, StandardOfLiving standardOfLiving, Human governor) {
         this.id = id;
         this.name = name;
         this.coordinates = coordinates;
@@ -31,7 +31,7 @@ public class City implements Comparable<City> {
         this.governor = governor;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -103,11 +103,11 @@ public class City implements Comparable<City> {
         this.government = government;
     }
 
-    public StandartOfLiving getStandardOfLiving() {
+    public StandardOfLiving getStandardOfLiving() {
         return standardOfLiving;
     }
 
-    public void setStandardOfLiving(StandartOfLiving standardOfLiving) {
+    public void setStandardOfLiving(StandardOfLiving standardOfLiving) {
         this.standardOfLiving = standardOfLiving;
     }
 

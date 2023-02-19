@@ -1,12 +1,10 @@
-package collection;
+package collection.City;
 
 public class Human implements Comparable<Human> {
     private String name; //Поле не может быть null, Строка не может быть пустой
-    private String zodiacSign;
 
-    public Human(String name, String zodiacSign) {
+    public Human(String name) {
         this.name = name;
-        this.zodiacSign = zodiacSign;
     }
 
     @Override
@@ -16,12 +14,6 @@ public class Human implements Comparable<Human> {
         }
         if (this.name != null) {
             return this.name.compareTo(o.name);
-        } else {
-            if (this.zodiacSign != null) {
-                return this.zodiacSign.compareTo(o.zodiacSign);
-            } else if (o.zodiacSign != null) {
-                return -o.zodiacSign.compareTo(this.zodiacSign);
-            }
         }
         return 0;
     }
@@ -29,7 +21,6 @@ public class Human implements Comparable<Human> {
     @Override
     public String toString() {
         return "Human: " +
-                "name = '" + name + "'" +
-                ", zodiacSign = " + zodiacSign;
+                "name = '" + name + "'";
     }
 }

@@ -5,23 +5,26 @@
 - [x] Think of logical project structure
 - [x] Make sure that you separate `user` from `server` for next lab
   
+#
 
+- [x] create CSVManager
+- [x] create CollectionManager
+- [x] create Managers interface
+- [x] create .csv file
 - [ ] make `serialization` from TreeSet collection to .csv (for save command)
-- [x] make `deserialization` from .csv to TreeSet collection (for show and add commands) 
-  - [x] create CSVManager
-  - [x] create CollectionManager
-  - [x] create Managers interface
-  - [x] create read method in Managers interface
   - [ ] create write method in Managers interface
-  - [x] create read method in CollectionManager
   - [ ] create write method in CollectionManager
-  - [x] create read method in CSVManager
   - [ ] create write method in CSVManager
+- [x] make `deserialization` from .csv to TreeSet collection (for show and add commands)
+  - [x] create read method in Managers interface
+  - [x] create read method in CollectionManager
+  - [x] create read method in CSVManager
 
-  
+#  
   
 - [ ] create userManager
   
+#
 
 - [ ] create commands
   - [ ] create help command
@@ -41,10 +44,13 @@
   - [ ] create print_descending command
   - [ ] create print_field_descending_meters_above_sea_level command
 
+#
+
 - [ ] create validators for "add" and other commands
 - [ ] create handlers
 - [ ] use those validators in CSVManager  
 
+#
 
 - [ ] create checking for `^D` and other unexpected symbols in `std:in`
 - [ ] Make sure the `execute_script` in `execute_script` doesn't run indefinitely
@@ -52,6 +58,7 @@
 - [ ] generate `javadoc` for everything
 - [ ] make `report` in .docx and .pdf
   
+#
 
 - [ ] generate lab5.jar file
 - [ ] upload it to `helios` via scp command

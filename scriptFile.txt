@@ -1,0 +1,7 @@
+save
+save
+show
+clear
+show
+history
+exit

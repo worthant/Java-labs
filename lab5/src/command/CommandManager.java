@@ -4,6 +4,7 @@ import collection.City.*;
 import command.commands.Exit;
 import command.commands.History;
 import command.commands.Save;
+import command.commands.Help;
 
 import java.util.HashMap;
 
@@ -15,7 +16,7 @@ public class CommandManager {
     static {
         commandMap = new HashMap<>();
 
-//        commandMap.put("help", new Help());
+        commandMap.put("help", new Help());
 //        commandMap.put("info", new Info());
 //        commandMap.put("show", new Show());
 //        commandMap.put("add", new Add());

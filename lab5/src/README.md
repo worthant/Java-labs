@@ -29,7 +29,7 @@
 #
 
 - [ ] make commands
-  - [ ] make help command
+  - [x] make help command
   - [ ] make info command
   - [ ] make show command
   - [ ] make add element command
@@ -41,7 +41,7 @@
   - [x] make exit command
   - [ ] make add_if_min command
   - [ ] make remove_greater command
-  - [ ] make history command
+  - [x] make history command
   - [ ] make sum_of_meters_above_sea_level command
   - [ ] make print_descending command
   - [ ] make print_field_descending_meters_above_sea_level command

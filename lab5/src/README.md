@@ -31,7 +31,7 @@
 - [ ] make commands
   - [x] make help command
   - [ ] make info command
-  - [ ] make show command
+  - [x] make show command
   - [ ] make add element command
   - [ ] make update id command
   - [ ] make remove_by_id command

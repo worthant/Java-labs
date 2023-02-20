@@ -18,15 +18,19 @@ public class CollectionManager {
         }
 
         CSVManager csvManager = new CSVManager();
-        CollectionManager.setCollection(csvManager.readFromFile(pathToDataFile));
+        CollectionManager.setCityCollection(csvManager.readFromFile(pathToDataFile));
     }
 
     public void writeCollection() {
         CSVManager csvManager = new CSVManager();
         csvManager.write(pathToDataFile, cityTreeSet);
     }
-    public static void setCollection(TreeSet<City> cityTreeSet) {
+    public static void setCityCollection(TreeSet<City> cityTreeSet) {
         CollectionManager.cityTreeSet = cityTreeSet;
+    }
+
+    public static TreeSet<City> getCityCollection() {
+        return cityTreeSet;
     }
 
     public static void setPathToDataFile(String pathToDataFile){

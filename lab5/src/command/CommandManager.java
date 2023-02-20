@@ -1,10 +1,7 @@
 package command;
 
 import collection.City.*;
-import command.commands.Exit;
-import command.commands.History;
-import command.commands.Save;
-import command.commands.Help;
+import command.commands.*;
 
 import java.util.HashMap;
 
@@ -18,7 +15,7 @@ public class CommandManager {
 
         commandMap.put("help", new Help());
 //        commandMap.put("info", new Info());
-//        commandMap.put("show", new Show());
+        commandMap.put("show", new Show());
 //        commandMap.put("add", new Add());
 //        commandMap.put("remove_by_id", new RemoveById());
 //        commandMap.put("clear", new Clear());

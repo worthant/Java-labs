@@ -28,23 +28,23 @@
   
 #
 
-- [ ] create commands
-  - [ ] create help command
-  - [ ] create info command
-  - [ ] create show command
-  - [ ] create add element command
-  - [ ] create update id command
-  - [ ] create remove_by_id command
-  - [ ] create clear command
-  - [x] create save command
-  - [ ] create execute_script file_name command
-  - [ ] create exit command
-  - [ ] create add_if_min command
-  - [ ] create remove_greater command
-  - [ ] create history command
-  - [ ] create sum_of_meters_above_sea_level command
-  - [ ] create print_descending command
-  - [ ] create print_field_descending_meters_above_sea_level command
+- [ ] make commands
+  - [ ] make help command
+  - [ ] make info command
+  - [ ] make show command
+  - [ ] make add element command
+  - [ ] make update id command
+  - [ ] make remove_by_id command
+  - [ ] make clear command
+  - [x] make save command
+  - [ ] make execute_script file_name command
+  - [x] make exit command
+  - [ ] make add_if_min command
+  - [ ] make remove_greater command
+  - [ ] make history command
+  - [ ] make sum_of_meters_above_sea_level command
+  - [ ] make print_descending command
+  - [ ] make print_field_descending_meters_above_sea_level command
 
 #
 

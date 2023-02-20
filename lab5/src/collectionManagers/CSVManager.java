@@ -2,13 +2,11 @@ package collectionManagers;
 
 import collection.City.*;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.util.TreeSet;
 
+import collection.comparators.CityComparator;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
@@ -18,9 +16,9 @@ import org.apache.commons.csv.CSVRecord;
 public class CSVManager implements Managers{
     @Override
     public TreeSet<City> readFromFile(String pathToDataFile) {
-        TreeSet<City> cities = new TreeSet<>();
+        TreeSet<City> cities = new TreeSet<>(new CityComparator());
 
-        try (FileReader fileReader = new FileReader(pathToDataFile);
+        try (InputStreamReader fileReader = new InputStreamReader(new FileInputStream(pathToDataFile));
              CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withHeader());) {
 
             for (CSVRecord fields : csvParser) {
@@ -59,9 +57,9 @@ public class CSVManager implements Managers{
     @Override
     public void write(String pathToDataFile, TreeSet<City> cities) {
         try {
-            FileWriter fileWriter = new FileWriter(pathToDataFile);
+            BufferedWriter fileWriter = new BufferedWriter(new FileWriter(pathToDataFile));
             CSVPrinter csvPrinter = new CSVPrinter(fileWriter, CSVFormat.DEFAULT
-                    .withHeader("id", "name", "x", "y",
+                    .withHeader("id", "name", "x", "y", "creationDate",
                             "area", "population", "metersAboveSeaLevel", "climate", "government",
                             "standardOfLiving", "governor"));
 

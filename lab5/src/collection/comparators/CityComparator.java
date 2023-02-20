@@ -4,7 +4,7 @@ import collection.City.City;
 
 import java.util.Comparator;
 
-public class CitySort implements Comparator<City> {
+public class CityComparator implements Comparator<City> {
 
     @Override
     public int compare(City o1, City o2) {

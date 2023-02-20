@@ -1,6 +1,8 @@
 package command;
 
 import collection.City.*;
+import command.commands.Exit;
+import command.commands.Save;
 
 import java.util.HashMap;
 
@@ -19,7 +21,7 @@ public class CommandManager {
 //        commandMap.put("remove_by_id", new RemoveById());
 //        commandMap.put("clear", new Clear());
         commandMap.put("save", new Save());
-//        commandMap.put("exit", new Exit());
+        commandMap.put("exit", new Exit());
 //        commandMap.put("remove_at", new RemoveAtIndex());
 //        commandMap.put("add_if_max", new AddIfMax());
 //        commandMap.put("remove_greater", new RemoveGreater());

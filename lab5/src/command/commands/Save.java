@@ -1,7 +1,8 @@
-package command;
+package command.commands;
 
 
 import collectionManagers.CollectionManager;
+import command.Command;
 
 public class Save extends Command {
 

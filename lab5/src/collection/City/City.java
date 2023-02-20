@@ -121,7 +121,9 @@ public class City implements Comparable<City> {
 
     @Override
     public int compareTo(City o) {
-        int result = this.name.compareTo(o.name);
+        int result = Long.compare(this.id, o.id);
+        if (result == 0)
+            result = this.name.compareTo(o.name);
         if (result == 0)
             result = this.area - o.area;
         if (result == 0)

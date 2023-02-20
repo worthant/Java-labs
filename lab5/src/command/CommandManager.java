@@ -14,7 +14,7 @@ public class CommandManager {
         commandMap = new HashMap<>();
 
         commandMap.put("help", new Help());
-//        commandMap.put("info", new Info());
+        commandMap.put("info", new Info());
         commandMap.put("show", new Show());
 //        commandMap.put("add", new Add());
 //        commandMap.put("remove_by_id", new RemoveById());

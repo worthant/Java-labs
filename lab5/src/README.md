@@ -30,7 +30,7 @@
 
 - [ ] make commands
   - [x] make help command
-  - [ ] make info command
+  - [x] make info command
   - [x] make show command
   - [ ] make add element command
   - [ ] make update id command

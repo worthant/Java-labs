@@ -4,4 +4,6 @@ show
 clear
 show
 history
+execute_script scriptFile
+history
 exit

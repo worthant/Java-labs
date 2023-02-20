@@ -4,6 +4,7 @@ import command.Command;
 import command.CommandManager;
 import collection.City.*;
 import collectionManagers.*;
+import command.commands.History;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -24,6 +25,9 @@ public class UserManager {
     }
 
     public static void requestCommand() {
+        // start tracking commands to History
+        History.initializeHistoryStack();
+
         System.out.print("Введите команду: ");
         String userManager = scanner.nextLine().trim();
 
@@ -44,10 +48,11 @@ public class UserManager {
         // execute command
         if (commandMap.containsKey(command)) {
             commandMap.get(command).setArgument(argument);
+            History.pushToHistoryStack(command, argument);
             commandMap.get(command).execute();
         } else {
             System.out.println("Команды " + command + " не существует!" +
-                    " Для уточнения команд воспользуйтесь командрй help!");
+                    "\nЧтобы посмотреть список доступных команд напишите: help");
         }
     }
 

@@ -35,7 +35,7 @@
   - [ ] make add element command
   - [ ] make update id command
   - [ ] make remove_by_id command
-  - [ ] make clear command
+  - [x] make clear command
   - [x] make save command
   - [ ] make execute_script file_name command
   - [x] make exit command

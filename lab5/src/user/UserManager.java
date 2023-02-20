@@ -19,14 +19,13 @@ public class UserManager {
     private static boolean isWorking;
 
     static {
+        History.initializeCommandsHistoryQueue();
         commandMap = CommandManager.getCommandMap();
         scanner = new Scanner(System.in);
         isWorking = true;
     }
 
     public static void requestCommand() {
-        // start tracking commands to History
-        History.initializeHistoryStack();
 
         System.out.print("Введите команду: ");
         String userManager = scanner.nextLine().trim();
@@ -49,7 +48,7 @@ public class UserManager {
         if (commandMap.containsKey(command)) {
             commandMap.get(command).setArgument(argument);
             commandMap.get(command).execute();
-            History.pushToHistoryStack(command);
+            History.addToCommandsHistoryQueue(command);
         } else {
             System.out.println("Команды " + command + " не существует!" +
                     "\nЧтобы посмотреть список доступных команд напишите: help");

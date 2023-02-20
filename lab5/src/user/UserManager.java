@@ -25,29 +25,28 @@ public class UserManager {
 
     public static void requestCommand() {
         System.out.print("Введите команду: ");
-        String UserManager = scanner.nextLine().trim();
+        String userManager = scanner.nextLine().trim();
 
-        while (UserManager.contains("  "))
-            UserManager = UserManager.replaceAll("  ", " ");
-
-        String[] commandAndArgument = UserManager.split(" ");
-        String command = commandAndArgument[0];
+        String[] input = userManager.split(" ");
+        String command = input[0];
         String argument;
 
-        if (commandAndArgument.length == 1)
+        // configure command argument
+        if (input.length == 1)
             argument = null;
-        else if (commandAndArgument.length == 2)
-            argument = commandAndArgument[1];
+        else if (input.length == 2)
+            argument = input[1];
         else {
-            System.out.println("Требуется ввести: {команда} {аргумент} (если есть!)");
+            System.out.println("Некорректный формат ввода! \nВведите: {команда} {аргумент} (если есть!)");
             return;
         }
 
-        if (commandMap.containsKey(commandAndArgument[0])) {
-            commandMap.get(commandAndArgument[0]).setArgument(argument);
-            commandMap.get(commandAndArgument[0]).execute();
+        // execute command
+        if (commandMap.containsKey(command)) {
+            commandMap.get(command).setArgument(argument);
+            commandMap.get(command).execute();
         } else {
-            System.out.println("Команды " + commandAndArgument[0] + " не существует!" +
+            System.out.println("Команды " + command + " не существует!" +
                     " Для уточнения команд воспользуйтесь командрй help!");
         }
     }

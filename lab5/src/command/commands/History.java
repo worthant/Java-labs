@@ -39,8 +39,8 @@ public class History extends Command {
         History.commandHistory = commandStack;
     }
 
-    public static void pushToHistoryStack(String command, String argument) {
-        commandHistory.push(command + argument);
+    public static void pushToHistoryStack(String command) {
+        commandHistory.push(command);
     }
 
 }

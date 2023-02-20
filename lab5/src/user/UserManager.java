@@ -48,8 +48,8 @@ public class UserManager {
         // execute command
         if (commandMap.containsKey(command)) {
             commandMap.get(command).setArgument(argument);
-            History.pushToHistoryStack(command, argument);
             commandMap.get(command).execute();
+            History.pushToHistoryStack(command);
         } else {
             System.out.println("Команды " + command + " не существует!" +
                     "\nЧтобы посмотреть список доступных команд напишите: help");

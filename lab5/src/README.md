@@ -36,8 +36,10 @@
   - [ ] make update id command
   - [ ] make remove_by_id command
   - [x] make clear command
+    - [x] make backup file for default data in .csv
   - [x] make save command
-  - [ ] make execute_script file_name command
+  - [x] make execute_script file_name command
+    - [x] make scriptFile.txt
   - [x] make exit command
   - [ ] make add_if_min command
   - [ ] make remove_greater command

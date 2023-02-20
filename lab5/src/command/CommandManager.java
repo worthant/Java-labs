@@ -20,7 +20,7 @@ public class CommandManager {
 //        commandMap.put("remove_by_id", new RemoveById());
         commandMap.put("clear", new Clear());
         commandMap.put("save", new Save());
-//        commandMap.put("execute_script", new ExecuteScript());
+        commandMap.put("execute_script", new ExecuteScript());
         commandMap.put("exit", new Exit());
 //        commandMap.put("add_if_min", new AddIfMax());
 //        commandMap.put("remove_greater", new RemoveGreater());

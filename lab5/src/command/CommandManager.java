@@ -16,7 +16,7 @@ public class CommandManager {
         commandMap.put("help", new Help());
         commandMap.put("info", new Info());
         commandMap.put("show", new Show());
-//        commandMap.put("add", new Add());
+        commandMap.put("add", new Add());
 //        commandMap.put("remove_by_id", new RemoveById());
         commandMap.put("clear", new Clear());
         commandMap.put("save", new Save());

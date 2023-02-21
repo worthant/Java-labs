@@ -18,6 +18,8 @@ public class UserManager {
     private static Scanner scanner;
     private static boolean isWorking;
 
+    public static long nextCityId = 0;
+
     static {
         History.initializeCommandsHistoryQueue();
         commandMap = CommandManager.getCommandMap();
@@ -207,10 +209,10 @@ public class UserManager {
         parameters.add(standardOfLiving);
 
 
-        String governor;
+        Human governor;
         do {
             System.out.print("Введите ненулевое имя governor(не может быть null!): ");
-            governor = scanner.nextLine().trim();
+            governor = new Human(scanner.nextLine().trim());
         } while (governor.equals(""));
         parameters.add(governor);
 

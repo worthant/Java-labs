@@ -32,7 +32,9 @@
   - [x] make help command
   - [x] make info command
   - [x] make show command
-  - [ ] make add element command
+  - [x] make add element command
+    - [x] make createNewCityByUser method in UserManager
+    - [x] make requestEnum method in UserManager
   - [ ] make update id command
   - [ ] make remove_by_id command
   - [x] make clear command

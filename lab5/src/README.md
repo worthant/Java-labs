@@ -48,7 +48,7 @@
   - [x] make history command
   - [x] make sum_of_meters_above_sea_level command
   - [ ] make print_descending command
-  - [ ] make print_field_descending_meters_above_sea_level command
+  - [x] make print_field_descending_meters_above_sea_level command
 
 #
 

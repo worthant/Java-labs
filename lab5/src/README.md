@@ -44,7 +44,7 @@
     - [x] make scriptFile.txt
   - [x] make exit command
   - [ ] make add_if_min command
-  - [ ] make remove_greater command
+  - [x] make remove_greater command
   - [x] make history command
   - [ ] make sum_of_meters_above_sea_level command
   - [ ] make print_descending command
@@ -64,6 +64,7 @@
 - [x] create checking for `^D` and other unexpected symbols in `std:in`
   - [x] `^D` symbol causes EOF, so what should I do?)
 - [x] Make sure the `execute_script` in `execute_script` doesn't run indefinitely
+  - [ ] check recursion when file1 reference file2, which also references file1
 - [ ] make `UML` diagram using plantUML
 - [ ] generate `javadoc` for everything
 - [ ] make `report` in .docx and .pdf

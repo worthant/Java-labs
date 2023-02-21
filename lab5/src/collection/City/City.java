@@ -125,15 +125,9 @@ public class City implements Comparable<City> {
 
     @Override
     public int compareTo(City o) {
-        int result = Long.compare(this.id, o.id);
-        if (result == 0)
-            result = this.name.compareTo(o.name);
-        if (result == 0)
-            result = this.area - o.area;
+        int result = Integer.compare(this.population, o.population);
         if (result == 0)
             result = this.coordinates.compareTo(o.coordinates);
-        if (result == 0)
-            result = Integer.compare(this.population, o.population);
         if (result == 0)
             result = this.creationDate.compareTo(o.creationDate);
         if (result == 0)

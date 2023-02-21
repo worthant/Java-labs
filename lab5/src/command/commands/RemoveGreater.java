@@ -1,5 +1,9 @@
 package command.commands;
+import collection.City.City;
+import collectionManagers.CollectionManager;
 import command.Command;
+
+import java.util.TreeSet;
 
 public class RemoveGreater extends Command {
 
@@ -7,22 +11,24 @@ public class RemoveGreater extends Command {
         super(false);
     }
 
-    // TODO: write this command, because for this i need to write add command first
     @Override
-    public void execute() {}
-//        if (checkArgument(getArgument())) {
-//            Dragon newDragon = Dragon.getNewDragon();
-//
-//            for (int i = 0; i < CommandManager.getDragonCollection().getDragonArray().size(); i++) {
-//                if (CommandManager.getDragonCollection().getDragonArray().get(i).getAge() > newDragon.getAge()) {
-//                    for (int j = CommandManager.getDragonCollection().getDragonArray().size() - 1; j >= i; j--) {
-//                        CommandManager.getDragonCollection().getDragonArray().remove(j);
-//                    }
-//                    return;
-//                }
-//            }
-//        }
-//    }
+    public void execute() {
+        if (checkArgument(getArgument())) {
+            City newCity = CollectionManager.getNewCity();
+            TreeSet<City> cities = CollectionManager.getCityCollection();
+            TreeSet<City> cities2 = new TreeSet<>();
+
+            for (City city: cities) {
+                if (newCity.getPopulation() < city.getPopulation()) {
+                    cities2.add(city);
+                }
+            }
+
+            for(City city2 : cities2) {
+                cities.remove(city2);
+            }
+        }
+    }
 
     @Override
     public boolean checkArgument(Object inputArgument) {

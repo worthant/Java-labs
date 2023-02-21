@@ -43,17 +43,17 @@ public class CollectionManager {
     public static City getNewCity() {
         ArrayList<Object> parameters = UserManager.createNewCityByUser();
 
-        long id = UserManager.nextCityId++;
-        String name = (String) parameters.get(0);
-        Coordinates coordinates = (Coordinates) parameters.get(1);
-        java.util.Date creationDate = (java.util.Date) parameters.get(2);
-        Integer area = (Integer) parameters.get(3);
-        int population = (Integer) parameters.get(4);
-        Double metersAboveSeaLevel = (Double) parameters.get(5);
-        Climate climate = (Climate) parameters.get(6);
-        Government government = (Government) parameters.get(7);
-        StandardOfLiving standardOfLiving = (StandardOfLiving) parameters.get(8);
-        Human governor = (Human) parameters.get(9);
+        long id = (Long) parameters.get(0);
+        String name = (String) parameters.get(1);
+        Coordinates coordinates = (Coordinates) parameters.get(2);
+        java.util.Date creationDate = (java.util.Date) parameters.get(3);
+        Integer area = (Integer) parameters.get(4);
+        int population = (Integer) parameters.get(5);
+        Double metersAboveSeaLevel = (Double) parameters.get(6);
+        Climate climate = (Climate) parameters.get(7);
+        Government government = (Government) parameters.get(8);
+        StandardOfLiving standardOfLiving = (StandardOfLiving) parameters.get(9);
+        Human governor = (Human) parameters.get(10);
 
         return new City(id, name, coordinates, creationDate, area, population, metersAboveSeaLevel, climate, government, standardOfLiving, governor);
     }

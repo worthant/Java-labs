@@ -23,7 +23,7 @@ public class CommandManager {
         commandMap.put("execute_script", new ExecuteScript());
         commandMap.put("exit", new Exit());
 //        commandMap.put("add_if_min", new AddIfMax());
-//        commandMap.put("remove_greater", new RemoveGreater());
+        commandMap.put("remove_greater", new RemoveGreater());
         commandMap.put("history", new History());
 //        commandMap.put("sum_of_meters_above_sea_level", new SumOfMetersAboveSeaLevel());
 //        commandMap.put("print_descending", new PrintDescending());

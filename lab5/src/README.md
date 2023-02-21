@@ -43,7 +43,7 @@
   - [x] make execute_script file_name command
     - [x] make scriptFile.txt
   - [x] make exit command
-  - [ ] make add_if_min command
+  - [x] make add_if_min command
   - [x] make remove_greater command
   - [x] make history command
   - [ ] make sum_of_meters_above_sea_level command

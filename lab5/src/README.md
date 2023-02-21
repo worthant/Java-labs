@@ -28,15 +28,15 @@
   
 #
 
-- [ ] make commands
+- [x] make commands
   - [x] make help command
   - [x] make info command
   - [x] make show command
   - [x] make add element command
     - [x] make createNewCityByUser method in UserManager
     - [x] make requestEnum method in UserManager
-  - [ ] make update_id command
-  - [ ] make remove_by_id command
+  - [x] make update_id command
+  - [x] make remove_by_id command
   - [x] make clear command
     - [x] make backup file for default data in .csv
   - [x] make save command
@@ -71,7 +71,7 @@
   
 #
 
-- [ ] generate lab5.jar file
+- [x] generate lab5.jar file
 - [ ] upload it to `helios` via scp command
 
 

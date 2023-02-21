@@ -16,9 +16,12 @@ public class UpdateId extends Command {
     public void execute() {
         if (checkArgument(getArgument())) {
             Object obj = IdChecker.checkCityById((String) getArgument());
+            long id = IdChecker.getId();
             if (obj != null) {
                 CollectionManager.getCityCollection().remove(obj);
-                CollectionManager.getCityCollection().add(CollectionManager.getNewCity());
+                City city = CollectionManager.getNewCity();
+                city.setId(id);
+                CollectionManager.getCityCollection().add(city);
             } else
                 System.out.println("Элемента с таким id-номером нет в текущей коллекции!");
         }

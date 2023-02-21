@@ -1,6 +1,7 @@
 package command.commands;
 import collection.City.City;
 import collectionManagers.CollectionManager;
+import collectionManagers.IdChecker;
 import command.Command;
 
 import java.util.ArrayList;
@@ -16,19 +17,9 @@ public class RemoveById extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            int id = Integer.parseInt((String) getArgument());
-            TreeSet<City> cities = CollectionManager.getCityCollection();
-            Object obj = new Object();
-            boolean flag = false;
-            for (City city : cities) {
-                if (city.getId() == id) {
-                    obj = city;
-                    flag = true;
-                    break;
-                }
-            }
-            if (flag)
-                cities.remove(obj);
+            Object obj = IdChecker.checkCityById((String) getArgument());
+            if (obj != null)
+                CollectionManager.getCityCollection().remove(obj);
             else
                 System.out.println("Элемента с таким id-номером нет в текущей коллекции!");
         }

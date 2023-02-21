@@ -18,7 +18,7 @@ public class CommandManager {
         commandMap.put("show", new Show());
         commandMap.put("add", new Add());
         commandMap.put("remove_by_id", new RemoveById());
-//        commandMap.put("update id", new UpdateId());
+        commandMap.put("update_id", new UpdateId());
         commandMap.put("clear", new Clear());
         commandMap.put("save", new Save());
         commandMap.put("execute_script", new ExecuteScript());

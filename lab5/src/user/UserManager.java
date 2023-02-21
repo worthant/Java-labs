@@ -61,9 +61,9 @@ public class UserManager {
 
         ArrayList<Object> parameters = new ArrayList<>();
 
-//      TODO: Generate id automatically;
-//          Remember, that it should be unique!
-
+        long id;
+        id = nextCityId++;
+        parameters.add(id);
 
         String name;
         do {

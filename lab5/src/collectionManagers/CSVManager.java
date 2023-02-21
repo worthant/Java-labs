@@ -11,6 +11,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
+import user.UserManager;
 
 
 public class CSVManager implements Managers{
@@ -22,7 +23,7 @@ public class CSVManager implements Managers{
              CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withHeader());) {
 
             for (CSVRecord fields : csvParser) {
-                long id = Integer.parseInt(fields.get("id"));
+                long id = UserManager.nextCityId++;
                 String name = fields.get("name");
                 Integer x = Integer.parseInt(fields.get("x"));
                 double y = Double.parseDouble(fields.get("y"));

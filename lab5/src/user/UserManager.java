@@ -86,9 +86,8 @@ public class UserManager {
                         else
                             System.out.println("Максимальное значение координаты x: 499");
                     }
-                } catch (InputMismatchException e) {
+                } catch (NumberFormatException | InputMismatchException e2) {
                     System.out.println("Требуется ввести число в типе данных Integer!");
-                    scanner.next();
                 }
             }
             double y;
@@ -105,9 +104,8 @@ public class UserManager {
                         else
                             System.out.println("Координата y должна быть больше -274");
                     }
-                } catch (InputMismatchException e) {
+                } catch (NumberFormatException | InputMismatchException e) {
                     System.out.println("Требуется ввести число в типе данных double!");
-                    scanner.next();
                 }
             }
             Coordinates coordinates = new Coordinates(x, y);
@@ -129,9 +127,8 @@ public class UserManager {
                             System.out.println("Область должна быть больше 0!");
                         }
                     }
-                } catch (InputMismatchException e) {
+                } catch (NumberFormatException | InputMismatchException e) {
                     System.out.println("Требуется ввести число в типе данных Integer!");
-                    scanner.next();
                 }
             }
             parameters.add(area);
@@ -152,9 +149,8 @@ public class UserManager {
                             System.out.println("Численность населения должна быть больше 0!");
                         }
                     }
-                } catch (InputMismatchException e) {
+                } catch (NumberFormatException | InputMismatchException e) {
                     System.out.println("Требуется ввести число в типе данных int!");
-                    scanner.next();
                 }
             }
             parameters.add(population);
@@ -168,9 +164,8 @@ public class UserManager {
                         metersAboveSeaLevel = Double.parseDouble(nextLine);
                         break;
                     }
-                } catch (InputMismatchException e) {
+                } catch (NumberFormatException | InputMismatchException e) {
                     System.out.println("Требуется ввести число в типе данных Double!");
-                    scanner.next();
                 }
             }
             parameters.add(metersAboveSeaLevel);
@@ -190,7 +185,7 @@ public class UserManager {
             while (true) {
                 government = (Government) requestEnum(Government.values(), "тип");
                 if (government == null)
-                    System.out.println("Некорректно введены данные!(не может быть null)");
+                    System.out.println("Некорректно введены данные!");
                 else
                     break;
             }
@@ -209,17 +204,22 @@ public class UserManager {
 
 
             Human governor;
-            do {
+            while (true) {
                 System.out.print("Введите ненулевое имя governor(не может быть null!): ");
-                governor = new Human(scanner.nextLine().trim());
-            } while (governor.equals(""));
+                String nextLine = scanner.nextLine().trim();
+                if (nextLine.equals(""))
+                    System.out.println("Введите ненулевое имя(не может быть null!)");
+                else {
+                    governor = new Human(nextLine);
+                    break;
+                }
+            }
             parameters.add(governor);
-
 
             return parameters;
         } catch (NoSuchElementException e) {
             System.out.println("чего прогу ломаеш?");
-            isWorking = false;
+            System.exit(0);
             return null;
         }
     }
@@ -252,9 +252,12 @@ public class UserManager {
                 System.out.println("Требуется ввести целое число от 1 до " + values.length + "!");
                 return null;
             }
+        } catch (NumberFormatException e) {
+            System.out.println("Требуется ввести целое число от 1 до " + values.length + "!");
+            return null;
         } catch (NoSuchElementException e) {
             System.out.println("чего прогу ломаеш?");
-            isWorking = false;
+            System.exit(0);
             return null;
         }
     }

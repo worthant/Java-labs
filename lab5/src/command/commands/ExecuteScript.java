@@ -14,6 +14,8 @@ public class ExecuteScript extends Command {
 
     private HashMap<String, Command> commandMap;
 
+    private ArrayList<String> scriptFiles = new ArrayList<>();
+
 
     public ExecuteScript() {
         super(true);
@@ -54,34 +56,33 @@ public class ExecuteScript extends Command {
                 while (operation.contains("  "))
                     operation = operation.replaceAll("  ", " ");
 
-                String[] commandAndArgument = operation.split(" ");
+                String[] input = operation.split(" ");
 
-                if (commandAndArgument.length > 2) {
+                if (input.length > 2) {
                     System.out.println("Требуется ввести *команда* *аргумент* (при его наличии)!");
                     return;
                 }
 
-                if (commandAndArgument[0].equals("execute_script")) {
-                    if (commandAndArgument.length == 2 &&
-                            checkRecursion((String) getArgument(), (String) getArgument())) {
+                if (input[0].equals("execute_script")) {
+                    if (input.length == 2 && checkRecursion((String) getArgument(), (String) getArgument(), scriptFiles)) {
                         commandMap.get("execute_script").execute();
                     }
-                } else if (commandMap.containsKey(commandAndArgument[0])) {
-                    commandMap.get(commandAndArgument[0]).execute();
+                } else if (commandMap.containsKey(input[0])) {
+                    commandMap.get(input[0]).execute();
                 } else
-                    System.out.println("Команды " + operation + " не существует! " +
-                            "Для уточнения команд воспользуйтесь командой help!");
+                    System.out.println("Команды " + operation + " не существует! " + "Для уточнения команд воспользуйтесь командой help!");
             }
         }
     }
 
-    private boolean checkRecursion(String filePath, String inputFilePath) {
-        if (filePath.equals(inputFilePath)) {
-            System.out.println("Команда execute_script не выполянется, чтобы не допустить рекурсии" +
-                    " (исходный файл коллекции и файла команды совпадают)!");
+    private boolean checkRecursion(String filePath, String inputFilePath, ArrayList<String> scriptFiles) {
+        if (filePath.equals(inputFilePath) || scriptFiles.contains(inputFilePath)) {
+            System.out.println("Команда execute_script не выполянется, чтобы не допустить рекурсии!");
             return false;
-        } else
+        } else {
+            scriptFiles.add(inputFilePath);
             return true;
+        }
     }
 
     @Override

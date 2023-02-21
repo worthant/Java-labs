@@ -4,6 +4,6 @@ show
 clear
 show
 history
-execute_script scriptFile
+execute_script lab5/script2.txt
 history
 exit

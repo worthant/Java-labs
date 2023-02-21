@@ -52,9 +52,9 @@
 
 #
 
-- [ ] Make id
-  - [ ] Make id generated automatically
-  - [ ] Make id unique
+- [x] Make id
+  - [x] Make id generated automatically
+  - [x] Make id unique
 - [ ] create validators for "add" and other commands
 - [ ] create handlers
 - [ ] use those validators in CSVManager  
@@ -64,7 +64,7 @@
 - [x] create checking for `^D` and other unexpected symbols in `std:in`
   - [x] `^D` symbol causes EOF, so what should I do?)
 - [x] Make sure the `execute_script` in `execute_script` doesn't run indefinitely
-  - [ ] check recursion when file1 reference file2, which also references file1
+  - [x] check recursion when file1 reference file2, which also references file1
 - [ ] make `UML` diagram using plantUML
 - [ ] generate `javadoc` for everything
 - [ ] make `report` in .docx and .pdf

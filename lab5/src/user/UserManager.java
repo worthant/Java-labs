@@ -59,10 +59,13 @@ public class UserManager {
 
         ArrayList<Object> parameters = new ArrayList<>();
 
-        String name;
+//      TODO: Generate id automatically;
+//          Remember, that it should be unique!
 
+
+        String name;
         do {
-            System.out.print("Введите ненулевое имя: ");
+            System.out.print("Введите ненулевое имя(не может быть null!): ");
             name = scanner.nextLine().trim();
         } while (name.equals(""));
         parameters.add(name);
@@ -70,131 +73,180 @@ public class UserManager {
         Integer x;
         while (true) {
             try {
-                System.out.print("Введите координату x в типе данных float: ");
-                x = scanner.nextInt();
-                if (x <= 499)
-                    break;
-                else
-                    System.out.println("Максимальное значение координаты x: 499");
+                System.out.print("Введите координату x в типе данных Integer: ");
+                String nextLine = scanner.nextLine().trim();
+                if (nextLine.equals(""))
+                    System.out.println("Введите ненулевую координату(не может быть null!)");
+                else {
+                    x = Integer.parseInt(nextLine);
+                    if (x <= 499)
+                        break;
+                    else
+                        System.out.println("Максимальное значение координаты x: 499");
+                }
             } catch (InputMismatchException e) {
-                System.out.println("Требуется ввести число в типе данных float!");
+                System.out.println("Требуется ввести число в типе данных Integer!");
                 scanner.next();
             }
         }
         double y;
         while (true) {
             try {
-                System.out.print("Введите координату y в типе данных int: ");
-                y = scanner.nextDouble();
-                if (y > -274)
-                    break;
-                else
-                    System.out.println("Координата y должна быть больше -274");
+                System.out.print("Введите координату y в типе данных double: ");
+                String nextLine = scanner.nextLine().trim();
+                if (nextLine.equals(""))
+                    System.out.println("Введите ненулевую координату(не может быть null!)");
+                else {
+                    y = Double.parseDouble(nextLine);
+                    if (y > -274)
+                        break;
+                    else
+                        System.out.println("Координата y должна быть больше -274");
+                }
             } catch (InputMismatchException e) {
-                System.out.println("Требуется ввести число в типе данных int!");
+                System.out.println("Требуется ввести число в типе данных double!");
                 scanner.next();
             }
         }
         Coordinates coordinates = new Coordinates(x, y);
         parameters.add(coordinates);
 
-        LocalDate creationDate = LocalDate.now();
+        java.util.Date creationDate = java.sql.Date.valueOf(LocalDate.now());
         parameters.add(creationDate);
 
-        Long age;
+        Integer area;
         while (true) {
             try {
-                System.out.print("Введите возраст в типе данных long: ");
-                age = scanner.nextLong();
-                if (age > 0) {
-                    break;
-                } else {
-                    System.out.println("Возраст должен быть больше 0!");
+                System.out.print("Введите область в типе данных Integer: ");
+                String nextLine = scanner.nextLine().trim();
+                if (!nextLine.equals("")) {
+                    area = Integer.parseInt(nextLine);
+                    if (area > 0) {
+                        break;
+                    } else {
+                        System.out.println("Область должна быть больше 0!");
+                    }
                 }
             } catch (InputMismatchException e) {
-                System.out.println("Требуется ввести число в типе данных long!");
+                System.out.println("Требуется ввести число в типе данных Integer!");
                 scanner.next();
             }
         }
-        parameters.add(age);
+        parameters.add(area);
 
-//        DragonType type;
-//        do {
-//            type = (DragonType) requestEnum(DragonType.values(), "тип");
-//        } while (type == null);
-//        characteristics.add(type);
-//
-//        DragonCharacter character;
-//
-//        while (true) {
-//            scanner = new Scanner(System.in);
-//            System.out.println("Сделать характер null?");
-//            System.out.print("Введите ответ да/нет: ");
-//            String userAnswer = scanner.nextLine().strip();
-//            if (userAnswer.equals("да")) {
-//                character = null;
-//                break;
-//            } else if (userAnswer.equals(("нет"))) {
-//                character = (DragonCharacter) requestEnum(DragonCharacter.values(), "характер");
-//                break;
-//            } else {
-//                System.out.println("Требуется ввести да/нет!");
-//            }
-//        }
-//
-//        characteristics.add(character);
-//
-//        scanner = new Scanner(System.in);
-//        String depth;
-//        DragonCave cave;
-//        while (true) {
-//            System.out.print("Введите глубину пещеры в типе данных int: ");
-//            depth = scanner.nextLine().strip();
-//            if (depth.equals("")) {
-//                cave = null;
-//                break;
-//            } else {
-//                try {
-//                    cave = new DragonCave(Integer.parseInt(depth));
-//                    break;
-//                } catch (NumberFormatException e) {
-//                    System.out.println("Требуется ввести целое число!");
-//                }
-//            }
-//        }
-//
-//        characteristics.add(cave);
-            return parameters;
+
+        int population;
+        while (true) {
+            try {
+                System.out.print("Введите численность населения в типе данных int: ");
+                String nextLine = scanner.nextLine().trim();
+                if (nextLine.equals(""))
+                    System.out.println("Введите ненулевую численность населения(не может быть null!)");
+                else {
+                    population = Integer.parseInt(nextLine);
+                    if (population > 0) {
+                        break;
+                    } else {
+                        System.out.println("Численность населения должна быть больше 0!");
+                    }
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Требуется ввести число в типе данных int!");
+                scanner.next();
+            }
         }
-//
-//    private static Object requestEnum(Object[] values, String name) {
-//
-//        int i = 0;
-//
-//        if (values[0] instanceof DragonCharacter)
-//
-//            System.out.println("Выберите " + name + ":");
-//        for (Object value : values) {
-//            System.out.println("\t" + ++i + "-" + value.toString());
-//        }
-//        System.out.print("Введите целое число от 1 до " + values.length + ": ");
-//        int userAnswer;
-//
-//        try {
-//            userAnswer = scanner.nextInt();
-//        } catch (InputMismatchException e) {
-//            System.out.println("Требуется ввести целое число!");
-//            return null;
-//        }
-//
-//        if (userAnswer >= 1 && userAnswer <= i) {
-//            return values[userAnswer - 1];
-//        } else {
-//            System.out.println("Требуется ввести целое число от 1 до " + values.length + "!");
-//            return null;
-//        }
-//
-//    }
+        parameters.add(population);
+
+
+        Double metersAboveSeaLevel;
+        while (true) {
+            try {
+                System.out.println("Введите высоту над уровнем моря в метрах в типе данных Double: ");
+                String nextLine = scanner.nextLine().trim();
+                if (!nextLine.equals("")) {
+                    metersAboveSeaLevel = Double.parseDouble(nextLine);
+                    break;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Требуется ввести число в типе данных Double!");
+                scanner.next();
+            }
+        }
+        parameters.add(metersAboveSeaLevel);
+
+
+        Climate climate;
+        while (true) {
+            climate = (Climate) requestEnum(Climate.values(), "тип");
+            if (climate == null)
+                System.out.println("Некорректно введены данные!(не может быть null)");
+            else
+                break;
+        }
+        parameters.add(climate);
+
+        Government government;
+        while (true) {
+            government = (Government) requestEnum(Government.values(), "тип");
+            if (government == null)
+                System.out.println("Некорректно введены данные!(не может быть null)");
+            else
+                break;
+        }
+        parameters.add(government);
+
+
+        StandardOfLiving standardOfLiving;
+        while (true) {
+            standardOfLiving = (StandardOfLiving) requestEnum(StandardOfLiving.values(), "тип");
+            if (standardOfLiving == null)
+                System.out.println("Некорректно введены данные!(не может быть null)");
+            else
+                break;
+        }
+        parameters.add(standardOfLiving);
+
+
+        String governor;
+        do {
+            System.out.print("Введите ненулевое имя governor(не может быть null!): ");
+            governor = scanner.nextLine().trim();
+        } while (governor.equals(""));
+        parameters.add(governor);
+
+
+        return parameters;
+    }
+
+    private static Object requestEnum(Object[] values, String name) {
+
+        int i = 0;
+
+        if (values[0] instanceof Climate)
+            System.out.println("Выберите " + name + ":");
+        for (Object value : values) {
+            System.out.println("\t" + ++i + " - " + value.toString());
+        }
+        System.out.print("Введите целое число от 1 до " + values.length + ": ");
+        String userAnswer;
+
+        try {
+            userAnswer = scanner.nextLine().trim();
+            if (userAnswer.equals(""))
+                return null;
+        } catch (InputMismatchException e) {
+            System.out.println("Требуется ввести целое число!");
+            return null;
+        }
+
+        int userAnswerInt = Integer.parseInt(userAnswer);
+        if (userAnswerInt >= 1 && userAnswerInt <= i) {
+            return values[userAnswerInt - 1];
+        } else {
+            System.out.println("Требуется ввести целое число от 1 до " + values.length + "!");
+            return null;
+        }
+    }
 
     public static void setIsWorking(boolean isWorking) {
         UserManager.isWorking = isWorking;
@@ -204,4 +256,5 @@ public class UserManager {
         return isWorking;
     }
 }
+
 

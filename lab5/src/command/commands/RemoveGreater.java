@@ -1,15 +1,15 @@
-//package command;
-//
-//import dragon.Dragon;
-//
-//public class RemoveGreater extends Command {
-//
-//    public RemoveGreater() {
-//        super(false);
-//    }
-//
-//    @Override
-//    public void execute() {
+package command.commands;
+import command.Command;
+
+public class RemoveGreater extends Command {
+
+    public RemoveGreater() {
+        super(false);
+    }
+
+    // TODO: write this command, because for this i need to write add command first
+    @Override
+    public void execute() {}
 //        if (checkArgument(getArgument())) {
 //            Dragon newDragon = Dragon.getNewDragon();
 //
@@ -23,15 +23,15 @@
 //            }
 //        }
 //    }
-//
-//    @Override
-//    public boolean checkArgument(Object inputArgument) {
-//        if (inputArgument == null)
-//            return true;
-//        else {
-//            System.out.println("Команда remove_greater не имеет аргументов!");
-//            return false;
-//        }
-//    }
-//
-//}
+
+    @Override
+    public boolean checkArgument(Object inputArgument) {
+        if (inputArgument == null)
+            return true;
+        else {
+            System.out.println("Команда remove_greater не имеет аргументов!");
+            return false;
+        }
+    }
+
+}

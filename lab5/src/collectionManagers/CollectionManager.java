@@ -36,4 +36,9 @@ public class CollectionManager {
     public static void setPathToDataFile(String pathToDataFile){
         CollectionManager.pathToDataFile = pathToDataFile;
     }
+
+    public static City getNewCity() {
+
+        //return new City(id, name, coordinates, creationDate, area, population, metersAboveSeaLevel, climate, government, standartOfLiving, governor);
+    }
 }

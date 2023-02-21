@@ -50,6 +50,9 @@
 
 #
 
+- [ ] Make id
+  - [ ] Make id generated automatically
+  - [ ] Make id unique
 - [ ] create validators for "add" and other commands
 - [ ] create handlers
 - [ ] use those validators in CSVManager  
@@ -57,6 +60,7 @@
 #
 
 - [ ] create checking for `^D` and other unexpected symbols in `std:in`
+  - [ ] `^D` symbol causes EOF, so what should I do?)
 - [ ] Make sure the `execute_script` in `execute_script` doesn't run indefinitely
 - [ ] make `UML` diagram using plantUML
 - [ ] generate `javadoc` for everything

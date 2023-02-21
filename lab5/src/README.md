@@ -24,7 +24,7 @@
   
 - [x] create userManager
   - [x] create working workflow
-  - [ ] complete it
+  - [x] complete it
   
 #
 
@@ -61,9 +61,9 @@
 
 #
 
-- [ ] create checking for `^D` and other unexpected symbols in `std:in`
-  - [ ] `^D` symbol causes EOF, so what should I do?)
-- [ ] Make sure the `execute_script` in `execute_script` doesn't run indefinitely
+- [x] create checking for `^D` and other unexpected symbols in `std:in`
+  - [x] `^D` symbol causes EOF, so what should I do?)
+- [x] Make sure the `execute_script` in `execute_script` doesn't run indefinitely
 - [ ] make `UML` diagram using plantUML
 - [ ] generate `javadoc` for everything
 - [ ] make `report` in .docx and .pdf

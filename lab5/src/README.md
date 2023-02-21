@@ -35,7 +35,7 @@
   - [x] make add element command
     - [x] make createNewCityByUser method in UserManager
     - [x] make requestEnum method in UserManager
-  - [ ] make update id command
+  - [ ] make update_id command
   - [ ] make remove_by_id command
   - [x] make clear command
     - [x] make backup file for default data in .csv

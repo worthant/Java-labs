@@ -23,7 +23,7 @@ public class CSVManager implements Managers{
              CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withHeader());) {
 
             for (CSVRecord fields : csvParser) {
-                long id = UserManager.nextCityId++;
+                long id = cities.hashCode();
                 String name = fields.get("name");
                 Integer x = Integer.parseInt(fields.get("x"));
                 double y = Double.parseDouble(fields.get("y"));
@@ -38,11 +38,6 @@ public class CSVManager implements Managers{
                 Climate climate = Climate.valueOf(fields.get("climate"));
                 Government government = Government.valueOf(fields.get("government"));
                 StandardOfLiving standardOfLiving = StandardOfLiving.valueOf(fields.get("standardOfLiving"));
-
-                /** TODO: create validators */
-//                    if (!row[11].isEmpty()) {
-//                        Human governor = new Human(row[11].trim());
-//                    }
                 Human governor = new Human(fields.get("governor"));
                 cities.add(new City(id, name, coordinates, creationDate, area, population, metersAboveSeaLevel, climate, government, standardOfLiving, governor));
             }

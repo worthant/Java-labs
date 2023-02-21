@@ -15,8 +15,6 @@ public class UserManager {
     private static Scanner scanner;
     private static boolean isWorking;
 
-    public static long nextCityId = 0;
-
     static {
         History.initializeCommandsHistoryQueue();
         commandMap = CommandManager.getCommandMap();
@@ -64,7 +62,7 @@ public class UserManager {
             ArrayList<Object> parameters = new ArrayList<>();
 
             long id;
-            id = nextCityId++;
+            id = parameters.hashCode();
             parameters.add(id);
 
             String name;

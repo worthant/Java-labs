@@ -7,11 +7,18 @@ import command.Command;
 
 import java.util.TreeSet;
 
+/**
+ * Command to update a city by its id number.
+ */
 public class UpdateId extends Command {
     public UpdateId() {
         super(true);
     }
 
+    /**
+     * Executes the UpdateId command by updating a city with a specified id number in the collection.
+     * The method calls the checkArgument method to validate the input argument before execution.
+     */
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
@@ -28,6 +35,12 @@ public class UpdateId extends Command {
     }
 
 
+    /**
+     * Checks if the input argument is valid for the UpdateId command.
+     * The input argument should be a non-null string that can be parsed to an integer.
+     * @param inputArgument the input argument to be checked
+     * @return true if the input argument is valid, false otherwise
+     */
     @Override
     public boolean checkArgument(Object inputArgument) {
         if (inputArgument == null) {

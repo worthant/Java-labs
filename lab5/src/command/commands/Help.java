@@ -1,11 +1,20 @@
 package command.commands;
 import command.Command;
+
+/**
+ * The Help class is a command that provides information about the available commands in the program.
+ * It extends the Command class and overrides its execute() and checkArgument() methods.
+ */
 public class Help extends Command {
 
     public Help() {
         super(false);
     }
 
+    /**
+     * Prints information about the available commands in the program to the console.
+     * Overrides execute() method of the Command class.
+     */
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
@@ -29,6 +38,13 @@ public class Help extends Command {
         }
     }
 
+    /**
+     * Checks if the argument of the Exit command is null.
+     * If the argument is not null, prints a message to the console indicating that the Exit command does not take any arguments.
+     * Overrides the checkArgument() method of the Command class.
+     * @param inputArgument the argument of the Exit command
+     * @return true if the inputArgument is null, false otherwise
+     */
     @Override
     public boolean checkArgument(Object inputArgument) {
         if (inputArgument == null)

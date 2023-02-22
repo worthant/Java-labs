@@ -1,7 +1,11 @@
 package command.commands;
 
+import collection.City.City;
+import collectionManagers.CollectionManager;
+import collectionManagers.IdChecker;
 import command.Command;
 import command.CommandManager;
+
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,21 +14,35 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ ExecuteScript is a class that represents the execute_script command.
+ It reads and executes a script from a file that contains a sequence of commands and arguments.
+ It also prevents recursion by keeping track of file paths that have already been executed.
+ */
 public class ExecuteScript extends Command {
 
     private HashMap<String, Command> commandMap;
+    private ArrayList<String> filePaths;
 
-    private ArrayList<String> scriptFiles = new ArrayList<>();
-
-
+    /**
+     Constructs a new ExecuteScript object.
+     Initializes commandMap with the command map from CommandManager, and creates an empty ArrayList of filePaths.
+     */
     public ExecuteScript() {
         super(true);
         this.commandMap = CommandManager.getCommandMap();
+        this.filePaths = new ArrayList<>();
     }
 
+    /**
+     Executes the command by reading and parsing the script file.
+     Each command in the file is executed using its corresponding command object from the command map.
+     The method also checks for recursion by ensuring that a file path is not executed twice.
+     */
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
+            filePaths.add((String) getArgument());
             ArrayList<String> operationList = new ArrayList<>();
 
             try (InputStreamReader reader = new InputStreamReader(new FileInputStream((String) getArgument()))) {
@@ -46,7 +64,7 @@ public class ExecuteScript extends Command {
                 operationList.add(command);
             } catch (
                     FileNotFoundException e) {
-                System.out.println("Файла по указаному пути не существует!");
+                System.out.println("Файла по указанному пути не существует или отсутствуют права на чтение!");
             } catch (
                     IOException e) {
                 e.printStackTrace();
@@ -56,35 +74,40 @@ public class ExecuteScript extends Command {
                 while (operation.contains("  "))
                     operation = operation.replaceAll("  ", " ");
 
-                String[] input = operation.split(" ");
+                String[] commandAndArgument = operation.split(" ");
+                String command = commandAndArgument[0];
+                String argument;
 
-                if (input.length > 2) {
+                if (commandAndArgument.length == 1)
+                    argument = null;
+                else if (commandAndArgument.length == 2)
+                    argument = commandAndArgument[1];
+                else {
                     System.out.println("Требуется ввести *команда* *аргумент* (при его наличии)!");
                     return;
                 }
 
-                if (input[0].equals("execute_script")) {
-                    if (input.length == 2 && checkRecursion((String) getArgument(), (String) getArgument(), scriptFiles)) {
-                        commandMap.get("execute_script").execute();
+                if (commandMap.containsKey(commandAndArgument[0])) {
+                    if (commandAndArgument[0].equals("execute_script")) {
+                        if (filePaths.contains(commandAndArgument[1])) {
+                            System.out.println("Команда execute_script не выполняется, чтобы не допустить рекурсию!");
+                            continue;
+                        }
                     }
-                } else if (commandMap.containsKey(input[0])) {
-                    commandMap.get(input[0]).execute();
-                } else
-                    System.out.println("Команды " + operation + " не существует! " + "Для уточнения команд воспользуйтесь командой help!");
+                    commandMap.get(commandAndArgument[0]).setArgument(argument);
+                    commandMap.get(commandAndArgument[0]).execute();
+                } else {
+                    System.out.println("Команды " + commandAndArgument[0] + " не существует!" +
+                            " Для уточнения команд воспользуйтесь командой help!");
+                }
             }
+            filePaths.remove(getArgument());
         }
     }
 
-    private boolean checkRecursion(String filePath, String inputFilePath, ArrayList<String> scriptFiles) {
-        if (filePath.equals(inputFilePath) || scriptFiles.contains(inputFilePath)) {
-            System.out.println("Команда execute_script не выполянется, чтобы не допустить рекурсии!");
-            return false;
-        } else {
-            scriptFiles.add(inputFilePath);
-            return true;
-        }
-    }
-
+    /**
+     * Checks if the input argument is valid
+     */
     @Override
     public boolean checkArgument(Object inputArgument) {
         if (inputArgument == null) {

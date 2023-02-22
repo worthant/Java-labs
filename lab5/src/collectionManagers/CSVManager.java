@@ -13,8 +13,17 @@ import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 import user.UserManager;
 
-
+/**
+ * The CSVManager class provides methods for working with files in .csv format.
+ * The class implements the Managers interface.
+ * @see collectionManagers.Managers
+ */
 public class CSVManager implements Managers{
+    /**
+     * Reads data from a file in .csv format and returns a TreeSet of City objects.
+     * @param pathToDataFile the path to the file containing the city data.
+     * @return a TreeSet of City objects containing the city data read from the file.
+     */
     @Override
     public TreeSet<City> readFromFile(String pathToDataFile) {
         TreeSet<City> cities = new TreeSet<>(new CityComparator());
@@ -50,6 +59,11 @@ public class CSVManager implements Managers{
         return cities;
     }
 
+    /**
+     * Writes the provided TreeSet of City objects to a file in .csv format.
+     * @param pathToDataFile the path to the file to write the city data to.
+     * @param cities the TreeSet of City objects to write to the file.
+     */
     @Override
     public void write(String pathToDataFile, TreeSet<City> cities) {
         try {

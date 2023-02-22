@@ -5,11 +5,27 @@ import command.commands.*;
 
 import java.util.HashMap;
 
+/**
+ The CommandManager class is responsible for managing all available commands in the application.
+ It provides a static method getCommandMap() that returns a HashMap of all commands where the key is
+ the command name and the value is an instance of the corresponding Command subclass.
+ */
 public class CommandManager {
 
+    /**
+     A City object used for creating instances of classes that store data about cities.
+     */
     private static City cities;
+
+    /**
+     A HashMap object that stores all available commands in the application. The key is the command name
+     and the value is an instance of the corresponding Command subclass.
+     */
     private final static HashMap<String, Command> commandMap;
 
+    /**
+     Initializes the commandMap HashMap and creates instances of all available commands.
+     */
     static {
         commandMap = new HashMap<>();
 
@@ -30,7 +46,11 @@ public class CommandManager {
         commandMap.put("print_descending", new PrintDescending());
         commandMap.put("print_field_descending_meters_above_sea_level", new PrintFieldDescendingMetersAboveSeaLevel());
     }
-
+    /**
+     Returns the commandMap HashMap that stores all available commands in the application.
+     @return the HashMap of all commands where the key is the command name and the value is an instance
+     of the corresponding Command subclass.
+     */
     public static HashMap<String, Command> getCommandMap() {
         return commandMap;
     }

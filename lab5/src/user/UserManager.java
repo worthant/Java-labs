@@ -9,12 +9,37 @@ import command.commands.History;
 import java.time.LocalDate;
 import java.util.*;
 
+/**
+ The UserManager class manages the input of commands from the user and
+ creation of new city by user input.
+ This class initializes a command map from the CommandManager, scanner for
+ user input and history queue of the commands from the History class.
+ */
 public class UserManager {
 
+    /**
+     * A hashmap that stores command objects with their respective command names.
+     * This hashmap is initialized using the getCommandMap method from CommandManager.
+     */
     private static HashMap<String, Command> commandMap;
+
+    /**
+     * Scanner object for reading user input from the console.
+     */
     private static Scanner scanner;
+
+    /**
+     * A boolean that determines whether the user is still interacting with the program.
+     * This is set to true by default and set to false if a NoSuchElementException is caught.
+     */
     private static boolean isWorking;
 
+    /**
+     * Static block that initializes the commandMap, scanner and isWorking variable.
+     * This block is run only once when the class is first loaded.
+     * The commandMap is initialized using the getCommandMap method from CommandManager.
+     * The scanner reads input from System.in. The isWorking variable is set to true.
+     */
     static {
         History.initializeCommandsHistoryQueue();
         commandMap = CommandManager.getCommandMap();
@@ -22,6 +47,14 @@ public class UserManager {
         isWorking = true;
     }
 
+    /**
+     * The requestCommand method takes user input for a command and its arguments,
+     * and executes the corresponding command using the CommandMap.
+     * If the command is not recognized, the user is informed of the same.
+     *
+     * This method uses a try-catch block to handle NoSuchElementException, which is
+     * thrown when the user presses Ctrl+D in the console.
+     */
     public static void requestCommand() {
 
         try {
@@ -57,6 +90,14 @@ public class UserManager {
         }
     }
 
+    /**
+     * The createNewCityByUser method takes user input for parameters of a new City,
+     * and creates a new City object using the input parameters.
+     * The method returns an ArrayList of the parameters of the newly created City object.
+     *
+     * This method uses a try-catch block to handle NumberFormatException and
+     * InputMismatchException, which are thrown when user input is not of the expected type.
+     */
     public static ArrayList<Object> createNewCityByUser() {
         try {
             ArrayList<Object> parameters = new ArrayList<>();

@@ -5,12 +5,20 @@ import command.Command;
 
 import java.util.TreeSet;
 
+/**
+ * This class represents the RemoveGreater command in the program. When executed, it removes all
+ * elements from the collection that have a population greater than the specified city.
+ */
 public class RemoveGreater extends Command {
 
     public RemoveGreater() {
         super(false);
     }
 
+    /**
+     * Executes the RemoveGreater command. Removes all elements from the collection that have a
+     * population greater than the specified city.
+     */
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
@@ -30,6 +38,14 @@ public class RemoveGreater extends Command {
         }
     }
 
+
+    /**
+     * Checks whether the given argument is valid for this command. Since this command doesn't
+     * require an argument, this method always returns true.
+     *
+     * @param inputArgument the argument to be checked
+     * @return true since this command doesn't require an argument
+     */
     @Override
     public boolean checkArgument(Object inputArgument) {
         if (inputArgument == null)

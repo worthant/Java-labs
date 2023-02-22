@@ -6,12 +6,19 @@ import command.Command;
 
 import java.util.TreeSet;
 
+/**
+ * Command to show all cities in the collection.
+ */
 public class Show extends Command {
 
     public Show() {
         super(false);
     }
 
+    /**
+     * Executes the Show command by printing all the cities in the collection.
+     * The method calls the checkArgument method to validate the input argument before execution.
+     */
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
@@ -26,6 +33,14 @@ public class Show extends Command {
         }
     }
 
+
+    /**
+     * Checks if the input argument is valid for the Show command.
+     * The input argument should be null.
+     *
+     * @param inputArgument the input argument to be checked
+     * @return true if the input argument is valid, false otherwise
+     */
     @Override
     public boolean checkArgument(Object inputArgument) {
         if (inputArgument == null)

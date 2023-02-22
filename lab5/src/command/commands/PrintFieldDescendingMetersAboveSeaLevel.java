@@ -8,12 +8,21 @@ import command.Command;
 import java.util.Comparator;
 import java.util.TreeSet;
 
+/**
+ * Class PrintFieldDescendingMetersAboveSeaLevel provides output of the meters above sea level in descending order.
+ * Extends the Command class.
+ */
 public class PrintFieldDescendingMetersAboveSeaLevel extends Command {
 
     public PrintFieldDescendingMetersAboveSeaLevel() {
         super(false);
     }
 
+    /**
+     * Overrides the method execute() in the Command class.
+     * Prints the meters above sea level in descending order.
+     * Checks the argument before execution.
+     */
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
@@ -29,6 +38,13 @@ public class PrintFieldDescendingMetersAboveSeaLevel extends Command {
         }
     }
 
+
+    /**
+     * Overrides the method checkArgument(Object inputArgument) in the Command class.
+     * Checks if the argument is null.
+     * @param inputArgument the argument to be checked.
+     * @return true if the argument is null, false if not.
+     */
     @Override
     public boolean checkArgument(Object inputArgument) {
         if (inputArgument == null)

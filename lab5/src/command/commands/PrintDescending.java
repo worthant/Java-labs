@@ -8,11 +8,21 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.TreeSet;
 
+/**
+ The PrintDescending class is a command class that prints the population of all cities
+ in descending order. It extends the abstract class Command.
+ */
 public class PrintDescending extends Command {
     public PrintDescending() {
         super(false);
     }
 
+    /**
+     Executes the PrintDescending command by first checking if it has an argument,
+     then retrieving the collection of cities and creating an ArrayList of cities.
+     The ArrayList is then reversed and the population of each city is printed in
+     descending order.
+     */
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
@@ -28,6 +38,12 @@ public class PrintDescending extends Command {
         }
     }
 
+    /**
+     Checks whether the PrintDescending command has an argument. Since this command
+     does not require an argument, it will return true if inputArgument is null.
+     @param inputArgument the argument to be checked
+     @return true if the argument is null, false otherwise
+     */
     @Override
     public boolean checkArgument(Object inputArgument) {
         if (inputArgument == null)

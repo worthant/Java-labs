@@ -2,7 +2,13 @@ package collection.City;
 
 import java.util.Date;
 
+/**
+ * Main class for City objects, stored in TreeSet collection
+ * @author boris
+ */
+
 public class City implements Comparable<City> {
+
     private long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
@@ -123,6 +129,11 @@ public class City implements Comparable<City> {
         this.governor = governor;
     }
 
+    /**
+     * Method of Comparable interface
+     * @param o the object to be compared.
+     * @return result of comparison in int
+     */
     @Override
     public int compareTo(City o) {
         int result = Integer.compare(this.population, o.population);

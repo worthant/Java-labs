@@ -8,12 +8,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TreeSet;
 
+/**
+ * Class RemoveById provides removal of an element from the collection by its ID number.
+ * Extends the Command class.
+ */
 public class RemoveById extends Command {
 
     public RemoveById() {
         super(true);
     }
 
+    /**
+     * Overrides the method execute() in the Command class.
+     * Removes an element from the collection by its ID number.
+     * Checks the argument before execution.
+     */
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
@@ -24,6 +33,7 @@ public class RemoveById extends Command {
                 System.out.println("Элемента с таким id-номером нет в текущей коллекции!");
         }
     }
+
 
 
 

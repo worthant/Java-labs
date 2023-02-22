@@ -1,5 +1,8 @@
 package collection.City;
 
+/**
+ * Class representing a human
+ */
 public class Human implements Comparable<Human> {
     private String name; //Поле не может быть null, Строка не может быть пустой
 
@@ -7,6 +10,11 @@ public class Human implements Comparable<Human> {
         this.name = name;
     }
 
+    /**
+     * Compares two Human objects by their names
+     * @param o - Human object to compare
+     * @return - negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object
+     */
     @Override
     public int compareTo(Human o) {
         if (o == null) {

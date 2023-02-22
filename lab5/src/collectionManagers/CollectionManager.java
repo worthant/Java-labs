@@ -7,9 +7,19 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
+/**
+ * CollectionManager is a class for working with a TreeSet collection of City objects.
+ * It provides methods for loading and writing the collection to a .csv file,
+ * as well as creating a new City object based on user input.
+ */
 public class CollectionManager {
     private static TreeSet<City> cityTreeSet;
     private static String pathToDataFile;
+
+    /**
+     * Loads the TreeSet collection from a .csv file using the environment variable with the specified key.
+     * @param envKey the key of the environment variable containing the path to the .csv file
+     */
     public void loadCollection(String envKey) {
         String pathToDataFile = System.getenv(envKey);
         CollectionManager.setPathToDataFile(pathToDataFile);
@@ -24,22 +34,42 @@ public class CollectionManager {
         CollectionManager.setCityCollection(csvManager.readFromFile(pathToDataFile));
     }
 
+    /**
+     * Writes TreeSet collection to .csv file
+     */
     public void writeCollection() {
         CSVManager csvManager = new CSVManager();
         csvManager.write(pathToDataFile, cityTreeSet);
     }
+
+    /**
+     * Sets the collection of cities.
+     * @param cityTreeSet the TreeSet collection of City objects to set
+     */
     public static void setCityCollection(TreeSet<City> cityTreeSet) {
         CollectionManager.cityTreeSet = cityTreeSet;
     }
 
+    /**
+     * Gets the collection of cities.
+     * @return the TreeSet collection of City objects
+     */
     public static TreeSet<City> getCityCollection() {
         return cityTreeSet;
     }
 
+    /**
+     * Sets the path to the .csv file.
+     * @param pathToDataFile the path to the .csv file to set
+     */
     public static void setPathToDataFile(String pathToDataFile){
         CollectionManager.pathToDataFile = pathToDataFile;
     }
 
+    /**
+     * Creates new City object based on user input
+     * @return City object created
+     */
     public static City getNewCity() {
         ArrayList<Object> parameters = UserManager.createNewCityByUser();
 

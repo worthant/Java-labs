@@ -1,5 +1,8 @@
 package collection.City;
 
+/**
+ * Enum for different StandardOfLiving types
+ */
 public enum StandardOfLiving {
     ULTRA_HIGH,
     VERY_HIGH,

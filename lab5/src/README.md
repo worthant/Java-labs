@@ -82,8 +82,9 @@
 #
 
 - [ ] create userMode and nonUserMode packages in colectionManagers.handlers
-  - [ ] create CityNonCLIManager in nonUserMode
-  - [ ] create CityCLIManager in userMode
+  - [x] create CityNonCLIManager in nonUserMode
+  - [x] create CityCLIManager in userMode
+  - [ ] write working code in both 
 - [ ] create createCityObject() method in 
 - [ ] create interfaces for handlers
 

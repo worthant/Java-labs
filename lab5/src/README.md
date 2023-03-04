@@ -111,6 +111,10 @@
   - [ ] thwor all those exceptions to later handle them in 
 
 #
+- [ ] Make readFromFile method in CSV Manager return not only City-like object, but csvParser object (say no to hardcode!)
+- [ ] Then, make loadCityCollection method in CityManager iterate through fields like readFromFile method before
+- 
+#
 
 - [ ] create getDescription for each command
 - [ ] make help command not just sout String, but iterate through getDescription method of each command in CommandManager and write it's description

@@ -1,3 +1,5 @@
+# v1.0
+
 - [x] add README file for this laboratory work
 - [x] make colection package with all classes
 - [x] make default sorting implementing Comparable interface, overriding compareTo method
@@ -55,9 +57,6 @@
 - [x] Make id
   - [x] Make id generated automatically
   - [x] Make id unique
-- [ ] create validators for "add" and other commands
-- [ ] create handlers
-- [ ] use those validators in CSVManager  
 
 #
 
@@ -65,13 +64,57 @@
   - [x] `^D` symbol causes EOF, so what should I do?)
 - [x] Make sure the `execute_script` in `execute_script` doesn't run indefinitely
   - [x] check recursion when file1 reference file2, which also references file1
-- [ ] make `UML` diagram using plantUML
-- [ ] generate `javadoc` for everything
-- [ ] make `report` in .docx and .pdf
+- [x] make `UML` diagram using plantUML
+- [x] generate `javadoc` for everything
+- [x] make `report` in .docx and .pdf
   
 #
 
 - [x] generate lab5.jar file
-- [ ] upload it to `helios` via scp command
+- [x] upload it to `helios` via scp command
+#
+
+# v2.0
+
+- [ ] create validators for each City argument in collectionManagers.validators
+- [ ] use those validators in CSVManager 
+
+#
+
+- [ ] create userMode and nonUserMode packages in colectionManagers.handlers
+  - [ ] create CityNonCLIManager in nonUserMode
+  - [ ] create CityCLIManager in userMode
+- [ ] create createCityObject() method in 
+- [ ] create interfaces for handlers
 
 
+- [ ] create 2 modes: user and nonuser
+  - [ ] make CommandMode enum for createng this 2 modes
+  - [ ] make ModuleHandler for creating objects based on given CommandMode mode
+  - [ ] add it to CommandManager constructor
+  - [ ] based on mode, give scanner to nonCLI and nothing to CLI handler
+  - [ ] give every command, that could ask for nonuser mode just created handler object
+  - [ ] store all commands in LinkedHashMap for normal storing order, not just HashMap
+
+#
+
+- [ ] rewrite new UserManager class
+  - [ ] delete isWorking in Main and in UserManager.
+  - [ ] It takes input stream and command mode (not hardcoded System.in, like before)
+  - [ ] checks if next line is empty or not in while() loop
+  - [ ] if not it calls executeCommand method in CommandManager
+  
+  
+- [ ] make executeCommand in CommandManager, not in userManager
+  - [ ] executeCommand check for every possible exception and than calls .execute method from Command interface
+  - [ ] thwor all those exceptions to later handle them in 
+
+#
+
+- [ ] create getDescription for each command
+- [ ] make help command not just sout String, but iterate through getDescription method of each command in CommandManager and write it's description
+- [ ] exit command now uses system.exit(0)
+- [ ] add command uses CityCLI or nonCLI managers for createCityObject() method using CollectionHandler interface
+
+# ?
+1) system.exit(1)? (2)? other numbers?

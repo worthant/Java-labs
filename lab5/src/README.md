@@ -77,6 +77,17 @@
 # v2.0
 
 - [ ] create validators for each City argument in collectionManagers.validators
+  - [x] create Validator interface
+  - [ ] create NameValidator
+  - [ ] create CoordinateXValidator
+  - [ ] create CoordinateYValidator
+  - [ ] create AreaValidator
+  - [ ] create PopulationValidator
+  - [ ] create MetersAboveSeaLevelValidator
+  - [ ] create ClimateValidator
+  - [ ] create GovernmentValidator
+  - [ ] create StandardOfLivingValidator
+  - [ ] create HumanValidator
 - [ ] use those validators in CSVManager 
 
 #
@@ -108,7 +119,7 @@
   
 - [ ] make executeCommand in CommandManager, not in userManager
   - [ ] executeCommand check for every possible exception and than calls .execute method from Command interface
-  - [ ] thwor all those exceptions to later handle them in 
+  - [ ] throw all those exceptions to later handle them in 
 
 #
 - [ ] Make readFromFile method in CSV Manager return not only City-like object, but csvParser object (say no to hardcode!)

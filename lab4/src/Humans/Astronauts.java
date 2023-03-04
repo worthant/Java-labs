@@ -1,6 +1,5 @@
 package Humans;
 
-import java.lang.Math;
 import CosmicObjects.CosmicObject;
 import Interfaces.Imagine;
 import Ore.Ore;

@@ -1,8 +1,5 @@
 package command.commands;
 
-import collection.City.City;
-import collectionManagers.CollectionManager;
-import collectionManagers.IdChecker;
 import command.Command;
 import command.CommandManager;
 

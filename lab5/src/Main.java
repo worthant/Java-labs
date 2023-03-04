@@ -1,4 +1,4 @@
-import collectionManagers.CollectionManager;
+import collectionManagers.CityManager;
 import user.UserManager;
 /***
  * The main class of the application which
@@ -17,7 +17,7 @@ public class Main {
      @param args an array of command-line arguments for the application
      */
     public static void main(String[] args) {
-        CollectionManager loader = new CollectionManager();
+        CityManager loader = new CityManager();
         loader.loadCollection(ENV_KEY);
 
 

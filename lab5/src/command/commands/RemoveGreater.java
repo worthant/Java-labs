@@ -1,6 +1,6 @@
 package command.commands;
 import collection.City.City;
-import collectionManagers.CollectionManager;
+import collectionManagers.CityManager;
 import command.Command;
 
 import java.util.TreeSet;
@@ -22,8 +22,8 @@ public class RemoveGreater extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            City newCity = CollectionManager.getNewCity();
-            TreeSet<City> cities = CollectionManager.getCityCollection();
+            City newCity = CityManager.getNewCity();
+            TreeSet<City> cities = CityManager.getCityCollection();
             TreeSet<City> cities2 = new TreeSet<>();
 
             for (City city: cities) {

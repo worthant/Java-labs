@@ -1,11 +1,10 @@
 package command.commands;
 import collection.City.City;
-import collectionManagers.CollectionManager;
+import collectionManagers.CityManager;
 import command.Command;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.TreeSet;
 
 /**
@@ -26,7 +25,7 @@ public class PrintDescending extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            TreeSet<City> cities = CollectionManager.getCityCollection();
+            TreeSet<City> cities = CityManager.getCityCollection();
             ArrayList<City> list = new ArrayList<>();
             for (City city : cities) {
                 list.add(city);

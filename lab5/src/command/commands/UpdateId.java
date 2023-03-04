@@ -1,11 +1,9 @@
 package command.commands;
 
 import collection.City.City;
-import collectionManagers.CollectionManager;
-import collectionManagers.IdChecker;
+import collectionManagers.CityIdChecker;
+import collectionManagers.CityManager;
 import command.Command;
-
-import java.util.TreeSet;
 
 /**
  * Command to update a city by its id number.
@@ -22,13 +20,13 @@ public class UpdateId extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            Object obj = IdChecker.checkCityById((String) getArgument());
-            long id = IdChecker.getId();
+            Object obj = CityIdChecker.checkCityById((String) getArgument());
+            long id = CityIdChecker.getId();
             if (obj != null) {
-                CollectionManager.getCityCollection().remove(obj);
-                City city = CollectionManager.getNewCity();
+                CityManager.getCityCollection().remove(obj);
+                City city = CityManager.getNewCity();
                 city.setId(id);
-                CollectionManager.getCityCollection().add(city);
+                CityManager.getCityCollection().add(city);
             } else
                 System.out.println("Элемента с таким id-номером нет в текущей коллекции!");
         }

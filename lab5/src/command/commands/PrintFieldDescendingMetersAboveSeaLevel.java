@@ -2,10 +2,9 @@ package command.commands;
 
 import collection.City.City;
 import collection.comparators.CityComparatorByMetersAboveSeaLevel;
-import collectionManagers.CollectionManager;
+import collectionManagers.CityManager;
 import command.Command;
 
-import java.util.Comparator;
 import java.util.TreeSet;
 
 /**
@@ -27,7 +26,7 @@ public class PrintFieldDescendingMetersAboveSeaLevel extends Command {
     public void execute() {
         if (checkArgument(getArgument())) {
             TreeSet<City> cities2 = new TreeSet<>(new CityComparatorByMetersAboveSeaLevel());
-            TreeSet<City> cities = CollectionManager.getCityCollection();
+            TreeSet<City> cities = CityManager.getCityCollection();
             for (City city: cities) {
                 cities2.add(city);
             }

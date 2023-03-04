@@ -7,7 +7,7 @@ import java.util.TreeSet;
 /**
  * Class for managing object's id's
  */
-public class IdChecker {
+public class CityIdChecker {
     public static long id;
 
     /**
@@ -17,7 +17,7 @@ public class IdChecker {
      */
     public static Object checkCityById(String argument) {
         long id = Long.parseLong(argument);
-        TreeSet<City> cities = CollectionManager.getCityCollection();
+        TreeSet<City> cities = CityManager.getCityCollection();
         Object obj = new Object();
         boolean flag = false;
         for (City city : cities) {

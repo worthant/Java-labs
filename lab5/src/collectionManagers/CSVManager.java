@@ -11,14 +11,13 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
-import user.UserManager;
 
 /**
  * The CSVManager class provides methods for working with files in .csv format.
  * The class implements the Managers interface.
- * @see collectionManagers.Managers
+ * @see FileManager
  */
-public class CSVManager implements Managers{
+public class CSVManager implements FileManager {
     /**
      * Reads data from a file in .csv format and returns a TreeSet of City objects.
      * @param pathToDataFile the path to the file containing the city data.

@@ -1,7 +1,7 @@
 package command.commands;
 
 
-import collectionManagers.CollectionManager;
+import collectionManagers.CityManager;
 import command.Command;
 
 /**
@@ -20,7 +20,7 @@ public class Save extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            CollectionManager collectionManager = new CollectionManager();
+            CityManager collectionManager = new CityManager();
             collectionManager.writeCollection();
         }
     }

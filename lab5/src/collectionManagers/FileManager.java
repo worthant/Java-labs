@@ -9,7 +9,7 @@ import java.util.TreeSet;
  The {@code Managers} interface represents a collection manager that reads and writes objects from and to a file.
  It has two methods to read objects from a file and write objects to a file.
  */
-public interface Managers {
+public interface FileManager {
 
     /**
      Reads a TreeSet of Cities from a file located at the specified path.

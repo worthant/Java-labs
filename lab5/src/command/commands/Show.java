@@ -1,7 +1,7 @@
 package command.commands;
 
 import collection.City.City;
-import collectionManagers.CollectionManager;
+import collectionManagers.CityManager;
 import command.Command;
 
 import java.util.TreeSet;
@@ -22,10 +22,10 @@ public class Show extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            if (CollectionManager.getCityCollection().isEmpty()) {
+            if (CityManager.getCityCollection().isEmpty()) {
                 System.out.println("Текущая коллекция пуста!");
             } else {
-                TreeSet<City> citySet = CollectionManager.getCityCollection();
+                TreeSet<City> citySet = CityManager.getCityCollection();
                 for (City city : citySet) {
                     System.out.println(city.toString());
                 }

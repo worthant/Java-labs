@@ -1,12 +1,7 @@
 package command.commands;
-import collection.City.City;
-import collectionManagers.CollectionManager;
-import collectionManagers.IdChecker;
+import collectionManagers.CityIdChecker;
+import collectionManagers.CityManager;
 import command.Command;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.TreeSet;
 
 /**
  * Class RemoveById provides removal of an element from the collection by its ID number.
@@ -26,9 +21,9 @@ public class RemoveById extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            Object obj = IdChecker.checkCityById((String) getArgument());
+            Object obj = CityIdChecker.checkCityById((String) getArgument());
             if (obj != null)
-                CollectionManager.getCityCollection().remove(obj);
+                CityManager.getCityCollection().remove(obj);
             else
                 System.out.println("Элемента с таким id-номером нет в текущей коллекции!");
         }

@@ -1,6 +1,6 @@
 package command.commands;
 
-import collectionManagers.CollectionManager;
+import collectionManagers.CityManager;
 import command.Command;
 
 /**
@@ -22,9 +22,9 @@ public class Info extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            System.out.println("Тип коллекции: " + CollectionManager.getCityCollection().getClass().toString());
-            System.out.println("Дата инициализации: " + CollectionManager.getCityCollection().first().getCreationDate().toString());
-            System.out.println("Количество элементов: " + CollectionManager.getCityCollection().toArray().length);
+            System.out.println("Тип коллекции: " + CityManager.getCityCollection().getClass().toString());
+            System.out.println("Дата инициализации: " + CityManager.getCityCollection().first().getCreationDate().toString());
+            System.out.println("Количество элементов: " + CityManager.getCityCollection().toArray().length);
         }
     }
 

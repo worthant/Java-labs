@@ -3,7 +3,7 @@ package command.commands;
 import command.Command;
 
 import collection.City.City;
-import collectionManagers.CollectionManager;
+import collectionManagers.CityManager;
 
 import java.util.TreeSet;
 
@@ -24,8 +24,8 @@ public class AddIfMin extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            City newCity = CollectionManager.getNewCity();
-            TreeSet<City> cities = CollectionManager.getCityCollection();
+            City newCity = CityManager.getNewCity();
+            TreeSet<City> cities = CityManager.getCityCollection();
 
             if (newCity.getPopulation() < cities.first().getPopulation()) {
                 cities.add(newCity);

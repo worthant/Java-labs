@@ -1,6 +1,5 @@
 package command.commands;
-import collection.City.City;
-import collectionManagers.CollectionManager;
+import collectionManagers.CityManager;
 import command.Command;
 
 /**
@@ -20,7 +19,7 @@ public class Add extends Command{
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            CollectionManager.getCityCollection().add(CollectionManager.getNewCity());
+            CityManager.getCityCollection().add(CityManager.getNewCity());
         }
     }
 

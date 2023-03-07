@@ -78,10 +78,10 @@
 
 - [ ] create validators for each City argument in collectionManagers.validators
   - [x] create Validator interface
-  - [ ] create NameValidator
-  - [ ] create CoordinateXValidator
-  - [ ] create CoordinateYValidator
-  - [ ] create AreaValidator
+  - [x] create NameValidator
+  - [x] create CoordinateXValidator
+  - [x] create CoordinateYValidator
+  - [x] create AreaValidator
   - [ ] create PopulationValidator
   - [ ] create MetersAboveSeaLevelValidator
   - [ ] create ClimateValidator

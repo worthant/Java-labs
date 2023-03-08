@@ -1,10 +1,9 @@
 package collectionManagers.validators;
 
 /**
- * Implementation of validator for name field. (Route)
+ * Implementation of validator for name field. (City)
  *
- * @since 1.0
- * @author Zerumi
+ * @author boris
  */
 public class NameValidator implements Validator<String> {
 

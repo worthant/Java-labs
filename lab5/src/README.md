@@ -76,7 +76,7 @@
 
 # v2.0
 
-- [ ] create validators for each City argument in collectionManagers.validators
+- [x] create validators for each City argument in collectionManagers.validators
   - [x] create Validator interface
   - [x] create NameValidator
   - [x] create CoordinateXValidator
@@ -87,7 +87,7 @@
   - [x] create ClimateValidator
   - [x] create GovernmentValidator
   - [x] create StandardOfLivingValidator
-  - [ ] create HumanValidator
+  - [x] create HumanValidator
 - [ ] use those validators in CSVManager 
 
 #

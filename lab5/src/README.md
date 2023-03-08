@@ -84,8 +84,8 @@
   - [x] create AreaValidator
   - [x] create PopulationValidator
   - [x] create MetersAboveSeaLevelValidator
-  - [ ] create ClimateValidator
-  - [ ] create GovernmentValidator
+  - [x] create ClimateValidator
+  - [x] create GovernmentValidator
   - [ ] create StandardOfLivingValidator
   - [ ] create HumanValidator
 - [ ] use those validators in CSVManager 

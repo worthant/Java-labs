@@ -109,6 +109,12 @@
   - [ ] store all commands in LinkedHashMap for normal storing order, not just HashMap
 
 #
+- [ ] IdManager class
+  - [x] rename CityIdChecker to IdManager
+  - [ ] create generateId method
+  - [ ] create checkCityById method
+
+#
 
 - [ ] rewrite new UserManager class
   - [ ] delete isWorking in Main and in UserManager.

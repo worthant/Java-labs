@@ -11,7 +11,7 @@ import java.util.TreeSet;
  * It provides methods for loading and writing the collection to a .csv file,
  * as well as creating a new City object based on user input.
  */
-public class CityManager {
+public class CityManager implements CollectionManager{
     private static TreeSet<City> cityTreeSet;
     private static String pathToDataFile;
 

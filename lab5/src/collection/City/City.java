@@ -37,6 +37,8 @@ public class City implements Comparable<City> {
         this.governor = governor;
     }
 
+    public City() {}
+
     public int getHeight() {
         return height;
     }

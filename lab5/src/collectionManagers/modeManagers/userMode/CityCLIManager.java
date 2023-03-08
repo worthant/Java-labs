@@ -1,7 +1,10 @@
 package collectionManagers.modeManagers.userMode;
 
 import collection.City.*;
+import collectionManagers.IdManager;
 import collectionManagers.modeManagers.ModeManager;
+import collectionManagers.validators.NameValidator;
+import collectionManagers.validators.Validator;
 import exceptions.BuildObjectException;
 
 import java.time.LocalDate;
@@ -17,17 +20,27 @@ public class CityCLIManager implements ModeManager<City> {
         Scanner scanner = new Scanner(System.in);
 
         // unique id
-        long id;
-        id = parameters.hashCode();
-        parameters.add(id);
+        city.setId(IdManager.generateId());
 
+        // name
         String name;
+        Validator<String> nameValidator = new NameValidator();
         do {
-            System.out.print("Введите ненулевое имя(не может быть null!): ");
-            name = scanner.nextLine().trim();
-        } while (name.equals(""));
-        parameters.add(name);
+            System.out.print("Enter name(not null!)(type: String) : ");
+            name = scanner.nextLine();
 
+            // if this value will be null add this code:
+            // if (name.isEmpty()) name = inputLine, where inputLine is *name* = scanner.nextLine()
+            // and also remove value == null checking from Validator
+
+            if (!nameValidator.validate(name)) {
+                System.out.println("Value violates restrictions for field! Try again.");
+                System.out.println("Restrictions: Should be not null and not empty.");
+            }
+        } while (!nameValidator.validate(name));
+        city.setName(name);
+
+        // Coordinates
         Integer x;
         while (true) {
             try {

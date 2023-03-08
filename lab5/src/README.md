@@ -111,7 +111,7 @@
 #
 - [ ] IdManager class
   - [x] rename CityIdChecker to IdManager
-  - [ ] create generateId method
+  - [x] create generateId method
   - [ ] create checkCityById method
 
 #

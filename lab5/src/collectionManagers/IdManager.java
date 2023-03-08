@@ -42,10 +42,10 @@ public class IdManager {
     }
 
     public static Long generateId() {
-        Long id = ThreadLocalRandom.current().nextLong(1, Long.MAX_VALUE);
-        while (queue.contains(id)) {
+        Long id;
+        do {
             id = ThreadLocalRandom.current().nextLong(1, Long.MAX_VALUE);
-        }
+        } while (queue.contains(id));
         queue.add(id);
         return id;
     }

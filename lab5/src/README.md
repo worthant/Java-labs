@@ -82,7 +82,7 @@
   - [x] create CoordinateXValidator
   - [x] create CoordinateYValidator
   - [x] create AreaValidator
-  - [ ] create PopulationValidator
+  - [x] create PopulationValidator
   - [ ] create MetersAboveSeaLevelValidator
   - [ ] create ClimateValidator
   - [ ] create GovernmentValidator

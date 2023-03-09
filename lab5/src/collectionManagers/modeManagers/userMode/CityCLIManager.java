@@ -10,6 +10,7 @@ import exceptions.BuildObjectException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class CityCLIManager implements ModeManager<City> {
@@ -41,47 +42,12 @@ public class CityCLIManager implements ModeManager<City> {
         city.setName(name);
 
         // Coordinates
-        Integer x;
-        while (true) {
-            try {
-                System.out.print("Введите координату x в типе данных Integer: ");
-                String nextLine = scanner.nextLine().trim();
-                if (nextLine.equals(""))
-                    System.out.println("Введите ненулевую координату(не может быть null!)");
-                else {
-                    x = Integer.parseInt(nextLine);
-                    if (x <= 499)
-                        break;
-                    else
-                        System.out.println("Максимальное значение координаты x: 499");
-                }
-            } catch (NumberFormatException | InputMismatchException e2) {
-                System.out.println("Требуется ввести число в типе данных Integer!");
-            }
-        }
-        double y;
-        while (true) {
-            try {
-                System.out.print("Введите координату y в типе данных double: ");
-                String nextLine = scanner.nextLine().trim();
-                if (nextLine.equals(""))
-                    System.out.println("Введите ненулевую координату(не может быть null!)");
-                else {
-                    y = Double.parseDouble(nextLine);
-                    if (y > -274)
-                        break;
-                    else
-                        System.out.println("Координата y должна быть больше -274");
-                }
-            } catch (NumberFormatException | InputMismatchException e) {
-                System.out.println("Требуется ввести число в типе данных double!");
-            }
-        }
-        Coordinates coordinates = new Coordinates(x, y);
-        parameters.add(coordinates);
+        CoordinatesCLIManager coordinatesCLIHandler = new CoordinatesCLIManager();
+        city.setCoordinates(coordinatesCLIHandler.buildObject());
 
+        // date
         java.util.Date creationDate = java.sql.Date.valueOf(LocalDate.now());
-        parameters.add(creationDate);
+        city.setCreationDate(creationDate);
 
         Integer area;
         while (true) {
@@ -100,7 +66,7 @@ public class CityCLIManager implements ModeManager<City> {
                 System.out.println("Требуется ввести число в типе данных Integer!");
             }
         }
-        parameters.add(area);
+        city.setArea(area);
 
 
         int population;
@@ -122,7 +88,7 @@ public class CityCLIManager implements ModeManager<City> {
                 System.out.println("Требуется ввести число в типе данных int!");
             }
         }
-        parameters.add(population);
+        city.setPopulation(population);
 
         Double metersAboveSeaLevel;
         while (true) {
@@ -137,18 +103,19 @@ public class CityCLIManager implements ModeManager<City> {
                 System.out.println("Требуется ввести число в типе данных Double!");
             }
         }
-        parameters.add(metersAboveSeaLevel);
+        city.setMetersAboveSeaLevel(metersAboveSeaLevel);
 
 
         Climate climate;
         while (true) {
+            System.out.println();
             climate = (Climate) requestEnum(Climate.values(), "тип");
             if (climate == null)
                 System.out.println("Некорректно введены данные!(не может быть null)");
             else
                 break;
         }
-        parameters.add(climate);
+        city.setClimate(climate);
 
         Government government;
         while (true) {
@@ -158,7 +125,7 @@ public class CityCLIManager implements ModeManager<City> {
             else
                 break;
         }
-        parameters.add(government);
+        city.setGovernment(government);
 
 
         StandardOfLiving standardOfLiving;
@@ -169,7 +136,7 @@ public class CityCLIManager implements ModeManager<City> {
             else
                 break;
         }
-        parameters.add(standardOfLiving);
+        city.setStandardOfLiving(standardOfLiving);
 
 
         Human governor;
@@ -183,8 +150,45 @@ public class CityCLIManager implements ModeManager<City> {
                 break;
             }
         }
-        parameters.add(governor);
+        city.setGovernor(governor);
 
-        return parameters;
+        return city;
+    }
+
+    private static Object requestEnum(Object[] values, String name) {
+        try {
+            System.out.println("Выберите " + name + ":");
+
+            int i = 0;
+            for (Object value : values) {
+                System.out.println("\t" + ++i + " - " + value.toString());
+            }
+
+            System.out.print("Введите целое число от 1 до " + values.length + ": ");
+            String userAnswer;
+            try {
+                userAnswer = scanner.nextLine().trim();
+                if (userAnswer.equals(""))
+                    return null;
+            } catch (InputMismatchException e) {
+                System.out.println("Требуется ввести целое число!");
+                return null;
+            }
+
+            int userAnswerInt = Integer.parseInt(userAnswer);
+            if (userAnswerInt >= 1 && userAnswerInt <= i) {
+                return values[userAnswerInt - 1];
+            } else {
+                System.out.println("Требуется ввести целое число от 1 до " + values.length + "!");
+                return null;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Требуется ввести целое число от 1 до " + values.length + "!");
+            return null;
+        } catch (NoSuchElementException e) {
+            System.out.println("чего прогу ломаеш?");
+            System.exit(0);
+            return null;
+        }
     }
 }

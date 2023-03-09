@@ -6,8 +6,8 @@ import java.util.Objects;
  * Class representing coordinates
  */
 public class Coordinates {
-    private int x; //Максимальное значение поля: 499
-    private double y; //Значение поля должно быть больше -274
+    private Integer x; //Максимальное значение поля: 499
+    private Double y; //Значение поля должно быть больше -274
 
     /**
      * Constructor for creating Coordinates object
@@ -18,6 +18,8 @@ public class Coordinates {
         this.x = x;
         this.y = y;
     }
+
+    public Coordinates(){}
 
     public int getX() {
         return x;

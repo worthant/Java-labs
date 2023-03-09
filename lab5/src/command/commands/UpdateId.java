@@ -1,8 +1,8 @@
 package command.commands;
 
 import collection.City.City;
-import collectionManagers.CityIdChecker;
 import collectionManagers.CityManager;
+import collectionManagers.IdManager;
 import command.Command;
 
 /**
@@ -20,8 +20,8 @@ public class UpdateId extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            Object obj = CityIdChecker.checkCityById((String) getArgument());
-            long id = CityIdChecker.getId();
+            Object obj = IdManager.checkCityById((String) getArgument());
+            long id = IdManager.generateId();
             if (obj != null) {
                 CityManager.getCityCollection().remove(obj);
                 City city = CityManager.getNewCity();

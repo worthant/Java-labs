@@ -88,6 +88,7 @@
   - [x] create GovernmentValidator
   - [x] create StandardOfLivingValidator
   - [x] create HumanValidator
+  - [x] create InputValidator
 - [ ] use those validators in CSVManager 
 
 #
@@ -95,13 +96,18 @@
 - [ ] create userMode and nonUserMode packages in colectionManagers.handlers
   - [x] create CityNonCLIManager in nonUserMode
   - [x] create CityCLIManager in userMode
+    - [x] create CoordinatesCLIManager in userMode
+    - [ ] create HumanCLIManager in userMode
+    - [ ] create ClimateCLIManager in userMode
+    - [ ] create GovernmentCLIManager
+    - [ ] create StandardOfLivingCLIManager in userMode
   - [ ] write working code in both 
 - [ ] create createCityObject() method in 
 - [ ] create interfaces for handlers
 
 
 - [ ] create 2 modes: user and nonuser
-  - [ ] make CommandMode enum for createng this 2 modes
+  - [ ] make CommandMode enum for creating this 2 modes
   - [ ] make ModuleHandler for creating objects based on given CommandMode mode
   - [ ] add it to CommandManager constructor
   - [ ] based on mode, give scanner to nonCLI and nothing to CLI handler

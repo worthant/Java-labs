@@ -5,7 +5,6 @@ package collectionManagers.validators;
  *
  * @param <T> Type of validation value.
  */
-@FunctionalInterface
 public interface Validator<T> {
     /**
      * Provides validation method.
@@ -14,4 +13,6 @@ public interface Validator<T> {
      * @return true if value is validate. Otherwise false.
      */
     boolean validate(T value);
+
+    String getDescr();
 }

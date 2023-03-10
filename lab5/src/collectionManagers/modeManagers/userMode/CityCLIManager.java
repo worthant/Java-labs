@@ -3,8 +3,7 @@ package collectionManagers.modeManagers.userMode;
 import collection.City.*;
 import collectionManagers.IdManager;
 import collectionManagers.modeManagers.ModeManager;
-import collectionManagers.validators.NameValidator;
-import collectionManagers.validators.Validator;
+import collectionManagers.validators.*;
 import exceptions.BuildObjectException;
 
 import java.time.LocalDate;
@@ -19,26 +18,31 @@ public class CityCLIManager implements ModeManager<City> {
         System.out.println("Building new City object...");
         City city = new City();
         Scanner scanner = new Scanner(System.in);
+        Validator<String> inputValidator = new InputValidator();
+        String nextLine;
+        System.out.println();
 
         // unique id
         city.setId(IdManager.generateId());
 
         // name
-        String name;
+        String name = null;
         Validator<String> nameValidator = new NameValidator();
         do {
             System.out.print("Enter name(not null!)(type: String) : ");
-            name = scanner.nextLine();
+            nextLine = scanner.nextLine();
 
             // if this value will be null add this code:
             // if (name.isEmpty()) name = inputLine, where inputLine is *name* = scanner.nextLine()
             // and also remove value == null checking from Validator
-
+            if (inputValidator.validate(nextLine)) {
+                name = nextLine;
+            }
             if (!nameValidator.validate(name)) {
                 System.out.println("Value violates restrictions for field! Try again.");
-                System.out.println("Restrictions: Should be not null and not empty.");
+                System.out.println("Restrictions: " + nameValidator.getDescr());
             }
-        } while (!nameValidator.validate(name));
+        } while (!inputValidator.validate(nextLine));
         city.setName(name);
 
         // Coordinates
@@ -50,26 +54,35 @@ public class CityCLIManager implements ModeManager<City> {
         city.setCreationDate(creationDate);
 
         Integer area;
-        while (true) {
-            try {
-                System.out.print("Введите область в типе данных Integer: ");
-                String nextLine = scanner.nextLine().trim();
-                if (!nextLine.equals("")) {
-                    area = Integer.parseInt(nextLine);
-                    if (area > 0) {
-                        break;
-                    } else {
-                        System.out.println("Область должна быть больше 0!");
-                    }
+        Validator<Integer> areaValidator = new AreaValidator();
+        do {
+            System.out.print("Enter area(noy null!)(type:Integer) : ");
+            nextLine = scanner.nextLine();
+
+            if (inputValidator.validate(nextLine)) {
+                area = Integer.parseInt(nextLine);
+                if (areaValidator.validate(area))
+                    city.setArea(area);
+                else {
+                    System.out.println("Value violates restrictions for this field! Try again.");
+                    System.out.println("Restrictions: " + areaValidator.getDescr());
                 }
-            } catch (NumberFormatException | InputMismatchException e) {
-                System.out.println("Требуется ввести число в типе данных Integer!");
+
             }
-        }
-        city.setArea(area);
+        } while (!inputValidator.validate(nextLine));
+
 
 
         int population;
+        Validator<Integer> populationValidator = new PopulationValidator();
+        do {
+            System.out.print("Введите численность населения в типе данных int: ");
+            nextLine = scanner.nextLine();
+
+
+        } while (!inputValidator.validate(nextLine));
+
+
         while (true) {
             try {
                 System.out.print("Введите численность населения в типе данных int: ");

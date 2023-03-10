@@ -6,6 +6,9 @@ package collectionManagers.validators;
  * @author boris
  */
 public class NameValidator implements Validator<String> {
+    public String getDescr() {
+        return "";
+    }
 
     /**
      * Checks if value not null and not blank.

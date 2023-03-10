@@ -12,8 +12,18 @@ public class InputValidator implements Validator<String>{
      * @param value name to validate
      * @return true/false -- matches the restrictions
      */
+    boolean canBeNull = false;
+    public String getDescr() {
+        return "";
+    }
     @Override
     public boolean validate(String value) {
-        return !value.isEmpty() && !value.isBlank();
+        if (!canBeNull)
+            return !value.isEmpty() && !value.isBlank();
+        return true;
+    }
+
+    public void canBeNull(boolean canBeNull) {
+        this.canBeNull = canBeNull;
     }
 }

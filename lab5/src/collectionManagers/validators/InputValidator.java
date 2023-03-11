@@ -5,7 +5,7 @@ package collectionManagers.validators;
  *
  * @author boris
  */
-public class InputValidator implements Validator<String>{
+public class InputValidator<T>{
     /**
      * Checks if value not null and not blank.
      *
@@ -16,7 +16,6 @@ public class InputValidator implements Validator<String>{
     public String getDescr() {
         return "";
     }
-    @Override
     public boolean validate(String value) {
         if (!canBeNull)
             return !value.isEmpty() && !value.isBlank();

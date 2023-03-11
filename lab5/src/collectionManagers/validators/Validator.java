@@ -6,6 +6,8 @@ package collectionManagers.validators;
  * @param <T> Type of validation value.
  */
 public interface Validator<T> {
+    boolean canBeNull = false;
+
     /**
      * Provides validation method.
      *

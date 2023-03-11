@@ -18,7 +18,7 @@ public class CityCLIManager implements ModeManager<City> {
         System.out.println("Building new City object...");
         City city = new City();
         Scanner scanner = new Scanner(System.in);
-        Validator<String> inputValidator = new InputValidator();
+        InputValidator<String> inputValidator = new InputValidator();
         String nextLine;
         System.out.println();
 
@@ -28,6 +28,7 @@ public class CityCLIManager implements ModeManager<City> {
         // name
         String name = null;
         Validator<String> nameValidator = new NameValidator();
+        inputValidator.canBeNull(false);
         while (true) {
             System.out.print("Enter name(not null!)(type: String) : ");
             nextLine = scanner.nextLine();

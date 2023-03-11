@@ -8,5 +8,8 @@ public enum Government {
     GERONTOCRACY,
     DEMARCHY,
     COMMUNISM,
-    NOOCRACY
+    NOOCRACY;
+    public static String getName() {
+        return "Government";
+    }
 }

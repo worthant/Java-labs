@@ -45,7 +45,6 @@ public class CityCLIManager implements ModeManager<City> {
             } else System.out.println("Input should not be empty!(value is not null)");
         }
 
-
         // Coordinates
         CoordinatesCLIManager coordinatesCLIHandler = new CoordinatesCLIManager();
         city.setCoordinates(coordinatesCLIHandler.buildObject());
@@ -53,7 +52,6 @@ public class CityCLIManager implements ModeManager<City> {
         // date
         java.util.Date creationDate = java.sql.Date.valueOf(LocalDate.now());
         city.setCreationDate(creationDate);
-
 
         // area
         Integer area;
@@ -74,7 +72,6 @@ public class CityCLIManager implements ModeManager<City> {
             } else System.out.println("Input should not be empty!(value is not null)");
         }
 
-
         // population
         int population;
         Validator<Integer> populationValidator = new PopulationValidator();
@@ -93,7 +90,6 @@ public class CityCLIManager implements ModeManager<City> {
                 }
             } else System.out.println("Input should not be empty!(value is not null)");
         }
-
 
         // metersAboveSeaLevel
         Double metersAboveSeaLevel;
@@ -114,7 +110,6 @@ public class CityCLIManager implements ModeManager<City> {
             } else System.out.println("Input should not be empty!(value is not null)");
         }
 
-
         // climate
         ClimateCLIManager climateCLIManager = new ClimateCLIManager();
         city.setClimate(climateCLIManager.buildObject());
@@ -127,58 +122,10 @@ public class CityCLIManager implements ModeManager<City> {
         StandardOfLivingCLIManager standardOfLivingCLIManager = new StandardOfLivingCLIManager();
         city.setStandardOfLiving(standardOfLivingCLIManager.buildObject());
 
-
-//        while (true) {
-//            System.out.println();
-//            climate = (Climate) requestEnum(Climate.values(), "тип");
-//            if (climate == null)
-//                System.out.println("Некорректно введены данные!(не может быть null)");
-//            else
-//                break;
-//        }
-//        city.setClimate(climate);
-//
-//        Government government;
-//        while (true) {
-//            government = (Government) requestEnum(Government.values(), "тип");
-//            if (government == null)
-//                System.out.println("Некорректно введены данные!");
-//            else
-//                break;
-//        }
-//        city.setGovernment(government);
-//
-//
-//        StandardOfLiving standardOfLiving;
-//        while (true) {
-//            standardOfLiving = (StandardOfLiving) requestEnum(StandardOfLiving.values(), "тип");
-//            if (standardOfLiving == null)
-//                System.out.println("Некорректно введены данные!(не может быть null)");
-//            else
-//                break;
-//        }
-//        city.setStandardOfLiving(standardOfLiving);
-
-
         // Human
         HumanCLIManager humanCLIManager = new HumanCLIManager();
         city.setGovernor(humanCLIManager.buildObject());
 
-//
-//        while (true) {
-//            System.out.print("Введите ненулевое имя governor(не может быть null!): ");
-//            String nextLine = scanner.nextLine().trim();
-//            if (nextLine.equals(""))
-//                System.out.println("Введите ненулевое имя(не может быть null!)");
-//            else {
-//                governor = new Human(nextLine);
-//                break;
-//            }
-//        }
-//        city.setGovernor(governor);
-//
-//        return city;
-//    }
         return city;
     }
 }

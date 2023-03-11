@@ -12,12 +12,11 @@ public class ClimateCLIManager implements ModeManager<Climate> {
     public Climate buildObject() throws BuildObjectException {
         Scanner scanner = new Scanner(System.in);
         InputValidator inputValidator = new InputValidator();
-        String nextLine;
         System.out.println();
 
         inputValidator.canBeNull(true);
-        EnumRequester<Climate> cliManagerUtility = new EnumRequester<>();
-        Climate climate = cliManagerUtility.requestEnum(Climate.values(), Climate.getName(), scanner, inputValidator);
+        EnumRequester<Climate> enumRequester = new EnumRequester<>();
+        Climate climate = enumRequester.requestEnum(Climate.values(), Climate.getName(), scanner, inputValidator);
         return climate;
     }
 }

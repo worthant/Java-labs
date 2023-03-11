@@ -9,6 +9,15 @@ public class Human implements Comparable<Human> {
     public Human(String name) {
         this.name = name;
     }
+    public Human(){};
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     /**
      * Compares two Human objects by their names

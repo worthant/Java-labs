@@ -5,7 +5,7 @@ package collectionManagers.validators;
  *
  * @author boris
  */
-public class InputValidator<T>{
+public class InputValidator{
     /**
      * Checks if value not null and not blank.
      *

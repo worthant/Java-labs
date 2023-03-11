@@ -18,7 +18,7 @@ public class CityCLIManager implements ModeManager<City> {
         System.out.println("Building new City object...");
         City city = new City();
         Scanner scanner = new Scanner(System.in);
-        InputValidator<String> inputValidator = new InputValidator();
+        InputValidator inputValidator = new InputValidator();
         String nextLine;
         System.out.println();
 

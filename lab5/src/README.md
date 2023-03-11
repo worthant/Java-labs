@@ -89,7 +89,7 @@
   - [x] create StandardOfLivingValidator
   - [x] create HumanValidator
   - [x] create InputValidator
-- [ ] use those validators in CSVManager 
+- [ ] use those validators in CSVManager
 
 #
 
@@ -139,13 +139,17 @@
 #
 - [ ] Make readFromFile method in CSV Manager return not only City-like object, but csvParser object (say no to hardcode!)
 - [ ] Then, make loadCityCollection method in CityManager iterate through fields like readFromFile method before
-- 
 #
 
 - [ ] create getDescription for each command
 - [ ] make help command not just sout String, but iterate through getDescription method of each command in CommandManager and write it's description
 - [ ] exit command now uses system.exit(0)
 - [ ] add command uses CityCLI or nonCLI managers for createCityObject() method using CollectionHandler interface
+
+# v2.1
+- [x] delete enum validators, because there is nothing to check
+- [x] create CLIManagerUtility for handy enum creation managing
+
 
 # ?
 1) system.exit(1)? (2)? other numbers?

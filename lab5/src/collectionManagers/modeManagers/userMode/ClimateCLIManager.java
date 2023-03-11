@@ -1,4 +1,24 @@
 package collectionManagers.modeManagers.userMode;
 
-public class ClimateCLIManager {
+import collection.City.Climate;
+import collectionManagers.modeManagers.ModeManager;
+import collectionManagers.validators.InputValidator;
+import collectionManagers.validators.Validator;
+import exceptions.BuildObjectException;
+
+import java.util.Scanner;
+
+public class ClimateCLIManager implements ModeManager<Climate> {
+    @Override
+    public Climate buildObject() throws BuildObjectException {
+        Climate climate;
+        Scanner scanner = new Scanner(System.in);
+        Validator<String> inputValidator = new InputValidator();
+        String nextLine;
+        System.out.println();
+
+
+        climate = CLIManagerUtility.requestEnum(Climate.values(), Climate.getName(), );
+        return climate;
+    }
 }

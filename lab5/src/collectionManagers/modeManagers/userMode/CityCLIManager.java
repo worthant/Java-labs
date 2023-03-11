@@ -28,22 +28,22 @@ public class CityCLIManager implements ModeManager<City> {
         // name
         String name = null;
         Validator<String> nameValidator = new NameValidator();
-        do {
+        while (true) {
             System.out.print("Enter name(not null!)(type: String) : ");
             nextLine = scanner.nextLine();
 
-            // if this value will be null add this code:
-            // if (name.isEmpty()) name = inputLine, where inputLine is *name* = scanner.nextLine()
-            // and also remove value == null checking from Validator
             if (inputValidator.validate(nextLine)) {
                 name = nextLine;
-            }
-            if (!nameValidator.validate(name)) {
-                System.out.println("Value violates restrictions for field! Try again.");
-                System.out.println("Restrictions: " + nameValidator.getDescr());
-            }
-        } while (!inputValidator.validate(nextLine));
-        city.setName(name);
+                if (nameValidator.validate(name)) {
+                    city.setName(name);
+                    break;
+                } else {
+                    System.out.println("Value violates restrictions for field! Try again.");
+                    System.out.println("Restrictions: " + nameValidator.getDescr());
+                }
+            } else System.out.println("Input should not be empty!(value is not null)");
+        }
+
 
         // Coordinates
         CoordinatesCLIManager coordinatesCLIHandler = new CoordinatesCLIManager();
@@ -53,155 +53,131 @@ public class CityCLIManager implements ModeManager<City> {
         java.util.Date creationDate = java.sql.Date.valueOf(LocalDate.now());
         city.setCreationDate(creationDate);
 
+
+        // area
         Integer area;
         Validator<Integer> areaValidator = new AreaValidator();
-        do {
-            System.out.print("Enter area(noy null!)(type:Integer) : ");
+        while (true) {
+            System.out.print("Enter area(not null!)(type: Integer) : ");
             nextLine = scanner.nextLine();
 
             if (inputValidator.validate(nextLine)) {
                 area = Integer.parseInt(nextLine);
-                if (areaValidator.validate(area))
+                if (areaValidator.validate(area)) {
                     city.setArea(area);
-                else {
+                    break;
+                } else {
                     System.out.println("Value violates restrictions for this field! Try again.");
                     System.out.println("Restrictions: " + areaValidator.getDescr());
                 }
-
-            }
-        } while (!inputValidator.validate(nextLine));
-
+            } else System.out.println("Input should not be empty!(value is not null)");
+        }
 
 
+        // population
         int population;
         Validator<Integer> populationValidator = new PopulationValidator();
-        do {
-            System.out.print("Введите численность населения в типе данных int: ");
+        while (true) {
+            System.out.print("Enter population(not null!)(type: int) : ");
             nextLine = scanner.nextLine();
 
-
-        } while (!inputValidator.validate(nextLine));
-
-
-        while (true) {
-            try {
-                System.out.print("Введите численность населения в типе данных int: ");
-                String nextLine = scanner.nextLine().trim();
-                if (nextLine.equals(""))
-                    System.out.println("Введите ненулевую численность населения(не может быть null!)");
-                else {
-                    population = Integer.parseInt(nextLine);
-                    if (population > 0) {
-                        break;
-                    } else {
-                        System.out.println("Численность населения должна быть больше 0!");
-                    }
-                }
-            } catch (NumberFormatException | InputMismatchException e) {
-                System.out.println("Требуется ввести число в типе данных int!");
-            }
-        }
-        city.setPopulation(population);
-
-        Double metersAboveSeaLevel;
-        while (true) {
-            try {
-                System.out.println("Введите высоту над уровнем моря в метрах в типе данных Double: ");
-                String nextLine = scanner.nextLine().trim();
-                if (!nextLine.equals("")) {
-                    metersAboveSeaLevel = Double.parseDouble(nextLine);
+            if (inputValidator.validate(nextLine)) {
+                population = Integer.parseInt(nextLine);
+                if (populationValidator.validate(population)) {
+                    city.setPopulation(population);
                     break;
+                } else {
+                    System.out.println("Value violates restrictions for this field! Try again.");
+                    System.out.println("Restrictions: " + populationValidator.getDescr());
                 }
-            } catch (NumberFormatException | InputMismatchException e) {
-                System.out.println("Требуется ввести число в типе данных Double!");
-            }
+            } else System.out.println("Input should not be empty!(value is not null)");
         }
-        city.setMetersAboveSeaLevel(metersAboveSeaLevel);
 
 
-        Climate climate;
+        // metersAboveSeaLevel
+        Double metersAboveSeaLevel;
+        Validator<Double> metersAboveSeaLevelValidator = new MetersAboveSeaLevelValidator();
         while (true) {
-            System.out.println();
-            climate = (Climate) requestEnum(Climate.values(), "тип");
-            if (climate == null)
-                System.out.println("Некорректно введены данные!(не может быть null)");
-            else
-                break;
+            System.out.println("Enter meters above sea level(not null!)(type: Double)");
+            nextLine = scanner.nextLine();
+
+            if (inputValidator.validate(nextLine)) {
+                metersAboveSeaLevel = Double.parseDouble(nextLine);
+                if (metersAboveSeaLevelValidator.validate(metersAboveSeaLevel)) {
+                    city.setMetersAboveSeaLevel(metersAboveSeaLevel);
+                    break;
+                } else {
+                    System.out.println("Value violates restrictions for this field! Try again.");
+                    System.out.println("Restrictions: " + metersAboveSeaLevelValidator.getDescr());
+                }
+            } else System.out.println("Input should not be empty!(value is not null)");
         }
-        city.setClimate(climate);
-
-        Government government;
-        while (true) {
-            government = (Government) requestEnum(Government.values(), "тип");
-            if (government == null)
-                System.out.println("Некорректно введены данные!");
-            else
-                break;
-        }
-        city.setGovernment(government);
 
 
-        StandardOfLiving standardOfLiving;
-        while (true) {
-            standardOfLiving = (StandardOfLiving) requestEnum(StandardOfLiving.values(), "тип");
-            if (standardOfLiving == null)
-                System.out.println("Некорректно введены данные!(не может быть null)");
-            else
-                break;
-        }
-        city.setStandardOfLiving(standardOfLiving);
+        // climate
+        ClimateCLIManager climateCLIManager = new ClimateCLIManager();
+        city.setClimate(climateCLIManager.buildObject());
+
+        // government
+        GovernmentCLIManager governmentCLIManager = new GovernmentCLIManager();
+        city.setGovernment(governmentCLIManager.buildObject());
+
+        // standardOfLiving
+        StandardOfLivingCLIManager standardOfLivingCLIManager = new StandardOfLivingCLIManager();
+        city.setStandardOfLiving(standardOfLivingCLIManager.buildObject());
 
 
-        Human governor;
-        while (true) {
-            System.out.print("Введите ненулевое имя governor(не может быть null!): ");
-            String nextLine = scanner.nextLine().trim();
-            if (nextLine.equals(""))
-                System.out.println("Введите ненулевое имя(не может быть null!)");
-            else {
-                governor = new Human(nextLine);
-                break;
-            }
-        }
-        city.setGovernor(governor);
+//        while (true) {
+//            System.out.println();
+//            climate = (Climate) requestEnum(Climate.values(), "тип");
+//            if (climate == null)
+//                System.out.println("Некорректно введены данные!(не может быть null)");
+//            else
+//                break;
+//        }
+//        city.setClimate(climate);
+//
+//        Government government;
+//        while (true) {
+//            government = (Government) requestEnum(Government.values(), "тип");
+//            if (government == null)
+//                System.out.println("Некорректно введены данные!");
+//            else
+//                break;
+//        }
+//        city.setGovernment(government);
+//
+//
+//        StandardOfLiving standardOfLiving;
+//        while (true) {
+//            standardOfLiving = (StandardOfLiving) requestEnum(StandardOfLiving.values(), "тип");
+//            if (standardOfLiving == null)
+//                System.out.println("Некорректно введены данные!(не может быть null)");
+//            else
+//                break;
+//        }
+//        city.setStandardOfLiving(standardOfLiving);
 
+
+        // Human
+        HumanCLIManager humanCLIManager = new HumanCLIManager();
+        city.setGovernor(humanCLIManager.buildObject());
+
+//
+//        while (true) {
+//            System.out.print("Введите ненулевое имя governor(не может быть null!): ");
+//            String nextLine = scanner.nextLine().trim();
+//            if (nextLine.equals(""))
+//                System.out.println("Введите ненулевое имя(не может быть null!)");
+//            else {
+//                governor = new Human(nextLine);
+//                break;
+//            }
+//        }
+//        city.setGovernor(governor);
+//
+//        return city;
+//    }
         return city;
-    }
-
-    private static Object requestEnum(Object[] values, String name) {
-        try {
-            System.out.println("Выберите " + name + ":");
-
-            int i = 0;
-            for (Object value : values) {
-                System.out.println("\t" + ++i + " - " + value.toString());
-            }
-
-            System.out.print("Введите целое число от 1 до " + values.length + ": ");
-            String userAnswer;
-            try {
-                userAnswer = scanner.nextLine().trim();
-                if (userAnswer.equals(""))
-                    return null;
-            } catch (InputMismatchException e) {
-                System.out.println("Требуется ввести целое число!");
-                return null;
-            }
-
-            int userAnswerInt = Integer.parseInt(userAnswer);
-            if (userAnswerInt >= 1 && userAnswerInt <= i) {
-                return values[userAnswerInt - 1];
-            } else {
-                System.out.println("Требуется ввести целое число от 1 до " + values.length + "!");
-                return null;
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Требуется ввести целое число от 1 до " + values.length + "!");
-            return null;
-        } catch (NoSuchElementException e) {
-            System.out.println("чего прогу ломаеш?");
-            System.exit(0);
-            return null;
-        }
     }
 }

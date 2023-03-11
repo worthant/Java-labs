@@ -26,41 +26,40 @@ public class CoordinatesCLIManager implements ModeManager<Coordinates> {
             // coordinate x
             Integer x = null;
             Validator<Integer> coordXValidator = new CoordinateXValidator();
-            do {
+            while(true) {
                 System.out.print("Enter coordinate x(not null!)(type: Integer) : ");
                 nextLine = scanner.nextLine();
                 if (inputValidator.validate(nextLine)) {
                     x = Integer.parseInt(nextLine);
-                    if (coordXValidator.validate(x))
+                    if (coordXValidator.validate(x)) {
                         coordinates.setX(x);
-                    else {
+                        break;
+                    } else {
                         System.out.println("Value violates restrictions for this field! Try again.");
-                        System.out.println("Restrictions: Should be not null or empty.");
+                        System.out.println("Restrictions: " + coordXValidator.getDescr());
                     }
-                } else {
-                    System.out.println("Input should not be empty!(value is not null)");
-                }
-            } while (!inputValidator.validate(nextLine));
+                } else System.out.println("Input should not be empty!(value is not null)");
+            }
 
             // coordinate y
             Double y = null;
             Validator<Double> coordYValidator = new CoordinateYValidator();
-            do {
+            while(true) {
                 System.out.print("Enter coordinate y(not null!)(type: Integer) : ");
                 nextLine = scanner.nextLine();
                 if (inputValidator.validate(nextLine)) {
                     y = Double.parseDouble(nextLine);
-                    if (coordYValidator.validate(y))
+                    if (coordYValidator.validate(y)) {
                         coordinates.setY(y);
-                    else {
+                        break;
+                    } else {
                         System.out.println("Value violates restrictions for this field! Try again.");
-                        System.out.println("Restrictions: Should be not null or empty.");
+                        System.out.println("Restrictions: " + coordYValidator.getDescr());
                     }
-                } else {
-                    System.out.println("Input should not be empty!(value is not null)");
-                }
-            } while (!inputValidator.validate(nextLine));
+                } else System.out.println("Input should not be empty!(value is not null)");
+            }
             return coordinates;
+
         } catch (NoSuchElementException | NumberFormatException e) {
             throw new BuildObjectException("Во время конструирования объекта произошла ошибка: " + e.getMessage());
         }

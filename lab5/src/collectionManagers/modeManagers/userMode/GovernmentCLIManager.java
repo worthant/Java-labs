@@ -1,4 +1,12 @@
 package collectionManagers.modeManagers.userMode;
 
-public class GovernmentCLIManager {
+import collection.City.Government;
+import collectionManagers.modeManagers.ModeManager;
+import exceptions.BuildObjectException;
+
+public class GovernmentCLIManager implements ModeManager<Government> {
+    @Override
+    public Government buildObject() throws BuildObjectException {
+        return null;
+    }
 }

@@ -121,6 +121,9 @@
   - [ ] create checkCityById method
 
 #
+- [ ] Add iteration of enums validation to enumValidators instead of checking for null values
+
+#
 
 - [ ] rewrite new UserManager class
   - [ ] delete isWorking in Main and in UserManager.

@@ -13,12 +13,13 @@ public class ClimateCLIManager implements ModeManager<Climate> {
     public Climate buildObject() throws BuildObjectException {
         Climate climate;
         Scanner scanner = new Scanner(System.in);
-        Validator<String> inputValidator = new InputValidator();
+        InputValidator<String> inputValidator = new InputValidator();
         String nextLine;
         System.out.println();
 
 
-        climate = CLIManagerUtility.requestEnum(Climate.values(), Climate.getName(), );
+        inputValidator.canBeNull(true);
+        climate = CLIManagerUtility.requestEnum(Climate.values(), Climate.getName(), scanner, inputValidator, );
         return climate;
     }
 }

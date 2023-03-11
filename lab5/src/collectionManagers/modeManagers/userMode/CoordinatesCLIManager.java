@@ -18,7 +18,7 @@ public class CoordinatesCLIManager implements ModeManager<Coordinates> {
             System.out.println("Generating Coordinates...");
             Coordinates coordinates = new Coordinates();
             Scanner scanner = new Scanner(System.in);
-            Validator<String> inputValidator = new InputValidator();
+            InputValidator<String> inputValidator = new InputValidator();
             String nextLine;
             System.out.println();
 

@@ -2,10 +2,7 @@ package collectionManagers.modeManagers.userMode;
 
 import collection.City.Human;
 import collectionManagers.modeManagers.ModeManager;
-import collectionManagers.validators.HumanValidator;
 import collectionManagers.validators.InputValidator;
-import collectionManagers.validators.MetersAboveSeaLevelValidator;
-import collectionManagers.validators.Validator;
 import exceptions.BuildObjectException;
 
 import java.util.Scanner;
@@ -20,7 +17,6 @@ public class HumanCLIManager implements ModeManager<Human> {
 
         inputValidator.canBeNull(false);
         Human governor = new Human();
-        Validator<Human> humanValidator = new HumanValidator();
         while(true) {
             System.out.print("Enter name of governor(not null!)(type: String) : ");
             nextLine = scanner.nextLine();

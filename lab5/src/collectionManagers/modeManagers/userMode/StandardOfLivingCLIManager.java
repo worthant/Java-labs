@@ -17,7 +17,7 @@ public class StandardOfLivingCLIManager implements ModeManager<StandardOfLiving>
 
         inputValidator.canBeNull(false);
         EnumRequester<StandardOfLiving> enumRequester = new EnumRequester<>();
-        StandardOfLiving standardOfLiving = enumRequester.requestEnum(StandardOfLiving.values(), StandardOfLiving.getName(), scanner, inputValidator);
+        StandardOfLiving standardOfLiving = enumRequester.requestEnum(StandardOfLiving.values(), StandardOfLiving.class.getSimpleName(), scanner, inputValidator);
         return standardOfLiving;
     }
 }

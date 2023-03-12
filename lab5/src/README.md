@@ -150,6 +150,10 @@
 - [x] delete enum validators, because there is nothing to check
 - [x] create CLIManagerUtility for handy enum creation managing
 
+#
+- [ ] Create structure for catching any exception, that could be thrown
+  - [ ] implement BuildObjectException everywhere
+
 
 # ?
 1) system.exit(1)? (2)? other numbers?

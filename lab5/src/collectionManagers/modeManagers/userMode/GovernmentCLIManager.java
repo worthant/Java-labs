@@ -17,7 +17,7 @@ public class GovernmentCLIManager implements ModeManager<Government> {
 
         inputValidator.canBeNull(false);
         EnumRequester<Government> enumRequester = new EnumRequester<>();
-        Government government = enumRequester.requestEnum(Government.values(), Government.getName(), scanner, inputValidator);
+        Government government = enumRequester.requestEnum(Government.values(), Government.class.getSimpleName(), scanner, inputValidator);
         return government;
     }
 }

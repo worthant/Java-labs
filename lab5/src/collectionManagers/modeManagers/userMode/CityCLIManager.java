@@ -61,7 +61,7 @@ public class CityCLIManager implements ModeManager<City> {
             nextLine = scanner.nextLine();
 
             if (inputValidator.validate(nextLine)) {
-                area = Integer.parseInt(nextLine);
+                area = Integer.valueOf(nextLine);
                 if (areaValidator.validate(area)) {
                     city.setArea(area);
                     break;
@@ -99,7 +99,7 @@ public class CityCLIManager implements ModeManager<City> {
             nextLine = scanner.nextLine();
 
             if (inputValidator.validate(nextLine)) {
-                metersAboveSeaLevel = Double.parseDouble(nextLine);
+                metersAboveSeaLevel = Double.valueOf(nextLine);
                 if (metersAboveSeaLevelValidator.validate(metersAboveSeaLevel)) {
                     city.setMetersAboveSeaLevel(metersAboveSeaLevel);
                     break;

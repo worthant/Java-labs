@@ -6,8 +6,5 @@ package collection.City;
 public enum Climate {
     TROPICAL_SAVANNA,
     OCEANIC,
-    STEPPE;
-    public static String getName() {
-        return "Climate";
-    }
+    STEPPE
 }

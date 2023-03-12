@@ -1,6 +1,7 @@
 package command.commands;
 import collectionManagers.CityIdChecker;
 import collectionManagers.CityManager;
+import collectionManagers.IdManager;
 import command.Command;
 
 /**
@@ -21,11 +22,10 @@ public class RemoveById extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            Object obj = CityIdChecker.checkCityById((String) getArgument());
+            Object obj = IdManager.checkCityById((String) getArgument());
             if (obj != null)
                 CityManager.getCityCollection().remove(obj);
-            else
-                System.out.println("Элемента с таким id-номером нет в текущей коллекции!");
+            else System.out.println("Элемента с таким id-номером нет в текущей коллекции!");
         }
     }
 

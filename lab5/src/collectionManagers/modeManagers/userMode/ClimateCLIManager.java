@@ -16,7 +16,7 @@ public class ClimateCLIManager implements ModeManager<Climate> {
 
         inputValidator.canBeNull(true);
         EnumRequester<Climate> enumRequester = new EnumRequester<>();
-        Climate climate = enumRequester.requestEnum(Climate.values(), Climate.getName(), scanner, inputValidator);
+        Climate climate = enumRequester.requestEnum(Climate.values(), Climate.class.getSimpleName(), scanner, inputValidator);
         return climate;
     }
 }

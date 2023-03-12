@@ -8,8 +8,5 @@ public enum StandardOfLiving {
     VERY_HIGH,
     HIGH,
     ULTRA_LOW,
-    NIGHTMARE;
-    public static String getName() {
-        return "StandardOfLiving";
-    }
+    NIGHTMARE
 }

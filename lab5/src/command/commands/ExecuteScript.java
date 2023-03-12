@@ -42,7 +42,7 @@ public class ExecuteScript extends Command {
             filePaths.add((String) getArgument());
             ArrayList<String> operationList = new ArrayList<>();
 
-            try (InputStreamReader reader = new InputStreamReader(new FileInputStream((String) getArgument()))) {
+            try (InputStreamReader reader = new InputStreamReader(new FileInputStream((String) this.getArgument()))) {
 
                 String command = "";
                 int c;

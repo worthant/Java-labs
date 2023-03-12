@@ -22,7 +22,7 @@ public class EnumRequester<T extends Enum<T>> {
                 nextLine = scanner.nextLine();
 
                 if (inputValidator.validate(nextLine)) {
-                    userAnswer = Integer.parseInt(nextLine);
+                    userAnswer = Integer.valueOf(nextLine);
                     if (userAnswer >= 1 && userAnswer <= i)
                         return values[userAnswer - 1];
                     else System.out.println("Enter number from 1 to " + values.length + "!");

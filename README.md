@@ -1,4 +1,4 @@
-# Java_labs
+# Java_labs [![CodeFactor](https://www.codefactor.io/repository/github/worthant/java_labs/badge)](https://www.codefactor.io/repository/github/worthant/java_labs)
 **Laboratory works**:
 - [Laboratory work №1](./lab1)
 - [Laboratory work №2](./lab2)

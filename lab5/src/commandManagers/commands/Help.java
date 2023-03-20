@@ -1,5 +1,5 @@
-package command.commands;
-import command.Command;
+package commandManagers.commands;
+import commandManagers.Command;
 
 /**
  * The Help class is a command that provides information about the available commands in the program.

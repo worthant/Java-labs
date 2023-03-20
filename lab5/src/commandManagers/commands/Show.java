@@ -2,6 +2,7 @@ package commandManagers.commands;
 
 import collection.City.City;
 import collectionManagers.CityManager;
+import collectionManagers.CollectionManager;
 import commandManagers.Command;
 
 import java.util.TreeSet;
@@ -15,6 +16,16 @@ public class Show extends Command {
         super(false);
     }
 
+    @Override
+    public String getName() {
+        return "show";
+    }
+
+    @Override
+    public String getDescr() {
+        return "Prints to standard output all elements of the collection in String representation.";
+    }
+
     /**
      * Executes the Show command by printing all the cities in the collection.
      * The method calls the checkArgument method to validate the input argument before execution.
@@ -22,13 +33,13 @@ public class Show extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            if (CityManager.getCollection().isEmpty()) {
-                System.out.println("Текущая коллекция пуста!");
+            CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
+
+            if (manager.getCollection().isEmpty())
+            {
+                System.out.println("There's nothing to show.");
             } else {
-                TreeSet<City> citySet = CityManager.getCollection();
-                for (City city : citySet) {
-                    System.out.println(city.toString());
-                }
+                manager.getCollection().forEach(System.out::println);
             }
         }
     }

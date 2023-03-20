@@ -1,6 +1,5 @@
 package commandManagers.commands;
 import collection.City.City;
-import collectionManagers.CityIdChecker;
 import collectionManagers.CityManager;
 import collectionManagers.CollectionManager;
 import collectionManagers.IdManager;
@@ -13,6 +12,13 @@ import java.util.TreeSet;
  * Extends the Command class.
  */
 public class RemoveById extends Command {
+
+    /**
+     * Constructs a new command with the specified argument requirement.
+     */
+    public RemoveById() {
+        super(true);
+    }
 
     @Override
     public String getName() {
@@ -32,10 +38,14 @@ public class RemoveById extends Command {
     @Override
     public void execute() {
         if (checkArgument(this.getArgument())) {
-            CollectionManager<TreeSet<City>, City> collectionHandler = CityManager.getInstance();
-            Object obj = IdManager.checkCityById((String) this.getArgument());
-            if (obj != null)
-                collectionHandler.getCollection().remove(obj);
+            CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
+
+            Long finalId = IdManager.validateUserInput((String) this.getArgument());
+            if (finalId == null) return;
+
+            City city = IdManager.checkCityById(finalId);
+            if (city != null)
+                manager.getCollection().remove(city);
             else System.out.println("Элемента с таким id-номером нет в текущей коллекции!");
         }
     }
@@ -46,16 +56,8 @@ public class RemoveById extends Command {
     @Override
     public boolean checkArgument(Object inputArgument) {
         if (inputArgument == null) {
-            System.out.println("Команда remove_by_id имеет аргумент типа данных int!");
+            System.out.println("Команда remove_by_id имеет аргумент (типа данных int!)");
             return false;
-        } else if (inputArgument instanceof String) {
-            try {
-                Integer.parseInt((String) inputArgument);
-                return true;
-            } catch (NumberFormatException e) {
-                System.out.println("Команда remove_by_id имеет аргумент типа данных int!");
-                return false;
-            }
         }
         return false;
     }

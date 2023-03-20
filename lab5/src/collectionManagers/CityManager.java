@@ -45,7 +45,7 @@ public class CityManager implements CollectionManager<TreeSet<City>, City> {
                 CSVManager csvManager = new CSVManager();
                 ArrayList<String> parsedCSVFile = csvManager.readFromFile(pathToDataFile);
                 TreeSet<City> cities = new TreeSet<>(new CityComparator());
-                CSVParser csvParser = CSVParser.parse(String.join("\n", parsedCSVFile), CSVFormat.DEFAULT.withFirstRecordAsHeader());
+                CSVParser csvParser = CSVParser.parse(String.join("\n", parsedCSVFile), CSVFormat.DEFAULT.withHeader("id", "name", "x", "y", "creationDate", "area", "population", "metersAboveSeaLevel", "climate", "government", "standardOfLiving", "governor"));
                 for (CSVRecord fields : csvParser) {
                     long id = IdManager.generateId();
                     String name = fields.get("name");
@@ -85,6 +85,19 @@ public class CityManager implements CollectionManager<TreeSet<City>, City> {
     @Override
     public void addElementToCollection(City value) {
 
+    }
+
+    /**
+     * Returns first element of collection.
+     * @return First element of collection. If collection is empty, returns new object.
+     */
+    @Override
+    public City getFirstOrNew()
+    {
+        if (cityTreeSet.iterator().hasNext())
+            return cityTreeSet.iterator().next();
+        else
+            return new City();
     }
 
     @Override

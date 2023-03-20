@@ -1,6 +1,7 @@
 package commandManagers.commands;
 import collection.City.City;
 import collectionManagers.CityManager;
+import collectionManagers.CollectionManager;
 import commandManagers.Command;
 
 import java.util.ArrayList;
@@ -16,6 +17,16 @@ public class PrintDescending extends Command {
         super(false);
     }
 
+    @Override
+    public String getName() {
+        return "print_descending";
+    }
+
+    @Override
+    public String getDescr() {
+        return "Prints the elements of the collection in descending order.";
+    }
+
     /**
      Executes the PrintDescending command by first checking if it has an argument,
      then retrieving the collection of cities and creating an ArrayList of cities.
@@ -25,14 +36,9 @@ public class PrintDescending extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            TreeSet<City> cities = CityManager.getCollection();
-            ArrayList<City> list = new ArrayList<>();
-            for (City city : cities) {
-                list.add(city);
-            }
-            Collections.reverse(list);
-            for(City city : list) {
-                System.out.println(city.getPopulation());
+            CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
+            for (City city : manager.getCollection().descendingSet()) {
+                System.out.println(city);
             }
         }
     }
@@ -48,7 +54,7 @@ public class PrintDescending extends Command {
         if (inputArgument == null)
             return true;
         else {
-            System.out.println("Команда print_field_ascending_color не имеет аргументов!");
+            System.out.println("Команда print_descending не имеет аргументов!");
             return false;
         }
     }

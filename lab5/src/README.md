@@ -97,54 +97,56 @@
   - [x] create CityNonCLIManager in nonUserMode
   - [x] create CityCLIManager in userMode
     - [x] create CoordinatesCLIManager in userMode
-    - [ ] create HumanCLIManager in userMode
-    - [ ] create ClimateCLIManager in userMode
-    - [ ] create GovernmentCLIManager
-    - [ ] create StandardOfLivingCLIManager in userMode
-  - [ ] write working code in both 
-- [ ] create createCityObject() method in 
-- [ ] create interfaces for handlers
+    - [x] create HumanCLIManager in userMode
+    - [x] create ClimateCLIManager in userMode
+    - [x] create GovernmentCLIManager
+    - [x] create StandardOfLivingCLIManager in userMode
+  - [x] write working code in both 
+- [x] create createCityObject() method in 
+- [x] create interfaces for handlers
 
 
-- [ ] create 2 modes: user and nonuser
-  - [ ] make CommandMode enum for creating this 2 modes
-  - [ ] make ModuleHandler for creating objects based on given CommandMode mode
-  - [ ] add it to CommandManager constructor
-  - [ ] based on mode, give scanner to nonCLI and nothing to CLI handler
-  - [ ] give every command, that could ask for nonuser mode just created handler object
-  - [ ] store all commandManagers in LinkedHashMap for normal storing order, not just HashMap
+- [x] create 2 modes: user and nonuser
+  - [x] make CommandMode enum for creating this 2 modes
+  - [x] make ModuleHandler for creating objects based on given CommandMode mode
+  - [x] add it to CommandManager constructor
+  - [x] based on mode, give scanner to nonCLI and nothing to CLI handler
+  - [x] give every command, that could ask for nonuser mode just created handler object
+  - [x] store all commandManagers in LinkedHashMap for normal storing order, not just HashMap
 
 #
-- [ ] IdManager class
+- [x] IdManager class
   - [x] rename CityIdChecker to IdManager
   - [x] create generateId method
-  - [ ] create checkCityById method
+  - [x] create checkCityById method
+  - [x] create checking for numeric
+  - [x] create validation for user input
 
 #
-- [ ] Add iteration of enums validation to enumValidators instead of checking for null values
+- [x] Add iteration of enums validation to enumValidators instead of checking for null values
 
 #
 
-- [ ] rewrite new UserManager class
-  - [ ] delete isWorking in Main and in UserManager.
-  - [ ] It takes input stream and command mode (not hardcoded System.in, like before)
-  - [ ] checks if next line is empty or not in while() loop
-  - [ ] if not it calls executeCommand method in CommandManager
+- [x] rewrite new UserManager class
+  - [x] delete isWorking in Main and in UserManager.
+  - [x] It takes input stream and command mode (not hardcoded System.in, like before)
+  - [x] checks if next line is empty or not in while() loop
+  - [x] if not it calls executeCommand method in CommandManager
   
   
-- [ ] make executeCommand in CommandManager, not in userManager
-  - [ ] executeCommand check for every possible exception and than calls .execute method from Command interface
-  - [ ] throw all those exceptions to later handle them in 
+- [x] make executeCommand in CommandManager, not in userManager
+  - [x] executeCommand check for every possible exception and than calls .execute method from Command interface
+  - [x] throw all those exceptions to later handle them in 
 
 #
-- [ ] Make readFromFile method in CSV Manager return not only City-like object, but csvParser object (say no to hardcode!)
-- [ ] Then, make loadCityCollection method in CityManager iterate through fields like readFromFile method before
+- [x] Make readFromFile method in CSV Manager return not only City-like object, but csvParser object (say no to hardcode!)
+- [x] Then, make loadCityCollection method in CityManager iterate through fields like readFromFile method before
 #
 
-- [ ] create getDescription for each command
-- [ ] make help command not just sout String, but iterate through getDescription method of each command in CommandManager and write it's description
-- [ ] exit command now uses system.exit(0)
-- [ ] add command uses CityCLI or nonCLI managers for createCityObject() method using CollectionHandler interface
+- [x] create getDescription for each command
+- [x] make help command not just sout String, but iterate through getDescription method of each command in CommandManager and write it's description
+- [x] exit command now uses system.exit(0)
+- [x] add command uses CityCLI or nonCLI managers for createCityObject() method using CollectionHandler interface
 
 # v2.1
 - [x] delete enum validators, because there is nothing to check
@@ -153,7 +155,10 @@
 #
 - [ ] Create structure for catching any exception, that could be thrown
   - [ ] implement BuildObjectException everywhere
+  - [ ] implement other Exceptions eveywhere
+- [ ] beautify and make good writing and loading in CSVManager and CityManager
 
 
 # ?
 1) system.exit(1)? (2)? other numbers?
+2) serr vs sout

@@ -12,15 +12,30 @@ import java.util.TreeSet;
 
 /**
  * Command to add a new city to the collection if it has a smaller population than the smallest city in the collection.
+ *
  * @author boris
  */
 public class AddIfMin extends Command {
     ModeManager<City> handler;
 
+    /**
+     * Default constructor from 1.0
+     */
+    public AddIfMin() {
+        super(false);
+    }
+
+    /**
+     * Provides choosing handler
+     *
+     * @since 2.0
+     * @param handler ModuleHandler for operating
+     */
     public AddIfMin(ModeManager<City> handler) {
         super(false);
         this.handler = handler;
     }
+
     @Override
     public String getName() {
         return "add_if_min";
@@ -38,12 +53,11 @@ public class AddIfMin extends Command {
     @Override
     public void execute() throws BuildObjectException {
         if (checkArgument(this.getArgument())) {
-            CollectionManager<TreeSet<City>, City> collectionHandler = CityManager.getInstance();
-
+            CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
             City newCity = handler.buildObject();
 
-            if (newCity.getPopulation() < collectionHandler.getCollection().first().getPopulation()) {
-                collectionHandler.addElementToCollection(newCity);
+            if (newCity.getPopulation() < manager.getCollection().first().getPopulation()) {
+                manager.addElementToCollection(newCity);
                 System.out.println("Element added!");
             } else {
                 System.out.println("Element not added: it's not lower than min value.");
@@ -54,6 +68,7 @@ public class AddIfMin extends Command {
 
     /**
      * Checks whether an argument is provided or not.
+     *
      * @param inputArgument the argument to be checked.
      * @return true if no argument is provided and false otherwise.
      */

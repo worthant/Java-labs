@@ -1,7 +1,11 @@
 package commandManagers.commands;
 
+import collection.City.City;
 import collectionManagers.CityManager;
+import collectionManagers.CollectionManager;
 import commandManagers.Command;
+
+import java.util.TreeSet;
 
 /**
  * Class Info provides information about the collection:
@@ -14,6 +18,16 @@ public class Info extends Command {
         super(false);
     }
 
+    @Override
+    public String getName() {
+        return "info";
+    }
+
+    @Override
+    public String getDescr() {
+        return "Prints information about the collection (type, initialization date, number of elements, etc.) to standard output.";
+    }
+
     /**
      * Overrides the method execute() in the Command class.
      * Prints the type of the collection, the date of its initialization, and the number of elements it contains.
@@ -22,9 +36,11 @@ public class Info extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            System.out.println("Тип коллекции: " + CityManager.getCollection().getClass().toString());
-            System.out.println("Дата инициализации: " + CityManager.getCollection().first().getCreationDate().toString());
-            System.out.println("Количество элементов: " + CityManager.getCollection().toArray().length);
+            CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
+
+            System.out.println("Collection type: " + manager.getCollection().getClass().toString());
+            System.out.println("Init date: " + manager.getCollection().first().getCreationDate().toString());
+            System.out.println("Collection size: " + manager.getCollection().size());
         }
     }
 

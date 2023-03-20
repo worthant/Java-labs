@@ -1,7 +1,7 @@
-package command.commands;
+package commandManagers.commands;
 
 import collectionManagers.CityManager;
-import command.Command;
+import commandManagers.Command;
 
 /**
  * Class Info provides information about the collection:
@@ -22,9 +22,9 @@ public class Info extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            System.out.println("Тип коллекции: " + CityManager.getCityCollection().getClass().toString());
-            System.out.println("Дата инициализации: " + CityManager.getCityCollection().first().getCreationDate().toString());
-            System.out.println("Количество элементов: " + CityManager.getCityCollection().toArray().length);
+            System.out.println("Тип коллекции: " + CityManager.getCollection().getClass().toString());
+            System.out.println("Дата инициализации: " + CityManager.getCollection().first().getCreationDate().toString());
+            System.out.println("Количество элементов: " + CityManager.getCollection().toArray().length);
         }
     }
 

@@ -1,7 +1,7 @@
-package command.commands;
+package commandManagers.commands;
 
 import collectionManagers.CityManager;
-import command.Command;
+import commandManagers.Command;
 
 /**
  * Command to clear the collection.
@@ -20,7 +20,7 @@ public class Clear extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            CityManager.getCityCollection().clear();
+            CityManager.getCollection().clear();
             System.out.println("Коллекция успешно очищена!");
         }
     }

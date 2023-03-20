@@ -1,8 +1,8 @@
-package command.commands;
+package commandManagers.commands;
 
 import collection.City.City;
 import collectionManagers.CityManager;
-import command.Command;
+import commandManagers.Command;
 
 import java.util.TreeSet;
 
@@ -21,7 +21,7 @@ public class SumOfMetersAboveSeaLevel extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            TreeSet<City> cities = CityManager.getCityCollection();
+            TreeSet<City> cities = CityManager.getCollection();
             Double sum = 0.0;
 
             for (City city: cities) {

@@ -1,15 +1,38 @@
-package command.commands;
+package commandManagers.commands;
+import collection.City.City;
 import collectionManagers.CityManager;
-import command.Command;
+import collectionManagers.modeManagers.ModeManager;
+import commandManagers.Command;
+import exceptions.BuildObjectException;
 
 /**
  * Command to add a new city to the collection.
  * @author boris
  */
 public class Add extends Command{
+    ModeManager<City> handler;
 
+    /**
+     * Default constructor from 1.0
+     */
     public Add() {
         super(false);
+    }
+
+    public Add(ModeManager<City> handler)
+    {
+        super(false);
+        this.handler = handler;
+    }
+
+    @Override
+    public String getName() {
+        return "Add";
+    }
+
+    @Override
+    public String getDescr() {
+        return "Adds new element to collection.";
     }
 
     /**
@@ -17,9 +40,9 @@ public class Add extends Command{
      * Prints a message indicating that the command does not take arguments otherwise.
      */
     @Override
-    public void execute() {
+    public void execute() throws BuildObjectException {
         if (checkArgument(getArgument())) {
-            CityManager.getCityCollection().add(CityManager.getNewCity());
+            CityManager.getCollection().add(handler.buildObject());
         }
     }
 

@@ -3,6 +3,8 @@ package collectionManagers;
 import collection.City.City;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.TreeSet;
 
 /**
@@ -17,7 +19,7 @@ public interface FileManager {
      @return a TreeSet of City objects read from the file
      @throws IOException if there was an error reading the file
      */
-    TreeSet<City> readFromFile(String pathToDataFile) throws IOException;
+    ArrayList<String> readFromFile(String pathToDataFile) throws IOException;
 
     /**
      Writes a TreeSet of City objects to a file located at the specified path.

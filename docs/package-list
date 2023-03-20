@@ -3,5 +3,5 @@ collection.City
 collection.comparators
 collectionManagers
 command
-command.commands
+command.commandManagers
 user

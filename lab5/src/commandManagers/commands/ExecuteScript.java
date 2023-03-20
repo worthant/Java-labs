@@ -1,7 +1,7 @@
-package command.commands;
+package commandManagers.commands;
 
-import command.Command;
-import command.CommandManager;
+import commandManagers.Command;
+import commandManagers.CommandManager;
 
 
 import java.io.FileInputStream;

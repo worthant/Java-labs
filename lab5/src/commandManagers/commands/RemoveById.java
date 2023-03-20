@@ -1,8 +1,12 @@
-package command.commands;
+package commandManagers.commands;
+import collection.City.City;
 import collectionManagers.CityIdChecker;
 import collectionManagers.CityManager;
+import collectionManagers.CollectionManager;
 import collectionManagers.IdManager;
-import command.Command;
+import commandManagers.Command;
+
+import java.util.TreeSet;
 
 /**
  * Class RemoveById provides removal of an element from the collection by its ID number.
@@ -10,8 +14,14 @@ import command.Command;
  */
 public class RemoveById extends Command {
 
-    public RemoveById() {
-        super(true);
+    @Override
+    public String getName() {
+        return "remove_by_id";
+    }
+
+    @Override
+    public String getDescr() {
+        return "Removes element from collection by id.";
     }
 
     /**
@@ -21,10 +31,11 @@ public class RemoveById extends Command {
      */
     @Override
     public void execute() {
-        if (checkArgument(getArgument())) {
-            Object obj = IdManager.checkCityById((String) getArgument());
+        if (checkArgument(this.getArgument())) {
+            CollectionManager<TreeSet<City>, City> collectionHandler = CityManager.getInstance();
+            Object obj = IdManager.checkCityById((String) this.getArgument());
             if (obj != null)
-                CityManager.getCityCollection().remove(obj);
+                collectionHandler.getCollection().remove(obj);
             else System.out.println("Элемента с таким id-номером нет в текущей коллекции!");
         }
     }

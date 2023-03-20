@@ -1,9 +1,9 @@
-package command.commands;
+package commandManagers.commands;
 
 import collection.City.City;
 import collectionManagers.CityManager;
 import collectionManagers.IdManager;
-import command.Command;
+import commandManagers.Command;
 
 /**
  * Command to update a city by its id number.
@@ -23,10 +23,10 @@ public class UpdateId extends Command {
             Object obj = IdManager.checkCityById((String) getArgument());
             long id = IdManager.generateId();
             if (obj != null) {
-                CityManager.getCityCollection().remove(obj);
+                CityManager.getCollection().remove(obj);
                 City city = CityManager.getNewCity();
                 city.setId(id);
-                CityManager.getCityCollection().add(city);
+                CityManager.getCollection().add(city);
             } else
                 System.out.println("Элемента с таким id-номером нет в текущей коллекции!");
         }

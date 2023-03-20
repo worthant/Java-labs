@@ -24,7 +24,7 @@ public class IdManager {
     }
     public static Object checkCityById(String argument) {
         long id = Long.parseLong(argument);
-        TreeSet<City> cities = CityManager.getCityCollection();
+        TreeSet<City> cities = CityManager.getCollection();
         Object obj = new Object();
         boolean flag = false;
         for (City city : cities) {

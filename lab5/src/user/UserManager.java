@@ -1,10 +1,9 @@
 package user;
 
-import command.Command;
-import command.CommandManager;
+import commandManagers.Command;
+import commandManagers.CommandManager;
 import collection.City.*;
-import collectionManagers.*;
-import command.commands.History;
+import commandManagers.commands.History;
 
 import java.time.LocalDate;
 import java.util.*;

@@ -1,6 +1,6 @@
-package command.commands;
+package commandManagers.commands;
 
-import command.Command;
+import commandManagers.Command;
 import user.UserManager;
 
 /**

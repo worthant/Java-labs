@@ -1,8 +1,8 @@
-package command.commands;
+package commandManagers.commands;
 
 
 import collectionManagers.CityManager;
-import command.Command;
+import commandManagers.Command;
 
 /**
  * Save class represents the Save command in the program. When executed, it writes the current

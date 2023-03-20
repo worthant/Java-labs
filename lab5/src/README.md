@@ -17,7 +17,7 @@
   - [x] create write method in Managers interface
   - [x] create write method in CollectionManager
   - [x] create write method in CSVManager
-- [x] make `deserialization` from .csv to TreeSet collection (for show and add commands)
+- [x] make `deserialization` from .csv to TreeSet collection (for show and add commandManagers)
   - [x] create read method in Managers interface
   - [x] create read method in CollectionManager
   - [x] create read method in CSVManager
@@ -30,7 +30,7 @@
   
 #
 
-- [x] make commands
+- [x] make commandManagers
   - [x] make help command
   - [x] make info command
   - [x] make show command
@@ -112,7 +112,7 @@
   - [ ] add it to CommandManager constructor
   - [ ] based on mode, give scanner to nonCLI and nothing to CLI handler
   - [ ] give every command, that could ask for nonuser mode just created handler object
-  - [ ] store all commands in LinkedHashMap for normal storing order, not just HashMap
+  - [ ] store all commandManagers in LinkedHashMap for normal storing order, not just HashMap
 
 #
 - [ ] IdManager class

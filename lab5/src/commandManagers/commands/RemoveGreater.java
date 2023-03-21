@@ -53,14 +53,26 @@ public class RemoveGreater extends Command {
     public void execute() throws BuildObjectException {
         if (checkArgument(this.getArgument())) {
             CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
+            if (manager.getCollection() == null) {
+                System.out.println("This command doesn't work right now");
+                return;
+            }
+
             City newCity = handler.buildObject();
             Iterator<City> iter = manager.getCollection().iterator();
 
+            int i = 0;
             while(iter.hasNext()) {
                 if (newCity.getPopulation() < iter.next().getPopulation()) {
                     iter.remove();
+                    i ++;
                 }
             }
+
+            // english moment
+            if (i == 1)
+                System.out.println(i + "object removed");
+            else System.out.println(i + "objects removed");
         }
     }
 
@@ -77,7 +89,7 @@ public class RemoveGreater extends Command {
         if (inputArgument == null)
             return true;
         else {
-            System.out.println("Команда remove_greater не имеет аргументов!");
+            System.out.println("Remove_greater has no arguments!");
             return false;
         }
     }

@@ -1,12 +1,13 @@
 package collectionManagers.modeManagers.userMode;
 
 import collectionManagers.validators.InputValidator;
+import exceptions.BuildObjectException;
 
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class EnumRequester<T extends Enum<T>> {
-    public T requestEnum(T[] values, String enumName, Scanner scanner, InputValidator inputValidator) {
+    public T requestEnum(T[] values, String enumName, Scanner scanner, InputValidator inputValidator) throws BuildObjectException {
         try {
             System.out.println("Choose " + enumName + " type:");
 
@@ -32,9 +33,7 @@ public class EnumRequester<T extends Enum<T>> {
             System.out.println("Требуется ввести целое число от 1 до " + values.length + "!");
             return null;
         } catch (NoSuchElementException e) {
-            System.out.println("чего прогу ломаеш?");
-            System.exit(0);
-            return null;
+            throw new BuildObjectException("Во время конструирования объекта произошла ошибка: " + e.getMessage());
         }
     }
 }

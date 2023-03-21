@@ -39,14 +39,19 @@ public class RemoveById extends Command {
     public void execute() {
         if (checkArgument(this.getArgument())) {
             CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
+            if (manager.getCollection() == null) {
+                System.out.println("This command doesn't work right now");
+                return;
+            }
 
             Long finalId = IdManager.validateUserInput((String) this.getArgument());
             if (finalId == null) return;
 
             City city = IdManager.checkCityById(finalId);
-            if (city != null)
+            if (city != null) {
                 manager.getCollection().remove(city);
-            else System.out.println("Элемента с таким id-номером нет в текущей коллекции!");
+                System.out.println("Element successfully removed!");
+            } else System.out.println("Элемента с таким id-номером нет в текущей коллекции!");
         }
     }
 
@@ -56,10 +61,10 @@ public class RemoveById extends Command {
     @Override
     public boolean checkArgument(Object inputArgument) {
         if (inputArgument == null) {
-            System.out.println("Команда remove_by_id имеет аргумент (типа данных int!)");
+            System.out.println("Remove_by_id has 1 argument of type long!");
             return false;
         }
-        return false;
+        return true;
     }
 
 }

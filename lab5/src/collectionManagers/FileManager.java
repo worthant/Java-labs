@@ -1,11 +1,8 @@
 package collectionManagers;
 
-import collection.City.City;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.TreeSet;
+import java.util.List;
 
 /**
  The {@code Managers} interface represents a collection manager that reads and writes objects from and to a file.
@@ -14,18 +11,20 @@ import java.util.TreeSet;
 public interface FileManager {
 
     /**
-     Reads a TreeSet of Cities from a file located at the specified path.
-     @param pathToDataFile the path to the file to be read
-     @return a TreeSet of City objects read from the file
-     @throws IOException if there was an error reading the file
+     * Reads a file at the specified path and returns an ArrayList containing each line of the file as a string.
+     *
+     * @param pathToDataFile The path to the file to read.
+     * @return An ArrayList containing each line of the file as a string.
+     * @throws IOException If there is an error reading the file.
      */
     ArrayList<String> readFromFile(String pathToDataFile) throws IOException;
 
     /**
-     Writes a TreeSet of City objects to a file located at the specified path.
-     @param pathToDataFile the path to the file to be written
-     @param cities a TreeSet of City objects to be written to the file
-     @throws IOException if there was an error writing to the file
+     * Writes a TreeSet of City objects to a file located at the specified path.
+     * @param pathToDataFile the path to the file to be written
+     * @param header An array of strings representing the header row of the CSV file.
+     * @param records An array of objects representing the records to write to the CSV file. Each record should be an array of objects corresponding to a row in the CSV file.
+     * @throws IOException if there was an error writing to the file
      */
-    void write(String pathToDataFile, TreeSet<City> cities) throws IOException;
+    void write(String pathToDataFile, String[] header, List<String> records) throws IOException;
 }

@@ -1,5 +1,11 @@
 package collectionManagers.validators;
 
+/**
+ * Implementation of validator for Population.
+ *
+ * @since 2.0
+ * @author boris
+ */
 public class PopulationValidator implements Validator<Integer> {
     public String getDescr() {
         return "Should be greater than 0";

@@ -6,7 +6,26 @@ import exceptions.BuildObjectException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+/**
+ * A utility class for requesting an enum value from the user.
+ *
+ * @param <T> the type of the enum to request
+ */
 public class EnumRequester<T extends Enum<T>> {
+
+    /**
+     * Requests an enum value from the user based on the provided array of enum values.
+     *
+     * @author boris
+     * @since 2.0
+     *
+     * @param values the array of enum values to choose from
+     * @param enumName the name of the enum type being requested
+     * @param scanner the scanner to read user input from
+     * @param inputValidator the input validator to validate user input
+     * @return the selected enum value
+     * @throws BuildObjectException if an error occurs during object construction
+     */
     public T requestEnum(T[] values, String enumName, Scanner scanner, InputValidator inputValidator) throws BuildObjectException {
         try {
             System.out.println("Choose " + enumName + " type:");

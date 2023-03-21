@@ -3,6 +3,7 @@ package collectionManagers.validators;
 /**
  * Implementation of validator for user input.
  *
+ * @since 2.0
  * @author boris
  */
 public class InputValidator{

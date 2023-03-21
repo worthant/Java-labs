@@ -12,7 +12,18 @@ import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+/**
+ * A class that implements the ModeManager interface for creating Coordinate objects via command-line interface.
+ */
 public class CoordinatesCLIManager implements ModeManager<Coordinates> {
+    /**
+     * Builds a Coordinates object via command-line interface, prompting the user for input.
+     *
+     * @author boris
+     * @since 2.0
+     * @return the created Coordinates object.
+     * @throws BuildObjectException if there is an error building the object.
+     */
     @Override
     public Coordinates buildObject() throws BuildObjectException {
         try {

@@ -1,6 +1,5 @@
 package collectionManagers.modeManagers.userMode;
 
-import collection.City.Climate;
 import collection.City.Government;
 import collectionManagers.modeManagers.ModeManager;
 import collectionManagers.validators.InputValidator;

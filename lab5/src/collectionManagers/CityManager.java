@@ -8,9 +8,9 @@ import org.apache.commons.csv.CSVRecord;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.AbstractCollection;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 import java.util.TreeSet;
 
 /**
@@ -28,8 +28,10 @@ public class CityManager implements CollectionManager<TreeSet<City>, City> {
             singletonPattern = new CityManager();
         return singletonPattern;
     }
+
     /**
      * Loads the TreeSet collection from a .csv file using the environment variable with the specified key.
+     *
      * @param envKey the key of the environment variable containing the path to the .csv file
      */
     public void loadCollection(String envKey) {
@@ -67,8 +69,8 @@ public class CityManager implements CollectionManager<TreeSet<City>, City> {
                 }
                 CityManager.getInstance().setCollection(cities);
 
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException | IllegalArgumentException e) {
+                throw new IllegalArgumentException("CSV format violation: " + e.getMessage());
             }
         }
     }
@@ -77,23 +79,49 @@ public class CityManager implements CollectionManager<TreeSet<City>, City> {
      * Writes TreeSet collection to .csv file
      */
     public void writeCollection() {
-        CSVManager csvManager = new CSVManager();
-        csvManager.write(pathToDataFile, cityTreeSet);
+        try {
+            // header of City collection
+            String[] header = {"id", "name", "x", "y", "creationDate",
+                    "area", "population", "metersAboveSeaLevel", "climate", "government",
+                    "standardOfLiving", "governor"};
+
+            List<String> records = new ArrayList<>();
+            int i = 1;
+            for (City city : CityManager.getInstance().getCollection()) {
+                records.add(city.getId() + "," + city.getName() + "," + city.getCoordinates().getX() + ","
+                        + city.getCoordinates().getY() + "," + city.getCreationDate() + "," + city.getArea() + ","
+                        + city.getPopulation() + "," + city.getMetersAboveSeaLevel() + "," + city.getClimate() + ","
+                        + city.getGovernment() + "," + city.getStandardOfLiving() + "," + city.getGovernor());
+
+                i++;
+            }
+
+            CSVManager csvManager = new CSVManager();
+            csvManager.write(pathToDataFile, header, records);
+        } catch (IOException | IllegalArgumentException e) {
+            throw new IllegalArgumentException("CSV format violation: " + e.getMessage());
+        }
     }
 
 
     @Override
     public void addElementToCollection(City value) {
-
+        if (cityTreeSet != null)
+            cityTreeSet.add(value);
+        else {
+            TreeSet<City> cities = new TreeSet<>(new CityComparator());
+            cities.add(value);
+            CityManager.getInstance().setCollection(cities);
+        }
     }
 
     /**
      * Returns first element of collection.
+     *
      * @return First element of collection. If collection is empty, returns new object.
      */
     @Override
-    public City getFirstOrNew()
-    {
+    public City getFirstOrNew() {
         if (cityTreeSet.iterator().hasNext())
             return cityTreeSet.iterator().next();
         else
@@ -102,37 +130,12 @@ public class CityManager implements CollectionManager<TreeSet<City>, City> {
 
     @Override
     public void clearCollection() {
-
-    }
-
-    @Override
-    public void sort() {
-
-    }
-
-
-    @Override
-    public void validateElements() {
-
-    }
-
-    @Override
-    public City getLastElement() {
-        return null;
-    }
-
-    @Override
-    public City getMin(Comparator<City> comparator) {
-        return null;
-    }
-
-    @Override
-    public City getMax(Comparator<City> comparator) {
-        return null;
+        cityTreeSet.clear();
     }
 
     /**
      * Sets the collection of cities.
+     *
      * @param cityTreeSet the TreeSet collection of City objects to set
      */
     @Override
@@ -142,6 +145,7 @@ public class CityManager implements CollectionManager<TreeSet<City>, City> {
 
     /**
      * Gets the collection of cities.
+     *
      * @return the TreeSet collection of City objects
      */
     public TreeSet<City> getCollection() {
@@ -150,9 +154,10 @@ public class CityManager implements CollectionManager<TreeSet<City>, City> {
 
     /**
      * Sets the path to the .csv file.
+     *
      * @param pathToDataFile the path to the .csv file to set
      */
-    public static void setPathToDataFile(String pathToDataFile){
+    public static void setPathToDataFile(String pathToDataFile) {
         CityManager.pathToDataFile = pathToDataFile;
     }
 

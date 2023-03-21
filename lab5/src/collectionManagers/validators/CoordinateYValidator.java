@@ -2,7 +2,7 @@ package collectionManagers.validators;
 
 public class CoordinateYValidator implements Validator<Double> {
     public String getDescr() {
-        return "";
+        return "value > -27";
     }
     @Override
     public boolean validate(Double value) {

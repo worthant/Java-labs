@@ -30,7 +30,7 @@ public class Exit extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            System.out.println("Завершение работы программы...");
+            System.out.println("Closing program...");
             System.exit(0);
         }
     }
@@ -47,7 +47,7 @@ public class Exit extends Command {
         if (inputArgument == null)
             return true;
         else {
-            System.out.println("Команда exit не имеет аргументов!");
+            System.out.println("Exit has no arguments!");
             return false;
         }
     }

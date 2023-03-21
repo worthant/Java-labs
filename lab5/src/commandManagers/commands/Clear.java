@@ -34,8 +34,12 @@ public class Clear extends Command {
     public void execute() {
         if (checkArgument(getArgument())) {
             CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
+            if (manager.getCollection() == null) {
+                System.out.println("There is nothing to clear)");
+                return;
+            }
             manager.clearCollection();
-            System.out.println("Коллекция успешно очищена!");
+            System.out.println("Collection successfully cleared!");
         }
     }
 
@@ -49,7 +53,7 @@ public class Clear extends Command {
         if (inputArgument == null)
             return true;
         else {
-            System.out.println("Команда clear не имеет аргументов!");
+            System.out.println("Clear has no arguments!");
             return false;
         }
     }

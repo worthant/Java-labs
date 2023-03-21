@@ -1,8 +1,6 @@
 save
 save
 show
-clear
-show
 history
 execute_script script1.txt
 history

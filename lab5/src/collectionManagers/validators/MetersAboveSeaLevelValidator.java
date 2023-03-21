@@ -2,7 +2,7 @@ package collectionManagers.validators;
 
 public class MetersAboveSeaLevelValidator implements Validator<Double> {
     public String getDescr() {
-        return "";
+        return "any value, that fits Double format";
     }
     @Override
     public boolean validate(Double value) {

@@ -1,15 +1,23 @@
 package commandManagers.commands;
 
 import commandManagers.Command;
+import commandManagers.CommandExecutor;
 import commandManagers.CommandManager;
+import commandManagers.CommandMode;
 
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 /**
  ExecuteScript is a class that represents the execute_script command.
@@ -18,17 +26,21 @@ import java.util.HashMap;
  */
 public class ExecuteScript extends Command {
 
-    private HashMap<String, Command> commandMap;
-    private ArrayList<String> filePaths;
-
     /**
      Constructs a new ExecuteScript object.
      Initializes commandMap with the command map from CommandManager, and creates an empty ArrayList of filePaths.
      */
     public ExecuteScript() {
         super(true);
-        this.commandMap = CommandManager.getCommandMap();
-        this.filePaths = new ArrayList<>();
+    }
+    @Override
+    public String getName() {
+        return "execute_script";
+    }
+
+    @Override
+    public String getDescr() {
+        return "Reads and executes script from file.";
     }
 
     /**
@@ -37,74 +49,42 @@ public class ExecuteScript extends Command {
      The method also checks for recursion by ensuring that a file path is not executed twice.
      */
     @Override
-    public void execute() {
-        if (checkArgument(getArgument())) {
-            filePaths.add((String) getArgument());
-            ArrayList<String> operationList = new ArrayList<>();
-
-            try (InputStreamReader reader = new InputStreamReader(new FileInputStream((String) this.getArgument()))) {
-
-                String command = "";
-                int c;
-                while (true) {
-
-                    c = reader.read();
-
-                    if (c != 10 && c != -1)
-                        command += (Character.valueOf((char) c)).toString();
-                    else if (c == 10) {
-                        operationList.add(command);
-                        command = "";
-                    } else
-                        break;
-                }
-                operationList.add(command);
-            } catch (
-                    FileNotFoundException e) {
-                System.out.println("Файла по указанному пути не существует или отсутствуют права на чтение!");
-            } catch (
-                    IOException e) {
-                e.printStackTrace();
+    public void execute() throws IllegalArgumentException {
+        try {
+            CommandExecutor executor = new CommandExecutor();
+            if (checkRecursion(Path.of((String) this.getArgument()), new ArrayDeque<>())) {
+                System.out.println("При анализе скрипта обнаружена рекурсия. Устраните ее перед исполнением.");
+                return;
             }
-
-            for (String operation : operationList) {
-                while (operation.contains("  "))
-                    operation = operation.replaceAll("  ", " ");
-
-                String[] commandAndArgument = operation.split(" ");
-                String command = commandAndArgument[0];
-                String argument;
-
-                if (commandAndArgument.length == 1)
-                    argument = null;
-                else if (commandAndArgument.length == 2)
-                    argument = commandAndArgument[1];
-                else {
-                    System.out.println("Требуется ввести *команда* *аргумент* (при его наличии)!");
-                    return;
-                }
-
-                if (commandMap.containsKey(commandAndArgument[0])) {
-                    if (commandAndArgument[0].equals("execute_script")) {
-                        if (filePaths.contains(commandAndArgument[1])) {
-                            System.out.println("Команда execute_script не выполняется, чтобы не допустить рекурсию!");
-                            continue;
-                        }
-                    }
-                    commandMap.get(commandAndArgument[0]).setArgument(argument);
-                    commandMap.get(commandAndArgument[0]).execute();
-                } else {
-                    System.out.println("Команды " + commandAndArgument[0] + " не существует!" +
-                            " Для уточнения команд воспользуйтесь командой help!");
-                }
-            }
-            filePaths.remove(getArgument());
+            System.out.println("Executing script");
+            executor.startExecuting(new FileInputStream(Path.of((String) this.getArgument()).toFile()), CommandMode.NonUserMode);
+        } catch (InvalidPathException e) {
+            System.out.println("Provided argument path isn't legal. Try again.");
+            throw new IllegalArgumentException(e);
+        } catch (FileNotFoundException | NoSuchFileException e) {
+            System.out.println("File not found! Try again.");
+        } catch (SecurityException e) {
+            System.out.println("Access denied. Try again with another file.");
+        } catch (IOException e) {
+            System.out.println("Something went wrong during file handling. Try again. (" + e.getMessage() + ")");
         }
     }
 
-    /**
-     * Checks if the input argument is valid
-     */
+    private boolean checkRecursion(Path path, ArrayDeque<Path> stack) throws IOException {
+        if (stack.contains(path)) return true;
+        stack.addLast(path);
+        String str = Files.readString(path);
+        Pattern pattern = Pattern.compile("execute_script .*");
+        var patternMatcher = pattern.matcher(str);
+        while (patternMatcher.find())
+        {
+            Path newPath = Path.of(patternMatcher.group().split(" ")[1]);
+            if(checkRecursion(newPath, stack)) return true;
+        }
+        stack.removeLast();
+        return false;
+    }
+
     @Override
     public boolean checkArgument(Object inputArgument) {
         if (inputArgument == null) {
@@ -115,5 +95,6 @@ public class ExecuteScript extends Command {
         }
         return false;
     }
+
 
 }

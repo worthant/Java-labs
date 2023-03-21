@@ -1,7 +1,11 @@
 package commandManagers.commands;
 
+import collection.City.City;
 import collectionManagers.CityManager;
+import collectionManagers.CollectionManager;
 import commandManagers.Command;
+
+import java.util.TreeSet;
 
 /**
  * Command to clear the collection.
@@ -12,6 +16,15 @@ public class Clear extends Command {
     public Clear() {
         super(false);
     }
+    @Override
+    public String getName() {
+        return "clear";
+    }
+
+    @Override
+    public String getDescr() {
+        return "Clears collection";
+    }
 
     /**
      * Clears the collection if no argument is provided.
@@ -20,7 +33,8 @@ public class Clear extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            CityManager.getCollection().clear();
+            CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
+            manager.clearCollection();
             System.out.println("Коллекция успешно очищена!");
         }
     }

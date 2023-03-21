@@ -2,6 +2,7 @@ package commandManagers.commands;
 
 import collection.City.City;
 import collectionManagers.CityManager;
+import collectionManagers.CollectionManager;
 import commandManagers.Command;
 
 import java.util.TreeSet;
@@ -15,16 +16,26 @@ public class SumOfMetersAboveSeaLevel extends Command {
         super(false);
     }
 
+    @Override
+    public String getName() {
+        return "sum_of_meters_above_sea_level";
+    }
+
+    @Override
+    public String getDescr() {
+        return "Prints the sum of the values of the metersAboveSeaLevel field for all elements of the collection.";
+    }
+
     /**
      * Computes the sum of meters above sea level of all cities in the collection and prints it to the console.
      */
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            TreeSet<City> cities = CityManager.getCollection();
+            CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
             Double sum = 0.0;
 
-            for (City city: cities) {
+            for (City city: manager.getCollection()) {
                 sum += city.getMetersAboveSeaLevel();
             }
             System.out.println(sum);

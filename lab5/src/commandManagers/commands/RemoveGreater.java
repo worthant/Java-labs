@@ -1,8 +1,12 @@
 package commandManagers.commands;
 import collection.City.City;
 import collectionManagers.CityManager;
+import collectionManagers.CollectionManager;
+import collectionManagers.modeManagers.ModeManager;
 import commandManagers.Command;
+import exceptions.BuildObjectException;
 
+import java.util.Iterator;
 import java.util.TreeSet;
 
 /**
@@ -11,8 +15,34 @@ import java.util.TreeSet;
  */
 public class RemoveGreater extends Command {
 
+    ModeManager<City> handler;
+
+    /**
+     * Default constructor from 1.0
+     */
     public RemoveGreater() {
         super(false);
+    }
+
+    /**
+     * Provides choosing handler
+     *
+     * @since 2.0
+     * @param handler ModuleHandler for operating
+     */
+    public RemoveGreater(ModeManager<City> handler) {
+        super(false);
+        this.handler = handler;
+    }
+
+    @Override
+    public String getName() {
+        return "RemoveGreater";
+    }
+
+    @Override
+    public String getDescr() {
+        return "Removes all elements from the collection that have a population greater than the specified city.";
     }
 
     /**
@@ -20,20 +50,16 @@ public class RemoveGreater extends Command {
      * population greater than the specified city.
      */
     @Override
-    public void execute() {
-        if (checkArgument(getArgument())) {
-            City newCity = CityManager.getNewCity();
-            TreeSet<City> cities = CityManager.getCollection();
-            TreeSet<City> cities2 = new TreeSet<>();
+    public void execute() throws BuildObjectException {
+        if (checkArgument(this.getArgument())) {
+            CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
+            City newCity = handler.buildObject();
+            Iterator<City> iter = manager.getCollection().iterator();
 
-            for (City city: cities) {
-                if (newCity.getPopulation() < city.getPopulation()) {
-                    cities2.add(city);
+            while(iter.hasNext()) {
+                if (newCity.getPopulation() < iter.next().getPopulation()) {
+                    iter.remove();
                 }
-            }
-
-            for(City city2 : cities2) {
-                cities.remove(city2);
             }
         }
     }

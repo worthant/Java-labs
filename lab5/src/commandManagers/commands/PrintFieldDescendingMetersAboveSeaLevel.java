@@ -3,6 +3,7 @@ package commandManagers.commands;
 import collection.City.City;
 import collection.comparators.CityComparatorByMetersAboveSeaLevel;
 import collectionManagers.CityManager;
+import collectionManagers.CollectionManager;
 import commandManagers.Command;
 
 import java.util.TreeSet;
@@ -17,6 +18,16 @@ public class PrintFieldDescendingMetersAboveSeaLevel extends Command {
         super(false);
     }
 
+    @Override
+    public String getName() {
+        return "print_field_descending_meters_above_sea_level";
+    }
+
+    @Override
+    public String getDescr() {
+        return "Prints the field values metersAboveSeaLevel of all elements in descending order.";
+    }
+
     /**
      * Overrides the method execute() in the Command class.
      * Prints the meters above sea level in descending order.
@@ -25,14 +36,9 @@ public class PrintFieldDescendingMetersAboveSeaLevel extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            TreeSet<City> cities2 = new TreeSet<>(new CityComparatorByMetersAboveSeaLevel());
-            TreeSet<City> cities = CityManager.getCollection();
-            for (City city: cities) {
-                cities2.add(city);
-            }
-
-            for (City city2: cities2) {
-                System.out.println(city2.getMetersAboveSeaLevel());
+            CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
+            for (City city : manager.getCollection().descendingSet()) {
+                System.out.println(city.getMetersAboveSeaLevel());
             }
         }
     }
@@ -49,7 +55,7 @@ public class PrintFieldDescendingMetersAboveSeaLevel extends Command {
         if (inputArgument == null)
             return true;
         else {
-            System.out.println("Команда print_field_ascending_color не имеет аргументов!");
+            System.out.println("Команда print_field_descending_meters_above_sea_level не имеет аргументов!");
             return false;
         }
     }

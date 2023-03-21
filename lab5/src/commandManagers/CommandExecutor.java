@@ -24,6 +24,7 @@ public class CommandExecutor {
             if (line.isEmpty()) continue;
             try {
                 commandManager.executeCommand(line.split(" "));
+                System.out.println();
             } catch (CommandInterruptedException | NoSuchElementException ex) {
                 if (mode.equals(CommandMode.CLI_UserMode))
                     System.err.println("Выполнение команды было прервано. Вы можете продолжать работу. Программа возвращена в безопасное состояние.");

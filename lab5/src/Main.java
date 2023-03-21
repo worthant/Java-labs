@@ -32,6 +32,7 @@ public class Main {
             // commands
             System.out.println("Welcome to CLI! Now you are operating with collection of \n  type: " + manager.getCollection().getClass().getName() + ", \n  filled with elements of type: " + manager.getFirstOrNew().getClass().getName());
             System.out.println("Now you can enter the commands. Use help for reference.");
+            System.out.println();
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
             System.out.println("Now you can enter the commands, but user manager works partially, because there is no collection whatsoever. Use help for reference.");

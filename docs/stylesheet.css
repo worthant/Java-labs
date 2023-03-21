@@ -189,7 +189,7 @@ ul.nav-list li {
 }
 .sub-nav .nav-list-search {
     float:right;
-    margin:0 0 0 0;
+    margin:0;
     padding:5px 6px;
     clear:none;
 }
@@ -239,10 +239,10 @@ ul.sub-nav-list li {
     margin:10px 0;
 }
 .sub-title {
-    margin:5px 0 0 0;
+    margin:5px 0 0;
 }
 .header ul {
-    margin:0 0 15px 0;
+    margin:0 0 15px;
     padding:0;
 }
 .header ul li, .footer ul li {
@@ -280,7 +280,7 @@ dl.notes > dt {
     font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif;
     font-size:12px;
     font-weight:bold;
-    margin:10px 0 0 0;
+    margin:10px 0 0;
     color:#4E4E4E;
 }
 dl.notes > dd {
@@ -320,7 +320,7 @@ ul.block-list,
 ul.details-list,
 ul.member-list,
 ul.summary-list {
-    margin:10px 0 10px 0;
+    margin:10px 0;
     padding:0;
 }
 ul.block-list > li,
@@ -398,7 +398,7 @@ div.table-tabs {
 div.table-tabs > button {
    border: none;
    cursor: pointer;
-   padding: 5px 12px 7px 12px;
+   padding: 5px 12px 7px;
    font-weight: bold;
    margin-right: 3px;
 }
@@ -672,7 +672,7 @@ ul.ui-autocomplete  li {
     z-index: 1;
 }
 .inherited-list {
-    margin: 10px 0 10px 0;
+    margin: 10px 0;
 }
 section.class-description {
     line-height: 1.4;
@@ -845,7 +845,7 @@ table.striped > tbody > tr > th {
     }
     .summary section[class$="-summary"], .details section[class$="-details"],
     .class-uses .detail, .serialized-class-details {
-        padding: 0 8px 5px 8px;
+        padding: 0 8px 5px;
     }
     body {
         -webkit-text-size-adjust: none;

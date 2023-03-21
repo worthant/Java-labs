@@ -102,8 +102,8 @@ public class CommandManager {
     public void executeCommand(String[] args) {
         try {
             if (args.length > 1)
-                Optional.ofNullable(commandMap.get(args[0])).orElseThrow(() -> new UnknownCommandException("Команды " + args[0] + "не обнаружено :( ")).setArgument(args[1]);
-            Optional.ofNullable(commandMap.get(args[0])).orElseThrow(() -> new UnknownCommandException("Команды " + args[0] + "не обнаружено :( ")).execute();
+                Optional.ofNullable(commandMap.get(args[0])).orElseThrow(() -> new UnknownCommandException("\nКоманды " + args[0] + " не обнаружено :( ")).setArgument(args[1]);
+            Optional.ofNullable(commandMap.get(args[0])).orElseThrow(() -> new UnknownCommandException("\nКоманды " + args[0] + " не обнаружено :( ")).execute();
             History.addToCommandsHistoryQueue(args[0]);
         } catch (IllegalArgumentException | NullPointerException | NoSuchElementException e) {
             System.err.println("Выполнение команды пропущено из-за неправильных предоставленных аргументов! (" + e.getMessage() + ")");

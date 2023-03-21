@@ -37,36 +37,4 @@ public interface CollectionManager<T extends AbstractCollection<E>, E> {
      */
     void clearCollection();
 
-    /**
-     * Provides method for fast sorting collection. You can ignore this method.
-     */
-    void sort();
-
-    /**
-     * Provides method for getting last element.
-     *
-     * @return Last element. If collection was empty, returns null.
-     */
-    E getLastElement();
-
-    /**
-     * Provides method for validate elements in collection. You can ignore this method
-     */
-    void validateElements();
-
-    /**
-     * Gets min element by given comparator
-     *
-     * @param comparator Comparator to compare.
-     * @return Min element or null if collection is empty
-     */
-    E getMin(Comparator<E> comparator);
-
-    /**
-     * Gets max element by given comparator
-     *
-     * @param comparator Comparator to compare.
-     * @return Max element or null if collection is empty
-     */
-    E getMax(Comparator<E> comparator);
 }

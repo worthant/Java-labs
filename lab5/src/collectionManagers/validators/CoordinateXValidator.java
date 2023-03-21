@@ -2,10 +2,10 @@ package collectionManagers.validators;
 
 public class CoordinateXValidator implements Validator<Integer> {
     public String getDescr() {
-        return "";
+        return "x <= 499";
     }
     @Override
     public boolean validate(Integer value) {
-        return value <= 499 && value <= Integer.MAX_VALUE;
+        return value <= 499;
     }
 }

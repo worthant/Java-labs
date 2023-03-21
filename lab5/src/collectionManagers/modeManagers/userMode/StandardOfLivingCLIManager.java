@@ -1,6 +1,5 @@
 package collectionManagers.modeManagers.userMode;
 
-import collection.City.Government;
 import collection.City.StandardOfLiving;
 import collectionManagers.modeManagers.ModeManager;
 import collectionManagers.validators.InputValidator;

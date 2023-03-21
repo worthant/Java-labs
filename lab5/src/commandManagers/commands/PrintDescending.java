@@ -4,8 +4,6 @@ import collectionManagers.CityManager;
 import collectionManagers.CollectionManager;
 import commandManagers.Command;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.TreeSet;
 
 /**
@@ -37,6 +35,10 @@ public class PrintDescending extends Command {
     public void execute() {
         if (checkArgument(getArgument())) {
             CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
+            if (manager.getCollection() == null) {
+                System.out.println("This command doesn't work right now");
+                return;
+            }
             for (City city : manager.getCollection().descendingSet()) {
                 System.out.println(city);
             }
@@ -54,7 +56,7 @@ public class PrintDescending extends Command {
         if (inputArgument == null)
             return true;
         else {
-            System.out.println("Команда print_descending не имеет аргументов!");
+            System.out.println("Print_descending has no arguments!");
             return false;
         }
     }

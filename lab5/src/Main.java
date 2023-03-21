@@ -15,21 +15,28 @@ import java.util.TreeSet;
 public class Main {
     /**
      * The environment key to the CSV file for storing the collection.
-    */
+     */
     private static final String ENV_KEY = "lab5";
 
     /**
-     The main method that loads the collection from the CSV file and starts the user interface.
-     @param args an array of command-line arguments for the application
+     * The main method that loads the collection from the CSV file and starts the user interface.
+     *
+     * @param args an array of command-line arguments for the application
      */
     public static void main(String[] args) {
         CityManager loader = new CityManager();
-        loader.loadCollection(ENV_KEY);
-        CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
+        try {
+            loader.loadCollection(ENV_KEY);
+            CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
 
-        // commands
-        System.out.println("Welcome to CLI! Now you are operating with collection of \n  type: " + manager.getCollection().getClass().getName() + ", \n  filled with elements of type: " + manager.getFirstOrNew().getClass().getName());
-        System.out.println("Now you can enter the commands. Use help for reference.");
+            // commands
+            System.out.println("Welcome to CLI! Now you are operating with collection of \n  type: " + manager.getCollection().getClass().getName() + ", \n  filled with elements of type: " + manager.getFirstOrNew().getClass().getName());
+            System.out.println("Now you can enter the commands. Use help for reference.");
+        } catch (IllegalArgumentException e) {
+            System.err.println(e.getMessage());
+            System.out.println("Now you can enter the commands, but user manager works partially, because there is no collection whatsoever. Use help for reference.");
+            System.out.println("!Please add any object of collection using add command to start workflow!");
+        }
         CommandExecutor executor = new CommandExecutor();
         executor.startExecuting(System.in, CommandMode.CLI_UserMode);
     }

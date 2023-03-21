@@ -1,4 +1,5 @@
 package commandManagers.commands;
+
 import collection.City.City;
 import collectionManagers.CityManager;
 import collectionManagers.CollectionManager;
@@ -10,9 +11,10 @@ import java.util.TreeSet;
 
 /**
  * Command to add a new city to the collection.
+ *
  * @author boris
  */
-public class Add extends Command{
+public class Add extends Command {
     ModeManager<City> handler;
 
     /**
@@ -25,11 +27,10 @@ public class Add extends Command{
     /**
      * Provides choosing handler
      *
-     * @since 2.0
      * @param handler ModuleHandler for operating
+     * @since 2.0
      */
-    public Add(ModeManager<City> handler)
-    {
+    public Add(ModeManager<City> handler) {
         super(false);
         this.handler = handler;
     }
@@ -53,11 +54,13 @@ public class Add extends Command{
         if (checkArgument(this.getArgument())) {
             CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
             manager.addElementToCollection(handler.buildObject());
+            System.out.println("City Object successfully added!");
         }
     }
 
     /**
      * Checks whether an argument is provided or not.
+     *
      * @param inputArgument the argument to be checked.
      * @return true if no argument is provided and false otherwise.
      */
@@ -66,7 +69,7 @@ public class Add extends Command{
         if (inputArgument == null)
             return true;
         else {
-            System.out.println("Команда add не имеет аргументов!");
+            System.out.println("Add has no arguments!");
             return false;
         }
     }

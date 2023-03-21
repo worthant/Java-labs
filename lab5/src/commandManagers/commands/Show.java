@@ -35,10 +35,9 @@ public class Show extends Command {
         if (checkArgument(getArgument())) {
             CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
 
-            if (manager.getCollection().isEmpty())
-            {
+            if (manager.getCollection() == null)
                 System.out.println("There's nothing to show.");
-            } else {
+            else {
                 manager.getCollection().forEach(System.out::println);
             }
         }
@@ -57,7 +56,7 @@ public class Show extends Command {
         if (inputArgument == null)
             return true;
         else {
-            System.out.println("Команда show не имеет аргументов!");
+            System.out.println("Show has no arguments!");
             return false;
         }
     }

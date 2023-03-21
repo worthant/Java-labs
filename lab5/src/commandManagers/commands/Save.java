@@ -1,6 +1,5 @@
 package commandManagers.commands;
 
-
 import collectionManagers.CityManager;
 import commandManagers.Command;
 
@@ -47,7 +46,7 @@ public class Save extends Command {
         if (inputArgument == null)
             return true;
         else {
-            System.out.println("Команда save не имеет аргументов!");
+            System.out.println("Save has no arguments!");
             return false;
         }
     }

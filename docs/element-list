@@ -1,0 +1,11 @@
+unnamed package
+collection.City
+collection.comparators
+collectionManagers
+collectionManagers.modeManagers
+collectionManagers.modeManagers.nonUserMode
+collectionManagers.modeManagers.userMode
+collectionManagers.validators
+commandManagers
+commandManagers.commands
+exceptions

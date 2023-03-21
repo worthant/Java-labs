@@ -3,11 +3,13 @@ package collectionManagers.validators;
 /**
  * Implementation of validator for name field. (City)
  *
+ * @since 2.0
  * @author boris
  */
 public class NameValidator implements Validator<String> {
+    @Override
     public String getDescr() {
-        return "";
+        return "Validates name field";
     }
 
     /**

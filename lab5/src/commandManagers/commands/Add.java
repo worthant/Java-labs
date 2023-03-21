@@ -1,9 +1,12 @@
 package commandManagers.commands;
 import collection.City.City;
 import collectionManagers.CityManager;
+import collectionManagers.CollectionManager;
 import collectionManagers.modeManagers.ModeManager;
 import commandManagers.Command;
 import exceptions.BuildObjectException;
+
+import java.util.TreeSet;
 
 /**
  * Command to add a new city to the collection.
@@ -19,6 +22,12 @@ public class Add extends Command{
         super(false);
     }
 
+    /**
+     * Provides choosing handler
+     *
+     * @since 2.0
+     * @param handler ModuleHandler for operating
+     */
     public Add(ModeManager<City> handler)
     {
         super(false);
@@ -41,8 +50,9 @@ public class Add extends Command{
      */
     @Override
     public void execute() throws BuildObjectException {
-        if (checkArgument(getArgument())) {
-            CityManager.getCollection().add(handler.buildObject());
+        if (checkArgument(this.getArgument())) {
+            CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
+            manager.addElementToCollection(handler.buildObject());
         }
     }
 

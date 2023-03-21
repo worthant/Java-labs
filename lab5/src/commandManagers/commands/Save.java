@@ -14,6 +14,16 @@ public class Save extends Command {
         super(false);
     }
 
+    @Override
+    public String getName() {
+        return "save";
+    }
+
+    @Override
+    public String getDescr() {
+        return "Saves collection to file.";
+    }
+
     /**
      * Executes the Save command. Writes the current collection to the file.
      */

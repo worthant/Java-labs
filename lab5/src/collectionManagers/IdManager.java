@@ -13,34 +13,30 @@ import java.util.concurrent.ThreadLocalRandom;
 public class IdManager {
     public static long id;
     private static Queue<Long> queue;
-    /**
-     * Checking if the object with the given id exists and if so, return it
-     * @param argument the id to check
-     * @return the object with the specified id if it exists, otherwise null
-     */
 
     static {
         queue = new LinkedList<>();
     }
-    public static Object checkCityById(String argument) {
-        long id = Long.parseLong(argument);
-        TreeSet<City> cities = CityManager.getCollection();
-        Object obj = new Object();
-        boolean flag = false;
-        for (City city : cities) {
+
+    /**
+     * Checking if the object with the given id exists and if so, return it
+     * @param id the id to check
+     * @return the object with the specified id if it exists, otherwise null
+     */
+    public static City checkCityById(Long id) {
+        CollectionManager<TreeSet<City>, City> collectionHandler = CityManager.getInstance();
+        for (City city : collectionHandler.getCollection()) {
             if (city.getId() == id) {
-                obj = city;
-                id = city.getId();
-                flag = true;
-                break;
+                return city;
             }
         }
-        if (flag)
-            return obj;
-        else
-            return null;
+        return null;
     }
 
+    /**
+     * Generating unique id
+     * @return unique generated id
+     */
     public static Long generateId() {
         Long id;
         do {
@@ -50,11 +46,25 @@ public class IdManager {
         return id;
     }
 
-    /**
-     * Method for getting the current id value
-     * @return the current id value
-     */
-    public static long getId() {
+    public static boolean isNotNumeric(String str) {
+        return !str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
+    }
+
+    public static Long validateUserInput(String input) {
+        if (IdManager.isNotNumeric(input)) {
+            System.out.println("Provided argument id: \"" + input + "\" is not a number! Try again.");
+            return null;
+        } else if (input.contains(".")) {
+            System.out.println("ID field cannot accept decimal values. Try again.");
+            return null;
+        }
+
+        Long id = null;
+        try {
+            id = Long.valueOf(input);
+        } catch (NumberFormatException e) {
+            System.out.println("Provided argument: \"" + input + "\" is too large for ID field. Try again.");
+        }
         return id;
     }
 }

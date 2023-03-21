@@ -1,7 +1,6 @@
 package commandManagers.commands;
 
 import commandManagers.Command;
-import user.UserManager;
 
 /**
  * The Exit class is a command that terminates the program.
@@ -13,6 +12,16 @@ public class Exit extends Command {
         super(false);
     }
 
+    @Override
+    public String getName() {
+        return "exit";
+    }
+
+    @Override
+    public String getDescr() {
+        return "Terminates the application (without saving collection).";
+    }
+
     /**
      * Terminates the program by setting the isWorking variable in UserManager class to false.
      * Prints a message to the console to indicate that the program is terminating.
@@ -21,8 +30,8 @@ public class Exit extends Command {
     @Override
     public void execute() {
         if (checkArgument(getArgument())) {
-            UserManager.setIsWorking(false);
-            System.out.println("Завершение работы программы!");
+            System.out.println("Завершение работы программы...");
+            System.exit(0);
         }
     }
 

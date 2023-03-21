@@ -28,6 +28,16 @@ public class History extends Command {
         super(false);
     }
 
+    @Override
+    public String getName() {
+        return "history";
+    }
+
+    @Override
+    public String getDescr() {
+        return "Prints the last 14 commands (without their arguments).";
+    }
+
     /**
      Executes the History command
      */

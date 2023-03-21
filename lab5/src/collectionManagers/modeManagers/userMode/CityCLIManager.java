@@ -11,7 +11,34 @@ import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+/**
+ * This class implements the ModeManager interface for City objects.
+ * It contains methods for building a new City object using user input through the command line interface.
+ * It handles input validation for all required fields, and uses other CLIManagers to obtain nested objects.
+ *
+ * @author boris
+ * @since 2.0
+ * @see ModeManager
+ * @see City
+ */
 public class CityCLIManager implements ModeManager<City> {
+
+    /**
+     * Builds a new City object using user input through the command line interface.
+     * It handles input validation for all required fields, and uses other CLIManagers to obtain nested objects.
+     *
+     * @return a new City object built from user input
+     * @throws BuildObjectException if an error occurs during object construction
+     *
+     * @author boris
+     * @since 2.0
+     *
+     * @see CoordinatesCLIManager
+     * @see ClimateCLIManager
+     * @see GovernmentCLIManager
+     * @see StandardOfLivingCLIManager
+     * @see HumanCLIManager
+     */
     @Override
     public City buildObject() throws BuildObjectException {
         try {

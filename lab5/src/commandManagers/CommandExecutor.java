@@ -7,6 +7,9 @@ import java.io.InputStream;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+/**
+ * A class for executing commands from an input stream.
+ */
 public class CommandExecutor {
     /**
      * Start executing commands from InputStream.

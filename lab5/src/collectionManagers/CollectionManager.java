@@ -1,7 +1,6 @@
 package collectionManagers;
 
 import java.util.AbstractCollection;
-import java.util.Comparator;
 
 public interface CollectionManager<T extends AbstractCollection<E>, E> {
     /**

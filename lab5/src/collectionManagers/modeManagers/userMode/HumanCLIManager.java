@@ -8,7 +8,21 @@ import exceptions.BuildObjectException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+
+/**
+ * This class implements the ModeManager interface for constructing a new Human object through the CLI.
+ * The buildObject() method prompts the user to enter the name of the human governor and returns a new Human object with the entered name.
+ * The input is validated using an InputValidator object.
+ *
+ * @author boris
+ * @since 2.0
+ */
 public class HumanCLIManager implements ModeManager<Human> {
+    /**
+     * Constructs a new Human object through the CLI by prompting the user to enter the name of the governor.
+     * @return a new Human object with the entered name
+     * @throws BuildObjectException if an error occurs while constructing the object
+     */
     @Override
     public Human buildObject() throws BuildObjectException {
         try {

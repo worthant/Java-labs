@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
+/**
+ * A ModeManager implementation for generating City objects without user input.
+ */
 public class CityNonUserManager implements ModeManager<City> {
 
     Scanner scanner;
@@ -25,6 +28,12 @@ public class CityNonUserManager implements ModeManager<City> {
         this.scanner = scanner;
     }
 
+    /**
+     * Generates a City object by reading values from the scanner and sets its attributes accordingly.
+     *
+     * @return A generated City object.
+     * @throws BuildObjectException If any of the generated values violate restrictions and cannot be added to the collection.
+     */
     @Override
     public City buildObject() throws BuildObjectException {
         System.out.println("Generating object...");

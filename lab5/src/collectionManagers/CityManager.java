@@ -9,7 +9,6 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -19,10 +18,26 @@ import java.util.TreeSet;
  * as well as creating a new City object based on user input.
  */
 public class CityManager implements CollectionManager<TreeSet<City>, City> {
+    /**
+     * Singleton instance of CityManager.
+     */
     private static CityManager singletonPattern;
+
+    /**
+     * TreeSet collection of City objects.
+     */
     private TreeSet<City> cityTreeSet;
+
+    /**
+     * Path to the data file for the collection.
+     */
     private static String pathToDataFile;
 
+    /**
+     * Gets singleton instance of CityManager.
+     *
+     * @return the singleton instance of CityManager
+     */
     public static CityManager getInstance() {
         if (singletonPattern == null)
             singletonPattern = new CityManager();
@@ -86,14 +101,11 @@ public class CityManager implements CollectionManager<TreeSet<City>, City> {
                     "standardOfLiving", "governor"};
 
             List<String> records = new ArrayList<>();
-            int i = 1;
             for (City city : CityManager.getInstance().getCollection()) {
                 records.add(city.getId() + "," + city.getName() + "," + city.getCoordinates().getX() + ","
                         + city.getCoordinates().getY() + "," + city.getCreationDate() + "," + city.getArea() + ","
                         + city.getPopulation() + "," + city.getMetersAboveSeaLevel() + "," + city.getClimate() + ","
                         + city.getGovernment() + "," + city.getStandardOfLiving() + "," + city.getGovernor());
-
-                i++;
             }
 
             CSVManager csvManager = new CSVManager();
@@ -103,7 +115,10 @@ public class CityManager implements CollectionManager<TreeSet<City>, City> {
         }
     }
 
-
+    /**
+     * Adds a City element to the collection managed by the CityManager.
+     * @param value the City element to be added to the collection
+     */
     @Override
     public void addElementToCollection(City value) {
         if (cityTreeSet != null)
@@ -128,6 +143,9 @@ public class CityManager implements CollectionManager<TreeSet<City>, City> {
             return new City();
     }
 
+    /**
+     * Removes all elements from the cityTreeSet collection.
+     */
     @Override
     public void clearCollection() {
         cityTreeSet.clear();
@@ -144,9 +162,9 @@ public class CityManager implements CollectionManager<TreeSet<City>, City> {
     }
 
     /**
-     * Gets the collection of cities.
+     * Returns the collection of cities.
      *
-     * @return the TreeSet collection of City objects
+     * @return the TreeSet collection of cities
      */
     public TreeSet<City> getCollection() {
         return cityTreeSet;

@@ -53,6 +53,10 @@ public class UpdateId extends Command {
     public void execute() throws BuildObjectException {
         if (checkArgument(this.getArgument())) {
             CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
+            if (manager.getCollection() == null) {
+                System.out.println("This command doesn't work right now");
+                return;
+            }
 
             Long finalId = IdManager.validateUserInput((String) this.getArgument());
             if (finalId == null) return;
@@ -89,7 +93,7 @@ public class UpdateId extends Command {
                 Integer.parseInt((String) inputArgument);
                 return true;
             } catch (NumberFormatException e) {
-                System.out.println("Команда update_id имеет аргумент типа данных int!");
+                System.out.println("Update_id has 1 argument of type int!");
                 return false;
             }
         }

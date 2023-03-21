@@ -1,7 +1,6 @@
 package commandManagers.commands;
 
 import collection.City.City;
-import collection.comparators.CityComparatorByMetersAboveSeaLevel;
 import collectionManagers.CityManager;
 import collectionManagers.CollectionManager;
 import commandManagers.Command;
@@ -37,6 +36,10 @@ public class PrintFieldDescendingMetersAboveSeaLevel extends Command {
     public void execute() {
         if (checkArgument(getArgument())) {
             CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
+            if (manager.getCollection() == null) {
+                System.out.println("This command doesn't work right now");
+                return;
+            }
             for (City city : manager.getCollection().descendingSet()) {
                 System.out.println(city.getMetersAboveSeaLevel());
             }
@@ -55,7 +58,7 @@ public class PrintFieldDescendingMetersAboveSeaLevel extends Command {
         if (inputArgument == null)
             return true;
         else {
-            System.out.println("Команда print_field_descending_meters_above_sea_level не имеет аргументов!");
+            System.out.println("Print_field_descending_meters_above_sea_level has no arguments!");
             return false;
         }
     }

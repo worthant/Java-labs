@@ -8,6 +8,7 @@ import collectionManagers.validators.InputValidator;
 import collectionManagers.validators.Validator;
 import exceptions.BuildObjectException;
 
+import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -24,39 +25,47 @@ public class CoordinatesCLIManager implements ModeManager<Coordinates> {
 
 
             // coordinate x
-            Integer x = null;
+            Integer x;
             Validator<Integer> coordXValidator = new CoordinateXValidator();
             while(true) {
-                System.out.print("Enter coordinate x(not null!)(type: Integer) : ");
-                nextLine = scanner.nextLine();
-                if (inputValidator.validate(nextLine)) {
-                    x = Integer.parseInt(nextLine);
-                    if (coordXValidator.validate(x)) {
-                        coordinates.setX(x);
-                        break;
-                    } else {
-                        System.out.println("Value violates restrictions for this field! Try again.");
-                        System.out.println("Restrictions: " + coordXValidator.getDescr());
-                    }
-                } else System.out.println("Input should not be empty!(value is not null)");
+                try {
+                    System.out.print("Enter coordinate x(not null!)(type: Integer) : ");
+                    nextLine = scanner.nextLine();
+                    if (inputValidator.validate(nextLine)) {
+                        x = Integer.parseInt(nextLine);
+                        if (coordXValidator.validate(x)) {
+                            coordinates.setX(x);
+                            break;
+                        } else {
+                            System.out.println("Value violates restrictions for this field! Try again.");
+                            System.out.println("Restrictions: " + coordXValidator.getDescr());
+                        }
+                    } else System.out.println("Input should not be empty!(value is not null)");
+                } catch (InputMismatchException | NumberFormatException e) {
+                    System.out.println("Wrong input! Try again.");
+                }
             }
 
             // coordinate y
-            Double y = null;
+            Double y;
             Validator<Double> coordYValidator = new CoordinateYValidator();
             while(true) {
-                System.out.print("Enter coordinate y(not null!)(type: Integer) : ");
-                nextLine = scanner.nextLine();
-                if (inputValidator.validate(nextLine)) {
-                    y = Double.parseDouble(nextLine);
-                    if (coordYValidator.validate(y)) {
-                        coordinates.setY(y);
-                        break;
-                    } else {
-                        System.out.println("Value violates restrictions for this field! Try again.");
-                        System.out.println("Restrictions: " + coordYValidator.getDescr());
-                    }
-                } else System.out.println("Input should not be empty!(value is not null)");
+                try {
+                    System.out.print("Enter coordinate y(not null!)(type: Double) : ");
+                    nextLine = scanner.nextLine();
+                    if (inputValidator.validate(nextLine)) {
+                        y = Double.parseDouble(nextLine);
+                        if (coordYValidator.validate(y)) {
+                            coordinates.setY(y);
+                            break;
+                        } else {
+                            System.out.println("Value violates restrictions for this field! Try again.");
+                            System.out.println("Restrictions: " + coordYValidator.getDescr());
+                        }
+                    } else System.out.println("Input should not be empty!(value is not null)");
+                } catch (InputMismatchException | NumberFormatException e) {
+                    System.out.println("Wrong input! Try again.");
+                }
             }
             return coordinates;
 

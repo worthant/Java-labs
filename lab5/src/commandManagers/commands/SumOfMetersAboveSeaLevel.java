@@ -33,6 +33,11 @@ public class SumOfMetersAboveSeaLevel extends Command {
     public void execute() {
         if (checkArgument(getArgument())) {
             CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
+            if (manager.getCollection() == null) {
+                System.out.println("This command doesn't work right now");
+                return;
+            }
+
             Double sum = 0.0;
 
             for (City city: manager.getCollection()) {
@@ -52,7 +57,7 @@ public class SumOfMetersAboveSeaLevel extends Command {
         if (inputArgument == null)
             return true;
         else {
-            System.out.println("Команда sum_of_age не имеет аргументов!");
+            System.out.println("Sum_of_age has no arguments!");
             return false;
         }
     }

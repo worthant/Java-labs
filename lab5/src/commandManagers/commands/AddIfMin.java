@@ -28,8 +28,8 @@ public class AddIfMin extends Command {
     /**
      * Provides choosing handler
      *
-     * @since 2.0
      * @param handler ModuleHandler for operating
+     * @since 2.0
      */
     public AddIfMin(ModeManager<City> handler) {
         super(false);
@@ -54,6 +54,10 @@ public class AddIfMin extends Command {
     public void execute() throws BuildObjectException {
         if (checkArgument(this.getArgument())) {
             CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
+            if (manager.getCollection() == null) {
+                System.out.println("This command doesn't work right now");
+                return;
+            }
             City newCity = handler.buildObject();
 
             if (newCity.getPopulation() < manager.getCollection().first().getPopulation()) {
@@ -77,7 +81,7 @@ public class AddIfMin extends Command {
         if (inputArgument == null)
             return true;
         else {
-            System.out.println("Команда add_if_max не имеет аргументов!");
+            System.out.println("Add_if_min has no arguments!");
             return false;
         }
     }

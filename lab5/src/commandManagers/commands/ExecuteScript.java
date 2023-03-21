@@ -1,5 +1,8 @@
 package commandManagers.commands;
 
+import collection.City.City;
+import collectionManagers.CityManager;
+import collectionManagers.CollectionManager;
 import commandManagers.Command;
 import commandManagers.CommandExecutor;
 import commandManagers.CommandManager;
@@ -17,6 +20,7 @@ import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 /**
@@ -51,13 +55,19 @@ public class ExecuteScript extends Command {
     @Override
     public void execute() throws IllegalArgumentException {
         try {
+            CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
+            if (manager.getCollection() == null) {
+                System.out.println("This command doesn't work right now");
+                return;
+            }
+
             CommandExecutor executor = new CommandExecutor();
             if (checkRecursion(Path.of((String) this.getArgument()), new ArrayDeque<>())) {
                 System.out.println("При анализе скрипта обнаружена рекурсия. Устраните ее перед исполнением.");
                 return;
             }
             System.out.println("Executing script");
-            executor.startExecuting(new FileInputStream(Path.of((String) this.getArgument()).toFile()), CommandMode.NonUserMode);
+            executor.startExecuting(new FileInputStream((String) this.getArgument()), CommandMode.NonUserMode);
         } catch (InvalidPathException e) {
             System.out.println("Provided argument path isn't legal. Try again.");
             throw new IllegalArgumentException(e);
@@ -88,7 +98,7 @@ public class ExecuteScript extends Command {
     @Override
     public boolean checkArgument(Object inputArgument) {
         if (inputArgument == null) {
-            System.out.println("Команда execute_script имеет аргумент - ссылку на файл!");
+            System.out.println("Execute_script has 1 argument - path to file!");
             return false;
         } else if (inputArgument instanceof String) {
             return true;

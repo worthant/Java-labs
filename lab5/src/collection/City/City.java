@@ -17,8 +17,6 @@ public class City implements Comparable<City> {
     private int population; //Значение поля должно быть больше 0, Поле не может быть null
     private Double metersAboveSeaLevel;
     private Climate climate; //Поле может быть null
-
-    private int height; //Какое-то поле
     private Government government; //Поле не может быть null
     private StandardOfLiving standardOfLiving; //Поле не может быть null
     private Human governor; //Поле может быть null
@@ -38,10 +36,6 @@ public class City implements Comparable<City> {
     }
 
     public City() {}
-
-    public int getHeight() {
-        return height;
-    }
 
     public long getId() {
         return id;

@@ -1,7 +1,6 @@
 package commandManagers;
 
 import collection.City.*;
-import collectionManagers.CityManager;
 import collectionManagers.modeManagers.ModeManager;
 import collectionManagers.modeManagers.nonUserMode.CityNonUserManager;
 import collectionManagers.modeManagers.userMode.CityCLIManager;
@@ -10,10 +9,7 @@ import exceptions.BuildObjectException;
 import exceptions.CommandInterruptedException;
 import exceptions.UnknownCommandException;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  The CommandManager class is responsible for managing all available commands in the application.
@@ -108,16 +104,15 @@ public class CommandManager {
             if (args.length > 1)
                 Optional.ofNullable(commandMap.get(args[0])).orElseThrow(() -> new UnknownCommandException("Команды " + args[0] + "не обнаружено :( ")).setArgument(args[1]);
             Optional.ofNullable(commandMap.get(args[0])).orElseThrow(() -> new UnknownCommandException("Команды " + args[0] + "не обнаружено :( ")).execute();
-        } catch (IllegalArgumentException | NullPointerException e) {
-//            System.err.println("Выполнение команды пропущено из-за неправильных предоставленных аргументов! (" + e.getMessage() + ")");
-            e.printStackTrace();
+            History.addToCommandsHistoryQueue(args[0]);
+        } catch (IllegalArgumentException | NullPointerException | NoSuchElementException e) {
+            System.err.println("Выполнение команды пропущено из-за неправильных предоставленных аргументов! (" + e.getMessage() + ")");
             throw new CommandInterruptedException(e);
         } catch (BuildObjectException | UnknownCommandException e) {
             System.err.println(e.getMessage());
             throw new CommandInterruptedException(e);
         } catch (Exception e) {
-            // "В командном менеджере произошла непредвиденная ошибка! " +
-            e.printStackTrace();
+            System.err.println("В командном менеджере произошла непредвиденная ошибка! ");
             throw new CommandInterruptedException(e);
         }
     }

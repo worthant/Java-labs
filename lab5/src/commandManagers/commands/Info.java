@@ -37,10 +37,13 @@ public class Info extends Command {
     public void execute() {
         if (checkArgument(getArgument())) {
             CollectionManager<TreeSet<City>, City> manager = CityManager.getInstance();
-
-            System.out.println("Collection type: " + manager.getCollection().getClass().toString());
-            System.out.println("Init date: " + manager.getCollection().first().getCreationDate().toString());
-            System.out.println("Collection size: " + manager.getCollection().size());
+            if (manager.getCollection() == null)
+                System.out.println("There's nothing to show info about.");
+            else {
+                System.out.println("Collection type: " + manager.getCollection().getClass().toString());
+                System.out.println("Init date: " + manager.getCollection().first().getCreationDate().toString());
+                System.out.println("Collection size: " + manager.getCollection().size());
+            }
         }
     }
 
@@ -56,7 +59,7 @@ public class Info extends Command {
         if (inputArgument == null)
             return true;
         else {
-            System.out.println("Команда info не имеет аргументов!");
+            System.out.println("Info has no arguments!");
             return false;
         }
     }

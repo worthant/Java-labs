@@ -14,7 +14,7 @@ public class InputValidator{
      */
     boolean canBeNull = false;
     public String getDescr() {
-        return "";
+        return "Validates user input";
     }
     public boolean validate(String value) {
         if (!canBeNull)

@@ -37,6 +37,7 @@ public class Help extends Command {
             manager.getCommandMap().forEach((name, command) -> System.out.println(name + " : " + command.getDescr()));
         else {
             var command = manager.getCommandMap().get(this.getArgument());
+            this.setArgument(null);
             System.out.println(this.getArgument() + " : " + Optional.ofNullable(command).map(Command::getDescr).orElse("This command is not found in manager"));
         }
     }

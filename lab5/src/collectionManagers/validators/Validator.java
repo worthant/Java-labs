@@ -3,6 +3,7 @@ package collectionManagers.validators;
 /**
  * Base validator. You should implement it for usage.
  *
+ * @since 2.0
  * @param <T> Type of validation value.
  */
 public interface Validator<T> {
@@ -16,5 +17,10 @@ public interface Validator<T> {
      */
     boolean validate(T value);
 
+    /**
+     * Provides description for all validators.
+     *
+     * @return String description of validator
+     */
     String getDescr();
 }

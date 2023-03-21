@@ -5,6 +5,12 @@ import collection.City.Coordinates;
 
 import java.util.Optional;
 
+/**
+ * Implementation of validator for City
+ *
+ *  @since 2.0
+ *  @author boris
+ */
 public class CityValidator implements Validator<City>{
     @Override
     public boolean validate(City city) {

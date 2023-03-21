@@ -5,21 +5,17 @@ import collectionManagers.CityManager;
 import collectionManagers.CollectionManager;
 import commandManagers.Command;
 import commandManagers.CommandExecutor;
-import commandManagers.CommandManager;
 import commandManagers.CommandMode;
 
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
@@ -80,6 +76,14 @@ public class ExecuteScript extends Command {
         }
     }
 
+    /**
+     * Checks if a given file path leads to a recursive call of a script.
+     *
+     * @param path the file path to check for recursion
+     * @param stack a stack containing previously visited file paths
+     * @return true if the given file path leads to a recursive call, false otherwise
+     * @throws IOException if an I/O error occurs while reading the file
+     */
     private boolean checkRecursion(Path path, ArrayDeque<Path> stack) throws IOException {
         if (stack.contains(path)) return true;
         stack.addLast(path);

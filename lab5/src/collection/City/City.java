@@ -34,7 +34,6 @@ public class City implements Comparable<City> {
         this.standardOfLiving = standardOfLiving;
         this.governor = governor;
     }
-
     public City() {}
 
     public long getId() {

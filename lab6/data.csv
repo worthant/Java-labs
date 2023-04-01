@@ -1,0 +1,4 @@
+id,name,x,y,creationDate,area,population,metersAboveSeaLevel,climate,government,standardOfLiving,governor
+2074407503,Kazan,25,17.0,2023-02-22,200,15000,340.1,OCEANIC,COMMUNISM,VERY_HIGH,Petr
+0,Sevastopol,16,15.0,2023-02-22,450,1345768,41.0,STEPPE,ANARCHY,NIGHTMARE,Artem
+-1220593662,Moscow,2143,4356.0,2023-02-22,2135,28376412,650.0,TROPICAL_SAVANNA,DEMARCHY,VERY_HIGH,Vasiliy

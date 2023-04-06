@@ -98,14 +98,15 @@ public enum StandardOfLiving {
     4) Выводы по работе.
 
 Вопросы к защите лабораторной работы:
-
-    - Сетевое взаимодействие - клиент-серверная архитектура, основные протоколы, их сходства и отличия.
-    - Протокол TCP. Классы Socket и ServerSocket.
-    - Протокол UDP. Классы DatagramSocket и DatagramPacket.
-    - Отличия блокирующего и неблокирующего ввода-вывода, их преимущества и недостатки. Работа с сетевыми каналами.
-    - Классы SocketChannel и DatagramChannel.
-    - Передача данных по сети. Сериализация объектов.
-    - Интерфейс Serializable. Объектный граф, сериализация и десериализация полей и методов.
-    - Java Stream API. Создание конвейеров. Промежуточные и терминальные операции.
-    - Шаблоны проектирования: Decorator, Iterator, Factory method, Command, Flyweight, Interpreter, Singleton, Strategy, Adapter, Facade, Proxy.
+```python
+1. Сетевое взаимодействие — клиент-серверная архитектура, основные протоколы, их сходства и отличия.
+2. Протокол TCP. Классы `Socket` и `ServerSocket`.
+3. Протокол UDP. Классы `DatagramSocket` и `DatagramPacket`.
+4. Отличия блокирующего и неблокирующего ввода-вывода, их преимущества и недостатки. Работа с сетевыми каналами.
+5. Классы `SocketChannel` и `DatagramChannel`.
+6. Передача данных по сети. Сериализация объектов.
+7. Интерфейс `Serializable`. Объектный граф, сериализация и десериализация полей и методов.
+8. Java Stream API. Создание конвейеров. Промежуточные и терминальные операции.
+9. Шаблоны проектирования: Decorator, Iterator, Factory method, Command, Flyweight, Interpreter, Singleton, Strategy, Adapter, Facade, Proxy.
+```
 

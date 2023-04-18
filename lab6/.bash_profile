@@ -1,1 +1,0 @@
-lab6=/home/studs/s368090/data.csv ; export lab6

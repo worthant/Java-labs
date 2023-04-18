@@ -5,4 +5,5 @@
 - [Laboratory work №3](./lab3)
 - [Laboratory work №4](./lab4)
 - [Laboratory work №5](./lab5)
+- [Laboratory work №6](./lab6)
 

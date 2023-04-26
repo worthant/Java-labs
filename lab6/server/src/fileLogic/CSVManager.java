@@ -4,6 +4,8 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -64,7 +66,7 @@ public class CSVManager implements FileManager {
                             "standardOfLiving", "governor"));
 
             for (String record: records) {
-                csvPrinter.printRecord((Object) record.split(","));
+                csvPrinter.printRecord((Object[]) record.split(","));
             }
 
             csvPrinter.flush();

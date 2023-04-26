@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Program entry point class. Contains main() method.
  * This program is managing collection of type <code>HashSet&#8249;Route></code>
  *
- * @author zerumi
+ * @author worthant
  * @since 1.0
  */
 public class Main {

@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import responses.CommandStatusResponse;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.TreeSet;
 
@@ -28,7 +29,6 @@ public class AddCommand implements BaseCommand, ArgumentConsumer<City> {
     public void setObj(City obj) {
         this.obj = obj;
         obj.setId(CityIDHandler.generateId());
-        obj.setCreationDate(Date.from(Instant.now()));
     }
 
     @Override

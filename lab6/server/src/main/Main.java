@@ -1,6 +1,8 @@
 package main;
 
 import clientLogic.ClientHandler;
+import commandManager.CommandManager;
+import commandManager.ServerCommandManager;
 import commandManager.commands.HistoryCommand;
 import commandManager.commands.SaveCommand;
 import exceptions.NotAvailableException;
@@ -14,22 +16,47 @@ import requestLogic.StatusRequest;
 import requestLogic.requestWorkers.RequestWorkerManager;
 import requestLogic.requests.ServerRequest;
 import requests.BaseRequest;
-import responseLogic.responseSenders.ResponseSender;
-import responses.ErrorResponse;
+
+import java.io.*;
+import java.net.SocketTimeoutException;
+import java.nio.ByteBuffer;
+import java.nio.channels.Pipe;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
+import java.util.Set;
 import serverLogic.DatagramServerConnectionFactory;
 import serverLogic.ServerConnection;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.net.SocketTimeoutException;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
+import java.util.Scanner;
+import java.util.Set;
 import java.util.TreeSet;
 
 @SuppressWarnings("InfiniteLoopStatement")
 public class Main {
     public static final int PORT = 50457;
     private static final Logger logger = LogManager.getLogger("io.github.worthant.lab6");
+    private static final Scanner scanner;
+
+    static {
+        scanner = new Scanner(System.in);
+    }
 
     /**
-     * Environment key to XML file for store collection.
+     * Environment key to CSV file for store collection.
      */
     public static final String ENV_KEY = "lab5";
 
@@ -59,6 +86,7 @@ public class Main {
         }
 
         // connection
+        logger.info("Creating a connection...");
         ServerConnection connection = new DatagramServerConnectionFactory().initializeServer(PORT);
         while (true) {
             try {
@@ -68,27 +96,31 @@ public class Main {
                     continue;
                 }
 
-                ClientHandler.getInstance().approveCallerBack(rq.getCallerBack());
-                ClientHandler.getInstance().restartTimer();
-
                 RequestReader rqReader = new RequestReader(rq.getInputStream());
                 BaseRequest baseRequest = rqReader.readObject();
                 var request = new ServerRequest(baseRequest, rq.getCallerBack(), connection);
                 RequestWorkerManager worker = new RequestWorkerManager();
                 worker.workWithRequest(request);
+            } catch (SocketTimeoutException e) {
+                // Check if there's any input available in System.in
+                try {
+                    if (System.in.available() > 0) {
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                        String line = reader.readLine();
+                        if (line != null) {
+                            ServerCommandManager manager = new ServerCommandManager();
+                            manager.executeCommand(line.split(" "));
+                        }
+                    }
+                } catch (IOException e1) {
+                    logger.error("Something went wrong during I/O", e1);
+                }
             } catch (IOException e) {
                 logger.error("Something went wrong during I/O", e);
             } catch (ClassNotFoundException e) {
                 logger.error("Class not Found", e);
             } catch (RuntimeException e) {
                 logger.fatal(e);
-            } catch (NotAvailableException e) {
-                try {
-                    ErrorResponse response = new ErrorResponse("Server is busy right now...");
-                    ResponseSender.sendResponse(response, connection, e.getDeniedClient());
-                } catch (IOException ex) {
-                    logger.fatal("Can't send response", e);
-                }
             }
         }
     }

@@ -21,7 +21,7 @@ public class CommandExporter {
         commands.add(new CommandDescription("sum_of_meters_above_sea_level", new ExternalBaseReceiverCaller()));
         commands.add(new CommandDescription("print_descending", new ExternalBaseReceiverCaller()));
         commands.add(new CommandDescription("print_field_descending_meters_above_sea_level", new ExternalBaseReceiverCaller()));
-        commands.add(new CommandDescription("remove_by_id", new ExternalArgumentReceiverCaller()));
+        commands.add(new CommandDescription("remove_by_id", new ExternalBaseReceiverCaller()));
         commands.add(new CommandDescription("add", new ExternalArgumentReceiverCaller<City>()));
         commands.add(new CommandDescription("add_if_min", new ExternalArgumentReceiverCaller<City>()));
         commands.add(new CommandDescription("remove_greater", new ExternalArgumentReceiverCaller<City>()));

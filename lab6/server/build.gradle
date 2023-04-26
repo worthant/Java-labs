@@ -10,6 +10,10 @@ application {
     mainClass = 'main.Main'
 }
 
+run {
+    standardInput = System.in
+}
+
 sourceSets.main.java.srcDirs = ['src']
 
 repositories {

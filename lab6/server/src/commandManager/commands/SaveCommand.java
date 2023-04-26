@@ -30,9 +30,10 @@ public class SaveCommand implements BaseCommand {
     public void execute(String[] args) {
         logger.trace("Saving...");
         CityHandler writer = CityHandler.getInstance();
+        response = CommandStatusResponse.ofString("[Server] Collection saving executing...\nsize of collection to write: " + writer.getCollection().size());
+        logger.info(response.getResponse());
         writer.writeCollection();
-
-        response = CommandStatusResponse.ofString("[Server] Collection saving executed.");
+        response = CommandStatusResponse.ofString("[Server] Collection saving executed.\nsize of written collection: " + writer.getCollection().size());
         logger.info(response.getResponse());
     }
 

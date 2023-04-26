@@ -3,6 +3,7 @@ package commandManager.commands;
 import responses.CommandStatusResponse;
 
 public class ExecuteScriptCommand implements BaseCommand {
+    private CommandStatusResponse response;
     @Override
     public String getName() {
         return "execute_script";
@@ -20,11 +21,11 @@ public class ExecuteScriptCommand implements BaseCommand {
 
     @Override
     public void execute(String[] args) throws IllegalArgumentException {
-        CommandStatusResponse.ofString("Server is alive and ready for command executing!");
+        response = CommandStatusResponse.ofString("Server is alive and ready for command executing!");
     }
 
     @Override
     public CommandStatusResponse getResponse() {
-        return null;
+        return response;
     }
 }

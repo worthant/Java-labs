@@ -6,6 +6,9 @@ import models.comparators.CityComparator;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import responses.CommandStatusResponse;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -15,10 +18,14 @@ import java.util.*;
 /**
  * Current implementation of CollectionsHandler for HashSet of Route.
  *
- * @author Zerumi
+ * @author worthant
  * @since 1.0
  */
 public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
+
+    private static final Logger logger = LogManager.getLogger("io.github.worthant.lab6.manager");
+
+    private CommandStatusResponse response;
 
     private static CityHandler singletonPattern;
     private final Date initDate;
@@ -35,7 +42,7 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
 
     private CityHandler() {
         cities = new TreeSet<>(new CityComparator());
-        initDate = Date.from(Instant.now());
+        initDate = java.sql.Date.valueOf(LocalDate.now());
     }
 
     /**
@@ -64,35 +71,48 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
                     "\nЗадайте переменную окружения с именем \"lab5\", поместив туда полный путь к .csv файлу.");
         } else {
             try {
+                long count = 1;
                 CSVManager csvManager = new CSVManager();
+                CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
                 ArrayList<String> parsedCSVFile = csvManager.readFromFile(pathToDataFile);
-                TreeSet<City> cities = new TreeSet<>(new CityComparator());
                 CSVParser csvParser = CSVParser.parse(String.join("\n", parsedCSVFile), CSVFormat.DEFAULT.withHeader("id", "name", "x", "y", "creationDate", "area", "population", "metersAboveSeaLevel", "climate", "government", "standardOfLiving", "governor"));
+                response = CommandStatusResponse.ofString("csvParser length: " + csvParser.getRecords().size());
+                logger.info(response.getResponse());
                 for (CSVRecord fields : csvParser) {
-                    long id = CityIDHandler.generateId();
+                    long id = Long.parseLong(fields.get("id"));
                     String name = fields.get("name");
                     Integer x = Integer.valueOf(fields.get("x"));
                     double y = Double.parseDouble(fields.get("y"));
                     Coordinates coordinates = new Coordinates(x, y);
                     java.util.Date creationDate = java.sql.Date.valueOf(LocalDate.now());
-                    Integer area = Integer.parseInt(fields.get("area"));
+                    Integer area = Integer.valueOf(fields.get("area"));
                     int population = Integer.parseInt(fields.get("population"));
                     Double metersAboveSeaLevel = null;
                     if (fields.get("metersAboveSeaLevel") != null && !fields.get("metersAboveSeaLevel").isEmpty()) {
-                        metersAboveSeaLevel = Double.parseDouble(fields.get("metersAboveSeaLevel"));
+                        metersAboveSeaLevel = Double.valueOf(fields.get("metersAboveSeaLevel"));
                     }
                     Climate climate = Climate.valueOf(fields.get("climate"));
                     Government government = Government.valueOf(fields.get("government"));
                     StandardOfLiving standardOfLiving = StandardOfLiving.valueOf(fields.get("standardOfLiving"));
                     Human governor = new Human(fields.get("governor"));
-                    cities.add(new City(id, name, coordinates, creationDate, area, population, metersAboveSeaLevel, climate, government, standardOfLiving, governor));
+
+                    City city = new City(id, name, coordinates, creationDate, area, population, metersAboveSeaLevel, climate, government, standardOfLiving, governor);
+                    collectionHandler.addElementToCollection(city);
+                    response = CommandStatusResponse.ofString(count++ + "th Element loaded!\n  fields: " + fields + "\n size: " + cities.size());
+                    logger.info(response.getResponse());
                 }
-                CityHandler.getInstance().setCollection(cities);
+                response = CommandStatusResponse.ofString("Parsed CSV: " + cities.size());
+                logger.info(response.getResponse());
+                CityHandler.getInstance().setCollection(collectionHandler.getCollection());
 
             } catch (IOException | IllegalArgumentException e) {
                 throw new IllegalArgumentException("CSV format violation: " + e.getMessage());
             }
         }
+    }
+
+    public CommandStatusResponse getResponse() {
+        return response;
     }
 
     /**
@@ -106,7 +126,7 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
                     "standardOfLiving", "governor"};
 
             List<String> records = new ArrayList<>();
-            for (City city : CityHandler.getInstance().getCollection()) {
+            for (City city : cities) {
                 records.add(city.getId() + "," + city.getName() + "," + city.getCoordinates().getX() + ","
                         + city.getCoordinates().getY() + "," + city.getCreationDate() + "," + city.getArea() + ","
                         + city.getPopulation() + "," + city.getMetersAboveSeaLevel() + "," + city.getClimate() + ","
@@ -147,9 +167,11 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
      */
     @Override
     public void addElementToCollection(City city) {
-        if (cities != null)
+        if (cities != null){
             cities.add(city);
-        else {
+            response = CommandStatusResponse.ofString("is element added? - " + cities.add(city));
+            logger.info(response.getResponse());
+        } else {
             TreeSet<City> cities = new TreeSet<>(new CityComparator());
             cities.add(city);
             CityHandler.getInstance().setCollection(cities);

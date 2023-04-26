@@ -1,7 +1,10 @@
 package models;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Main class for City objects, stored in TreeSet collection
@@ -13,7 +16,7 @@ public class City implements Comparable<City>, Serializable {
     private long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
-    private Date creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
+    private java.util.Date creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
     private Integer area; //Значение поля должно быть больше 0
     private int population; //Значение поля должно быть больше 0, Поле не может быть null
     private Double metersAboveSeaLevel;
@@ -61,11 +64,11 @@ public class City implements Comparable<City>, Serializable {
         this.coordinates = coordinates;
     }
 
-    public Date getCreationDate() {
+    public java.util.Date getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(java.util.Date creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -132,28 +135,25 @@ public class City implements Comparable<City>, Serializable {
      */
     @Override
     public int compareTo(City o) {
-        int result = Integer.compare(this.population, o.population);
-        if (result == 0)
-            result = this.coordinates.compareTo(o.coordinates);
-        if (result == 0)
-            result = this.creationDate.compareTo(o.creationDate);
-        if (result == 0)
-            result = this.standardOfLiving.compareTo(o.standardOfLiving);
-        if (result == 0)
-            result = this.government.compareTo(o.government);
-        if (result == 0) {
-            if (climate != null)
-                result = this.climate.compareTo(o.climate);
-            else if (o.climate != null)
-                result = -o.climate.compareTo(this.climate);
+        List<Comparator<City>> comparators = Arrays.asList(
+                Comparator.comparingInt(City::getPopulation),
+                (city1, city2) -> city1.getCoordinates().compareTo(city2.getCoordinates()),
+                Comparator.comparing(City::getCreationDate),
+                Comparator.comparing(City::getStandardOfLiving),
+                Comparator.comparing(City::getGovernment),
+                Comparator.nullsFirst(Comparator.comparing(City::getClimate)),
+                Comparator.nullsFirst(Comparator.comparing(City::getGovernor)),
+                Comparator.comparingLong(City::getId)
+        );
+
+        for (Comparator<City> comparator : comparators) {
+            int result = comparator.compare(this, o);
+            if (result != 0) {
+                return result;
+            }
         }
-        if (result == 0) {
-            if (governor != null)
-                result = this.governor.compareTo(o.governor);
-            else if (o.governor != null)
-                result = -o.governor.compareTo(this.governor);
-        }
-        return result;
+
+        return this.id < o.id ? -1 : 1;
     }
 
     @Override

@@ -8,10 +8,7 @@ import requestLogic.StatusRequestBuilder;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
+import java.net.*;
 import java.util.Arrays;
 
 public class DatagramServerConnection implements ServerConnection {
@@ -19,25 +16,21 @@ public class DatagramServerConnection implements ServerConnection {
     private static final Logger logger = LogManager.getLogger("io.github.worthant.lab6");
     private final DatagramSocket ds;
 
-    protected DatagramServerConnection(int port) throws SocketException {
+    protected DatagramServerConnection(int port, int timeout) throws SocketException {
         ds = new DatagramSocket(port);
+        ds.setSoTimeout(timeout);
     }
 
-    public StatusRequest listenAndGetData() {
+    public StatusRequest listenAndGetData() throws IOException {
         byte[] buffer = new byte[BUFFER_SIZE];
-        try {
-            DatagramPacket dp;
-            dp = new DatagramPacket(buffer, buffer.length);
-            ds.receive(dp);
+        DatagramPacket dp;
+        dp = new DatagramPacket(buffer, buffer.length);
+        ds.receive(dp);
 
-            logger.debug("Received connection.");
-            logger.trace("Bytes: " + Arrays.toString(dp.getData()));
+        logger.debug("Received connection.");
+        logger.trace("Bytes: " + Arrays.toString(dp.getData()));
 
-            return StatusRequestBuilder.initialize().setObjectStream(new ByteArrayInputStream(dp.getData())).setCallerBack(new CallerBack(dp.getAddress(), dp.getPort())).setCode(200).build();
-        } catch (IOException e) {
-            logger.error("Something went wrong during I/O.", e);
-        }
-        return StatusRequestBuilder.initialize().setCode(-501).build();
+        return StatusRequestBuilder.initialize().setObjectStream(new ByteArrayInputStream(dp.getData())).setCallerBack(new CallerBack(dp.getAddress(), dp.getPort())).setCode(200).build();
     }
 
     @Override

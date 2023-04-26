@@ -70,7 +70,8 @@ public class CityNonUserManager implements ModeManager<City> {
             System.out.println();
 
             // date
-            result.setCreationDate(Date.from(Instant.now()));
+            java.util.Date creationDate = java.sql.Date.valueOf(LocalDate.now());
+            city.setCreationDate(creationDate);
             System.out.println("Generated at: " + result.getCreationDate());
             System.out.println("Object generated! Validating result...");
             System.out.println();

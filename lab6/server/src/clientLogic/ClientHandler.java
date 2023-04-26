@@ -29,7 +29,7 @@ public class ClientHandler implements ActionListener {
     public void approveCallerBack(CallerBack callerBack) throws NotAvailableException {
         if (availability || this.callerBack.equals(callerBack)) {
             this.callerBack = callerBack;
-            availability = false;
+            availability = true;
             timer.start();
         } else throw new NotAvailableException(callerBack);
     }

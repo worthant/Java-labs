@@ -9,6 +9,7 @@ import models.validators.CityValidator;
 import models.validators.Validator;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
@@ -75,7 +76,9 @@ public class CityNonUserManager implements ModeManager<City> {
             System.out.println();
 
             // date
-            result.setCreationDate(Date.from(Instant.now()));
+            java.util.Date creationDate = java.sql.Date.valueOf(LocalDate.now());
+            result.setCreationDate(creationDate);
+            // result.setCreationDate(Date.from(Instant.now()));
             System.out.println("Generated at: " + result.getCreationDate());
             System.out.println("Object generated! Validating result...");
             System.out.println();

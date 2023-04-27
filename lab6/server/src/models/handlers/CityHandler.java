@@ -76,15 +76,13 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
                 CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
                 ArrayList<String> parsedCSVFile = csvManager.readFromFile(pathToDataFile);
                 CSVParser csvParser = CSVParser.parse(String.join("\n", parsedCSVFile), CSVFormat.DEFAULT.withHeader("id", "name", "x", "y", "creationDate", "area", "population", "metersAboveSeaLevel", "climate", "government", "standardOfLiving", "governor"));
-                response = CommandStatusResponse.ofString("csvParser length: " + csvParser.getRecords().size());
-                logger.info(response.getResponse());
-                for (CSVRecord fields : csvParser) {
+                for (CSVRecord fields : csvParser.getRecords()) {
                     long id = Long.parseLong(fields.get("id"));
                     String name = fields.get("name");
                     Integer x = Integer.valueOf(fields.get("x"));
                     double y = Double.parseDouble(fields.get("y"));
                     Coordinates coordinates = new Coordinates(x, y);
-                    java.util.Date creationDate = java.sql.Date.valueOf(LocalDate.now());
+                    Date creationDate = java.sql.Date.valueOf(LocalDate.now());
                     Integer area = Integer.valueOf(fields.get("area"));
                     int population = Integer.parseInt(fields.get("population"));
                     Double metersAboveSeaLevel = null;
@@ -168,7 +166,6 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
     @Override
     public void addElementToCollection(City city) {
         if (cities != null){
-            cities.add(city);
             response = CommandStatusResponse.ofString("is element added? - " + cities.add(city));
             logger.info(response.getResponse());
         } else {

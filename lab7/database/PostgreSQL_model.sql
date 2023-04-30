@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS City (
     creation_date TIMESTAMP NOT NULL, 
     area area_constraint,
     population population_constraint NOT NULL,
-    metersAboveSeaLevel DOUBLE PRECISION,
+    meters_above_sea_level DOUBLE PRECISION,
     climate CLIMATE_ENUM NOT NULL,
     government GOVERNMENT_ENUM NOT NULL,
     governor_id INTEGER REFERENCES Human(id) ON DELETE RESTRICT NOT NULL UNIQUE,

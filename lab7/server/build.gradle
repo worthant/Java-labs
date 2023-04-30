@@ -1,0 +1,46 @@
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'application'
+
+version '1.2'
+
+applicationDefaultJvmArgs = ["-Dlog4j.configurationFile=./log4j2.xml"]
+
+application {
+    mainClass = 'main.Main'
+}
+
+run {
+    standardInput = System.in
+}
+
+sourceSets.main.java.srcDirs = ['src']
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.github.yangtu222:BeanUtils:1.0.11'
+    implementation 'org.modelmapper:modelmapper-module-java8:1.2.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+    implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
+    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
+    implementation 'org.modelmapper:modelmapper:3.1.1'
+    implementation 'org.apache.commons:commons-csv:1.6'
+    implementation project(":shared")
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'main.Main',
+                'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' ')
+        )
+    }
+}

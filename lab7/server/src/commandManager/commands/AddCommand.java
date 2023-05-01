@@ -50,6 +50,7 @@ public class AddCommand implements BaseCommand, ArgumentConsumer<City> {
     public void execute(String[] args) {
         CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
 
+        collectionHandler.writeCollectionToDatabase();
         collectionHandler.addElementToCollection(obj);
 
         response = CommandStatusResponse.ofString("Element added!");

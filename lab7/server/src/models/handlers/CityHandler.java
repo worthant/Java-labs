@@ -1,6 +1,7 @@
 package models.handlers;
 
-import fileLogic.CSVManager;
+import collectionStorageManager.CSVManager;
+import collectionStorageManager.PostgreSQLManager;
 import models.*;
 import models.comparators.CityComparator;
 import org.apache.commons.csv.CSVFormat;
@@ -11,7 +12,6 @@ import org.apache.logging.log4j.Logger;
 import responses.CommandStatusResponse;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -60,8 +60,11 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
      * Loads the TreeSet collection from a .csv file using the environment variable with the specified key.
      *
      * @param envKey the key of the environment variable containing the path to the .csv file
+     * @deprecated
      */
-    public void loadCollection(String envKey) {
+    @Deprecated
+    @Override
+    public void loadCollectionFromFile(String envKey) {
         String pathToDataFile = System.getenv(envKey);
         CityHandler.setPathToDataFile(pathToDataFile);
         if (pathToDataFile == null) {
@@ -109,14 +112,27 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
         }
     }
 
-    public CommandStatusResponse getResponse() {
-        return response;
+    /**
+     * Loads the TreeSet collection from a .csv file using the environment variable with the specified key.
+     */
+    @Override
+    public void loadCollectionFromDatabase() {
+        PostgreSQLManager dbManager = new PostgreSQLManager();
+        ArrayList<City> cities = dbManager.readFromDatabase();
+        CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
+        for (City city: cities) {
+            collectionHandler.addElementToCollection(city);
+        }
+        CityHandler.getInstance().setCollection(collectionHandler.getCollection());
     }
 
     /**
      * Writes TreeSet collection to .csv file
+     * @deprecated
      */
-    public void writeCollection() {
+    @Deprecated
+    @Override
+    public void writeCollectionToFile() {
         try {
             // header of City collection
             String[] header = {"id", "name", "x", "y", "creationDate",
@@ -136,6 +152,15 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
         } catch (IOException | IllegalArgumentException e) {
             throw new IllegalArgumentException("CSV format violation: " + e.getMessage());
         }
+    }
+
+    /**
+     * Writes TreeSet collection to Database
+     */
+    @Override
+    public void writeCollectionToDatabase() {
+        PostgreSQLManager dbManager = new PostgreSQLManager();
+        dbManager.writeToDatabase();
     }
 
     /**
@@ -167,6 +192,7 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
     public void addElementToCollection(City city) {
         if (cities != null){
             response = CommandStatusResponse.ofString("is element added? - " + cities.add(city));
+            CityHandler.getInstance().writeCollectionToDatabase();
             logger.info(response.getResponse());
         } else {
             TreeSet<City> cities = new TreeSet<>(new CityComparator());
@@ -211,5 +237,8 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
         CityHandler.pathToDataFile = pathToDataFile;
     }
 
+    public CommandStatusResponse getResponse() {
+        return response;
+    }
 
 }

@@ -1,13 +1,15 @@
-package fileLogic;
+package collectionStorageManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- The {@code Managers} interface represents a collection manager that reads and writes objects from and to a file.
- It has two methods to read objects from a file and write objects to a file.
+ *  The {@code Managers} interface represents a collection manager that reads and writes objects from and to a file.
+ * It has two methods to read objects from a file and write objects to a file.
+ * @deprecated
  */
+@Deprecated
 public interface FileManager {
 
     /**

@@ -32,7 +32,7 @@ public class SaveCommand implements BaseCommand {
         CityHandler writer = CityHandler.getInstance();
         response = CommandStatusResponse.ofString("[Server] Collection saving executing...\nsize of collection to write: " + writer.getCollection().size());
         logger.info(response.getResponse());
-        writer.writeCollection();
+        writer.writeCollectionToDatabase();
         response = CommandStatusResponse.ofString("[Server] Collection saving executed.\nsize of written collection: " + writer.getCollection().size());
         logger.info(response.getResponse());
     }

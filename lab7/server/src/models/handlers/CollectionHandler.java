@@ -13,6 +13,16 @@ import java.util.Date;
  */
 public interface CollectionHandler<T extends AbstractCollection<E>, E> {
     /**
+     *
+     */
+    void loadCollectionFromDatabase();
+
+    /**
+     *
+     */
+    void writeCollectionToDatabase();
+
+    /**
      * Provides method for get collection.
      *
      * @return Actual collection reference
@@ -53,4 +63,14 @@ public interface CollectionHandler<T extends AbstractCollection<E>, E> {
      * @see commandManager.commands.InfoCommand
      */
     Date getInitDate();
+
+    /**
+     *
+     */
+    void loadCollectionFromFile(String envKey);
+
+    /**
+     *
+     */
+    void writeCollectionToFile();
 }

@@ -1,6 +1,5 @@
 package commandManager.commands;
 
-import clientLogic.ClientHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import responses.CommandStatusResponse;
@@ -29,8 +28,6 @@ public class ExitCommand implements BaseCommand {
     public void execute(String[] args) {
         logger.trace("Invoked exit command. Saving a collection...");
         logger.info("Someone is disconnected... Saving a collection...");
-        ClientHandler.getInstance().allowNewCallerBack();
-        logger.info("Allowed new caller back.");
         SaveCommand saveCommand = new SaveCommand();
         saveCommand.execute(new String[0]);
         response = CommandStatusResponse.ofString("Prepared for exit!");

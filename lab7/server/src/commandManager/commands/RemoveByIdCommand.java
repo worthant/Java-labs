@@ -1,5 +1,6 @@
 package commandManager.commands;
 
+import collectionStorageManager.PostgreSQLManager;
 import models.City;
 import models.handlers.CityHandler;
 import models.handlers.CollectionHandler;
@@ -39,10 +40,13 @@ public class RemoveByIdCommand implements BaseCommand {
     public void execute(String[] args) {
         CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
 
-        if (collectionHandler.getCollection().removeIf(city -> Objects.equals(city.getId(), Long.valueOf(args[1]))))
-            response = CommandStatusResponse.ofString("Element with that id doesn't exists.");
-        else
-            response = CommandStatusResponse.ofString("Executed.");
+        PostgreSQLManager dbManager = new PostgreSQLManager();
+//        boolean removed = dbManager.removeCityById(city.getId(), Long.parseLong(args[1]));
+
+        //if (collectionHandler.getCollection().removeIf(city -> Objects.equals(city.getId(), Long.valueOf(args[1]))))
+//            response = CommandStatusResponse.ofString("Element with that id doesn't exists.");
+//        else
+//            response = CommandStatusResponse.ofString("Executed.");
 
         logger.info(response.getResponse());
     }

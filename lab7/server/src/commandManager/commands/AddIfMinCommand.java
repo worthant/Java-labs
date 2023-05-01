@@ -43,6 +43,7 @@ public class AddIfMinCommand implements BaseCommand, ArgumentConsumer<City> {
         CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
 
         if (obj.getPopulation() < collectionHandler.getCollection().first().getPopulation()) {
+            collectionHandler.writeCollectionToDatabase();
             collectionHandler.addElementToCollection(obj);
             response = CommandStatusResponse.ofString("Element added!");
         } else {

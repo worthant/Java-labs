@@ -191,9 +191,9 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
     @Override
     public void addElementToCollection(City city) {
         if (cities != null){
-            response = CommandStatusResponse.ofString("is element added? - " + cities.add(city));
-            CityHandler.getInstance().writeCollectionToDatabase();
-            logger.info(response.getResponse());
+            cities.add(city);
+            // response = CommandStatusResponse.ofString("is element added? - " + cities.add(city));
+            // logger.info(response.getResponse());
         } else {
             TreeSet<City> cities = new TreeSet<>(new CityComparator());
             cities.add(city);

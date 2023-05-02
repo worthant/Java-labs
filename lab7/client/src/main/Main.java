@@ -7,10 +7,17 @@ import commandManager.CommandMode;
 import exceptions.CommandsNotLoadedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import requestLogic.requestSenders.AuthRequestSender;
+import requestLogic.requestSenders.RegRequestSender;
+import responses.AuthResponse;
+import responses.RegResponse;
 import serverLogic.*;
+import models.validators.*;
 
 import javax.swing.*;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.CountDownLatch;
@@ -29,6 +36,7 @@ public class Main {
 
     /**
      * Program entry point.
+     *
      * @param args Command-line arguments
      */
     public static void main(String[] args) {
@@ -38,6 +46,64 @@ public class Main {
             ServerConnection connection = new UdpConnectionBlockDecorator((UdpServerConnection) new UdpServerConnectionFactory().openConnection(InetAddress.getLocalHost(), PORT), true);
             ServerConnectionHandler.setServerConnection(connection);
             connection.openConnection();
+
+            System.out.println("\nWelcome to lab7 client!) Please, authorize or register to start working with commands:\n");
+            System.out.println("Write:\n  1 - to authorize,\n  {anything} - to register\n");
+            String name;
+            char[] passwd;
+            String nextLine;
+            boolean auth;
+            boolean authorizationDone = false;
+            InputValidator inputValidator = new InputValidator();
+            inputValidator.canBeNull(false);
+            do {
+                try {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                    nextLine = reader.readLine().trim();
+                    auth = nextLine.equals("1");
+
+                    while (true) {
+                        System.out.print("Enter your name(not null!)(type: String): ");
+                        nextLine = reader.readLine().trim();
+
+                        if (inputValidator.validate(nextLine)) {
+                            name = nextLine.split(" ")[0];
+                            break;
+                        } else System.out.println("Input should not be empty!(name is not null)");
+                    }
+
+                    while (true) {
+                        System.out.print("Enter your password(not null!)(type: charArray): ");
+                        nextLine = reader.readLine().trim();
+
+                        if (inputValidator.validate(nextLine)) {
+                            passwd = nextLine.split(" ")[0].toCharArray();
+                            break;
+                        } else System.out.println("Input should not be empty!(passwd is not null)");
+                    }
+
+                    if (auth) {
+                        System.out.println("Checking if user exists in database");
+                        AuthRequestSender rqSender = new AuthRequestSender();
+                        AuthResponse response = rqSender.sendAuthData(name, passwd, ServerConnectionHandler.getCurrentConnection());
+                        if (response.isAuth()) {
+                            System.out.println("Successfully authenticated");
+                            authorizationDone = true;
+                        } else
+                            System.out.println("There is no user with this name, or passwd is incorrect");
+                    } else {
+                        System.out.println("Registering new user");
+                        RegRequestSender rqSender = new RegRequestSender();
+                        RegResponse response = rqSender.sendRegData(name, passwd, ServerConnectionHandler.getCurrentConnection());
+                        if (response.isReg())
+                            System.out.println("Successfully registered new user with:\n name: " + name + ",\n passwd: " + passwd);
+                        else
+                            System.out.println("User with this credentials already exists in database");
+                    }
+                } catch (Exception e) {
+                    System.out.println("При вводе произошла непредвиденная ошибка!" + e.getMessage());
+                }
+            } while (!authorizationDone);
 
             // request commands
             boolean commandsNotLoaded = true;

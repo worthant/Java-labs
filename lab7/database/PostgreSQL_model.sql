@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS "User" (
 
 CREATE TABLE IF NOT EXISTS Coordinates (
     id SERIAL PRIMARY KEY,
-    x INTEGER CHECK (VALUE < 499) NOT NULL,
-    y DOUBLE PRECISION CHECK (VALUE > -274) NOT NULL
+    x INTEGER CHECK (x < 499) NOT NULL,
+    y DOUBLE PRECISION CHECK (y > -274) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Human (
@@ -53,11 +53,11 @@ CREATE TABLE IF NOT EXISTS City (
     creation_date TIMESTAMP NOT NULL, 
     area area_constraint,
     population population_constraint NOT NULL,
-    metersAboveSeaLevel DOUBLE PRECISION,
+    meters_above_sea_level DOUBLE PRECISION,
     climate CLIMATE_ENUM NOT NULL,
     government GOVERNMENT_ENUM NOT NULL,
     governor_id INTEGER REFERENCES Human(id) ON DELETE RESTRICT NOT NULL UNIQUE,
-    standardOfLiving STANDARD_OF_LIVING_ENUM NOT NULL
+    standard_of_living STANDARD_OF_LIVING_ENUM NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Creator (

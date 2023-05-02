@@ -11,6 +11,7 @@ import responses.CommandStatusResponse;
 import java.util.Comparator;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  * Prints all distance fields in ascending sorting.
@@ -35,22 +36,21 @@ public class PrintFieldDescendingMetersAboveSeaLevelCommand implements BaseComma
     @Override
     public void execute(String[] args) {
         CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
+        TreeSet<City> cityCollection = collectionHandler.getCollection();
 
-        TreeSet<City> sortedCities = new TreeSet<>(new CityComparatorByMetersAboveSeaLevel().reversed());
-        sortedCities.addAll(collectionHandler.getCollection());
-
-        StringBuilder sb = new StringBuilder();
-        for (City city : sortedCities) {
-            sb.append(city.getMetersAboveSeaLevel()).append('\n');
-        }
-        response = CommandStatusResponse.ofString(sb.toString());
-
-        if (collectionHandler.getCollection().isEmpty())
+        if (cityCollection.isEmpty()) {
             response = CommandStatusResponse.ofString("There's nothing to show...");
+        } else {
+            String output = cityCollection.stream()
+                    .sorted(Comparator.comparing(City::getMetersAboveSeaLevel).reversed())
+                    .map(city -> String.valueOf(city.getMetersAboveSeaLevel()))
+                    .collect(Collectors.joining("\n"));
+
+            response = CommandStatusResponse.ofString(output);
+        }
 
         logger.info(response.getResponse());
     }
-
 
     @Override
     public CommandStatusResponse getResponse() {

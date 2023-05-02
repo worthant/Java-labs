@@ -1,11 +1,8 @@
 package main;
 
-import clientLogic.ClientHandler;
-import commandManager.CommandManager;
 import commandManager.ServerCommandManager;
 import commandManager.commands.HistoryCommand;
 import commandManager.commands.SaveCommand;
-import exceptions.NotAvailableException;
 import models.City;
 import models.handlers.CollectionHandler;
 import models.handlers.CityHandler;
@@ -19,41 +16,19 @@ import requests.BaseRequest;
 
 import java.io.*;
 import java.net.SocketTimeoutException;
-import java.nio.ByteBuffer;
-import java.nio.channels.Pipe;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
-import java.util.Set;
+
 import serverLogic.DatagramServerConnectionFactory;
 import serverLogic.ServerConnection;
 
 import javax.swing.*;
 import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.TreeSet;
 
 @SuppressWarnings("InfiniteLoopStatement")
 public class Main {
     public static final int PORT = 50457;
     private static final Logger logger = LogManager.getLogger("io.github.worthant.lab6");
-    private static final Scanner scanner;
-
-    static {
-        scanner = new Scanner(System.in);
-    }
 
     /**
      * Environment key to CSV file for store collection.
@@ -73,7 +48,8 @@ public class Main {
 
         // load collection
         try {
-            loader.loadCollection(ENV_KEY);
+            // loader.loadCollectionFromFile(ENV_KEY);
+            loader.loadCollectionFromDatabase();
             logger.info("Loaded " + handler.getCollection().size() + " elements total.");
             logger.info(" ");
 

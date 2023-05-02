@@ -1,5 +1,6 @@
 package commandManager.commands;
 
+import collectionStorageManager.PostgreSQLManager;
 import models.City;
 import models.handlers.CollectionHandler;
 import models.handlers.CityIDHandler;
@@ -43,11 +44,14 @@ public class AddIfMinCommand implements BaseCommand, ArgumentConsumer<City> {
         CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
 
         if (obj.getPopulation() < collectionHandler.getCollection().first().getPopulation()) {
-            collectionHandler.addElementToCollection(obj);
-            response = CommandStatusResponse.ofString("Element added!");
-        } else {
-            response = new CommandStatusResponse("Element not added: it's not lower than min value.", 3);
-        }
+            PostgreSQLManager manager = new PostgreSQLManager();
+            long generatedId = manager.addElementToDatabase(obj);
+            if (generatedId != -1) {
+                obj.setId(generatedId);
+                collectionHandler.addElementToCollection(obj);
+                response = CommandStatusResponse.ofString("Element added with ID: " + generatedId);
+            } else response = CommandStatusResponse.ofString("Failed to add element.");
+        } else response = new CommandStatusResponse("Element not added: it's not lower than min value.", 3);
 
         logger.info(response.getResponse());
     }

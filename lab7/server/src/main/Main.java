@@ -6,6 +6,7 @@ import commandManager.commands.SaveCommand;
 import models.City;
 import models.handlers.CollectionHandler;
 import models.handlers.CityHandler;
+import multithreading.MultithreadingManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import requestLogic.RequestReader;
@@ -64,9 +65,7 @@ public class Main {
         }
 
         // Create thread pools for processing requests and sending responses
-        ExecutorService requestProcessingThreadPool = Executors.newFixedThreadPool(4);
-        ExecutorService responseSendingThreadPool = Executors.newCachedThreadPool();
-
+        ExecutorService requestProcessingThreadPool = MultithreadingManager.getRequestThreadPool();
 
         // connection
         logger.info("Creating a connection...");
@@ -87,11 +86,6 @@ public class Main {
                         RequestWorkerManager worker = new RequestWorkerManager();
                         // Process requests using the fixed thread pool
                         requestProcessingThreadPool.submit(() -> worker.workWithRequest(request));
-
-                        // Send responses using the cached thread pool
-                        responseSendingThreadPool.submit(() -> {
-                            // TODO: Implement logic to send a response
-                        });
                     } catch (IOException | ClassNotFoundException e) {
                         logger.error("Error in request processing thread", e);
                     }

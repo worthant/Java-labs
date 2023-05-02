@@ -49,16 +49,17 @@ CREATE TABLE IF NOT EXISTS Human (
 CREATE TABLE IF NOT EXISTS City (
     id BIGSERIAL PRIMARY KEY,
     name TEXT NOT NULL,
-    coordinates_id INTEGER REFERENCES Coordinates(id) ON DELETE RESTRICT NOT NULL UNIQUE,
+    coordinates_id INTEGER REFERENCES Coordinates(id) ON DELETE RESTRICT NOT NULL,
     creation_date TIMESTAMP NOT NULL, 
     area area_constraint,
     population population_constraint NOT NULL,
     meters_above_sea_level DOUBLE PRECISION,
     climate CLIMATE_ENUM NOT NULL,
     government GOVERNMENT_ENUM NOT NULL,
-    governor_id INTEGER REFERENCES Human(id) ON DELETE RESTRICT NOT NULL UNIQUE,
+    governor_id INTEGER REFERENCES Human(id) ON DELETE RESTRICT NOT NULL,
     standard_of_living STANDARD_OF_LIVING_ENUM NOT NULL
 );
+
 
 CREATE TABLE IF NOT EXISTS Creator (
     user_id BIGINT DEFAULT 1 REFERENCES "User"(id) ON DELETE SET DEFAULT NOT NULL,

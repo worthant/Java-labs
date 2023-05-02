@@ -1,19 +1,29 @@
+// ClientHandler.java
 package clientLogic;
 
 import collectionStorageManager.PostgreSQLManager;
-
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import exceptions.UserNotAuthenticatedException;
 
 public class ClientHandler {
     private final String name;
     private final char[] passwd;
     private static long userId;
+    private static ClientHandler instance;
 
-    public ClientHandler(String name, char[] passwd) {
+    private ClientHandler(String name, char[] passwd) {
         this.name = name;
         this.passwd = passwd;
+    }
+
+    public static ClientHandler getInstance(String name, char[] passwd) {
+        if (instance == null) {
+            instance = new ClientHandler(name, passwd);
+        }
+        return instance;
+    }
+
+    public static ClientHandler getInstance() {
+        return instance;
     }
 
     public boolean regUser() {
@@ -36,23 +46,14 @@ public class ClientHandler {
         return false;
     }
 
-    public static String hashPassword(char[] password, String salt) {
-        String input = String.valueOf(password) + salt;
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD2");
-            byte[] hashBytes = md.digest(input.getBytes(StandardCharsets.UTF_8));
-            return bytesToHex(hashBytes);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("MD2 hashing algorithm not available.", e);
+    public void authUserCommand() throws UserNotAuthenticatedException {
+        PostgreSQLManager manager = new PostgreSQLManager();
+        long id = manager.authUser(name, passwd);
+        if (id > 0) {
+            userId = id;
+        } else {
+            throw new UserNotAuthenticatedException("Can't execute command: user is not authenticated");
         }
-    }
-
-    private static String bytesToHex(byte[] bytes) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : bytes) {
-            sb.append(String.format("%02x", b));
-        }
-        return sb.toString();
     }
 
     public static long getUserId() {

@@ -1,5 +1,7 @@
 package commandManager.commands;
 
+import clientLogic.ClientHandler;
+import collectionStorageManager.PostgreSQLManager;
 import models.City;
 import models.handlers.CityHandler;
 import models.handlers.CityIDHandler;
@@ -41,27 +43,26 @@ public class RemoveGreaterCommand implements BaseCommand, ArgumentConsumer<City>
     @Override
     public void execute(String[] args) {
         CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
+        long ownerId = ClientHandler.getUserId();
 
         logger.debug("Distance: " + obj.getPopulation());
 
-        var iterator = collectionHandler.getCollection().iterator();
+        PostgreSQLManager dbManager = new PostgreSQLManager();
         int count = 0;
 
-        while (iterator.hasNext()) {
-            var current = iterator.next();
-            logger.debug("Comparing: current -- " + current.getPopulation() + " vs " + obj.getPopulation());
-            if (obj.getPopulation() < current.getPopulation()) {
-                logger.debug(" -- Greater / Will be removed...");
-                count++;
-            } else {
-                logger.debug(" -- Lower.");
+        for (City current : collectionHandler.getCollection()) {
+            if (dbManager.isCityOwnedByUser(current.getId(), ownerId) && obj.getPopulation() < current.getPopulation()) {
+                if (dbManager.removeCityById(current.getId(), ownerId)) {
+                    count++;
+                }
             }
         }
 
-        collectionHandler.getCollection().removeIf(current -> obj.getPopulation() < current.getPopulation());
+        collectionHandler.getCollection().removeIf(current -> dbManager.isCityOwnedByUser(current.getId(), ownerId) && obj.getPopulation() < current.getPopulation());
         response = CommandStatusResponse.ofString("Removed " + count + " elements");
         logger.info(response.getResponse());
     }
+
 
     @Override
     public CommandStatusResponse getResponse() {

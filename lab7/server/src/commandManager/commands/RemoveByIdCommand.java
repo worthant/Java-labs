@@ -1,5 +1,6 @@
 package commandManager.commands;
 
+import clientLogic.ClientHandler;
 import collectionStorageManager.PostgreSQLManager;
 import models.City;
 import models.handlers.CityHandler;
@@ -39,14 +40,22 @@ public class RemoveByIdCommand implements BaseCommand {
     @Override
     public void execute(String[] args) {
         CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
+        long ownerId = ClientHandler.getUserId();
+        long cityId = Long.parseLong(args[1]);
 
         PostgreSQLManager dbManager = new PostgreSQLManager();
-//        boolean removed = dbManager.removeCityById(city.getId(), Long.parseLong(args[1]));
 
-        //if (collectionHandler.getCollection().removeIf(city -> Objects.equals(city.getId(), Long.valueOf(args[1]))))
-//            response = CommandStatusResponse.ofString("Element with that id doesn't exists.");
-//        else
-//            response = CommandStatusResponse.ofString("Executed.");
+        if (!dbManager.isCityOwnedByUser(cityId, ownerId)) {
+            boolean removed = dbManager.removeCityById(cityId, ownerId);
+            if (removed) {
+                collectionHandler.getCollection().removeIf(city -> Objects.equals(city.getId(), cityId));
+                response = CommandStatusResponse.ofString("Element removed.");
+            } else {
+                response = CommandStatusResponse.ofString("Failed to remove the element.");
+            }
+        } else {
+            response = CommandStatusResponse.ofString("Element with that id doesn't exist or you don't have permission to remove it.");
+        }
 
         logger.info(response.getResponse());
     }

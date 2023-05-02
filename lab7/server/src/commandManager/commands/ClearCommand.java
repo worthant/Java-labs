@@ -1,5 +1,7 @@
 package commandManager.commands;
 
+import clientLogic.ClientHandler;
+import collectionStorageManager.PostgreSQLManager;
 import models.City;
 import models.handlers.CityHandler;
 import models.handlers.CollectionHandler;
@@ -31,11 +33,20 @@ public class ClearCommand implements BaseCommand {
 
     @Override
     public void execute(String[] args) {
-        CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
+        CityHandler cityHandler = CityHandler.getInstance();
+        PostgreSQLManager postgreSQLManager = new PostgreSQLManager();
 
-        collectionHandler.clearCollection();
+        long userId = ClientHandler.getUserId();
 
-        response = CommandStatusResponse.ofString("Cleared!");
+        // Clear the collection in the database for the specified user
+        boolean isCleared = postgreSQLManager.clearCitiesForUser(userId);
+
+        if (isCleared) {
+            response = CommandStatusResponse.ofString("Cleared!");
+        } else {
+            response = CommandStatusResponse.ofString("Failed to clear the collection.");
+        }
+
         logger.info(response.getResponse());
     }
 

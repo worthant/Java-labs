@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 public class ClientHandler {
     private final String name;
     private final char[] passwd;
+    private static long userId;
 
     public ClientHandler(String name, char[] passwd) {
         this.name = name;
@@ -17,12 +18,22 @@ public class ClientHandler {
 
     public boolean regUser() {
         PostgreSQLManager manager = new PostgreSQLManager();
-        return manager.regUser(name, passwd);
+        long id = manager.regUser(name, passwd);
+        if (id > 0) {
+            userId = id;
+            return true;
+        }
+        return false;
     }
 
     public boolean authUser() {
         PostgreSQLManager manager = new PostgreSQLManager();
-        return manager.authUser(name, passwd);
+        long id = manager.authUser(name, passwd);
+        if (id > 0) {
+            userId = id;
+            return true;
+        }
+        return false;
     }
 
     public static String hashPassword(char[] password, String salt) {
@@ -42,5 +53,9 @@ public class ClientHandler {
             sb.append(String.format("%02x", b));
         }
         return sb.toString();
+    }
+
+    public static long getUserId() {
+        return userId;
     }
 }

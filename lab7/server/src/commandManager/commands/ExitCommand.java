@@ -1,5 +1,6 @@
 package commandManager.commands;
 
+import models.handlers.CityHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import responses.CommandStatusResponse;
@@ -30,7 +31,7 @@ public class ExitCommand implements BaseCommand {
         logger.info("Someone is disconnected... Saving a collection...");
         SaveCommand saveCommand = new SaveCommand();
         saveCommand.execute(new String[0]);
-        response = CommandStatusResponse.ofString("Prepared for exit!");
+        response = CommandStatusResponse.ofString("Exiting the program!");
     }
 
     @Override

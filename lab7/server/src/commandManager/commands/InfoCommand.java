@@ -32,14 +32,15 @@ public class InfoCommand implements BaseCommand {
     @Override
     public void execute(String[] args) {
         CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
-
         TreeSet<City> collection = collectionHandler.getCollection();
 
-        String sb = "Now you are operating with collection of type " + collection.getClass().getName() + ", filled with elements of type " + collectionHandler.getFirstOrNew().getClass().getName() + '\n' +
-                "Collection size: " + collection.size() + '\n' +
-                "Init date: " + collectionHandler.getInitDate();
+        String output = String.format("Now you are operating with collection of type %s, filled with elements of type %s\nCollection size: %d\nInit date: %s",
+                collection.getClass().getName(),
+                collectionHandler.getFirstOrNew().getClass().getName(),
+                collection.size(),
+                collectionHandler.getInitDate());
 
-        response = CommandStatusResponse.ofString(sb);
+        response = CommandStatusResponse.ofString(output);
         logger.info(response.getResponse());
     }
 

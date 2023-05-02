@@ -1,11 +1,9 @@
-package fileLogic;
+package collectionStorageManager;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -15,8 +13,10 @@ import java.util.List;
  * The CSVManager class provides methods for working with files in .csv format.
  * The class implements the Managers interface.
  *
+ * @deprecated
  * @see FileManager
  */
+@Deprecated
 public class CSVManager implements FileManager {
 
     /**

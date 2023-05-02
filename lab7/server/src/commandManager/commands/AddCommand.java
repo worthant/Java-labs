@@ -1,5 +1,6 @@
 package commandManager.commands;
 
+import collectionStorageManager.PostgreSQLManager;
 import models.City;
 import models.handlers.CollectionHandler;
 import models.handlers.CityIDHandler;
@@ -48,11 +49,21 @@ public class AddCommand implements BaseCommand, ArgumentConsumer<City> {
 
     @Override
     public void execute(String[] args) {
-        CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
+        PostgreSQLManager manager = new PostgreSQLManager();
 
-        collectionHandler.addElementToCollection(obj);
+        // Add the new element to the database and retrieve its generated ID
+        long generatedId = manager.addElementToDatabase(obj);
 
-        response = CommandStatusResponse.ofString("Element added!");
+        if (generatedId != -1) {
+            // Set the generated ID for the new element
+            obj.setId(generatedId);
+            CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
+            collectionHandler.addElementToCollection(obj);
+
+            response = CommandStatusResponse.ofString("Element added with ID: " + generatedId);
+        } else {
+            response = CommandStatusResponse.ofString("Failed to add element.");
+        }
         logger.info(response.getResponse());
     }
 

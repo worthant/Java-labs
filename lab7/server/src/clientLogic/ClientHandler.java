@@ -1,55 +1,61 @@
 package clientLogic;
 
-import exceptions.NotAvailableException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import requestLogic.CallerBack;
+import collectionStorageManager.PostgreSQLManager;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
-public class ClientHandler implements ActionListener {
-    private static final Logger logger = LogManager.getLogger("com.github.worthant.lab6");
-    private static ClientHandler instance;
-    private final javax.swing.Timer timer;
-    boolean availability = true;
-    private CallerBack callerBack;
+public class ClientHandler {
+    private final String name;
+    private final char[] passwd;
+    private static long userId;
 
-    private ClientHandler() {
-        timer = new Timer(300000, this);
+    public ClientHandler(String name, char[] passwd) {
+        this.name = name;
+        this.passwd = passwd;
     }
 
-    public static ClientHandler getInstance() {
-        if (instance == null)
-            instance = new ClientHandler();
-        return instance;
+    public boolean regUser() {
+        PostgreSQLManager manager = new PostgreSQLManager();
+        long id = manager.regUser(name, passwd);
+        if (id > 0) {
+            userId = id;
+            return true;
+        }
+        return false;
     }
 
-    public void approveCallerBack(CallerBack callerBack) throws NotAvailableException {
-        if (availability || this.callerBack.equals(callerBack)) {
-            this.callerBack = callerBack;
-            availability = true;
-            timer.start();
-        } else throw new NotAvailableException(callerBack);
+    public boolean authUser() {
+        PostgreSQLManager manager = new PostgreSQLManager();
+        long id = manager.authUser(name, passwd);
+        if (id > 0) {
+            userId = id;
+            return true;
+        }
+        return false;
     }
 
-    public boolean isAvailability() {
-        return availability;
+    public static String hashPassword(char[] password, String salt) {
+        String input = String.valueOf(password) + salt;
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD2");
+            byte[] hashBytes = md.digest(input.getBytes(StandardCharsets.UTF_8));
+            return bytesToHex(hashBytes);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("MD2 hashing algorithm not available.", e);
+        }
     }
 
-    public void allowNewCallerBack() {
-        availability = true;
+    private static String bytesToHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
     }
 
-    public void restartTimer() {
-        logger.info("Timer restarted!");
-        this.timer.restart();
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        logger.debug("Allowed new connection.");
-        allowNewCallerBack();
+    public static long getUserId() {
+        return userId;
     }
 }

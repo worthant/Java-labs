@@ -25,6 +25,7 @@ public class PostgreSQLManager implements DatabaseManager {
         try {
             Properties info = new Properties();
             info.load(this.getClass().getResourceAsStream("/db.cfg"));
+            // "jdbc:postgresql://localhost:5432/studs"
             Connection connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/studs", info);
             Statement statement = connection.createStatement();
 

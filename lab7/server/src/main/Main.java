@@ -24,6 +24,8 @@ import javax.swing.*;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.TreeSet;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @SuppressWarnings("InfiniteLoopStatement")
 public class Main {
@@ -61,6 +63,11 @@ public class Main {
             logger.info(e.getMessage());
         }
 
+        // Create thread pools for processing requests and sending responses
+        ExecutorService requestProcessingThreadPool = Executors.newFixedThreadPool(4);
+        ExecutorService responseSendingThreadPool = Executors.newCachedThreadPool();
+
+
         // connection
         logger.info("Creating a connection...");
         ServerConnection connection = new DatagramServerConnectionFactory().initializeServer(PORT);
@@ -71,12 +78,24 @@ public class Main {
                     logger.debug("Status code: " + rq.getCode());
                     continue;
                 }
+                new Thread(() -> {
+                    try {
 
-                RequestReader rqReader = new RequestReader(rq.getInputStream());
-                BaseRequest baseRequest = rqReader.readObject();
-                var request = new ServerRequest(baseRequest, rq.getCallerBack(), connection);
-                RequestWorkerManager worker = new RequestWorkerManager();
-                worker.workWithRequest(request);
+                        RequestReader rqReader = new RequestReader(rq.getInputStream());
+                        BaseRequest baseRequest = rqReader.readObject();
+                        var request = new ServerRequest(baseRequest, rq.getCallerBack(), connection);
+                        RequestWorkerManager worker = new RequestWorkerManager();
+                        // Process requests using the fixed thread pool
+                        requestProcessingThreadPool.submit(() -> worker.workWithRequest(request));
+
+                        // Send responses using the cached thread pool
+                        responseSendingThreadPool.submit(() -> {
+                            // TODO: Implement logic to send a response
+                        });
+                    } catch (IOException | ClassNotFoundException e) {
+                        logger.error("Error in request processing thread", e);
+                    }
+                }).start();
             } catch (SocketTimeoutException e) {
                 // Check if there's any input available in System.in
                 try {
@@ -93,8 +112,6 @@ public class Main {
                 }
             } catch (IOException e) {
                 logger.error("Something went wrong during I/O", e);
-            } catch (ClassNotFoundException e) {
-                logger.error("Class not Found", e);
             } catch (RuntimeException e) {
                 logger.fatal(e);
             }

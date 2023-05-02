@@ -36,10 +36,8 @@ public class ClearCommand implements BaseCommand {
         CityHandler cityHandler = CityHandler.getInstance();
         PostgreSQLManager postgreSQLManager = new PostgreSQLManager();
 
-        long userId = ClientHandler.getUserId();
-
         // Clear the collection in the database for the specified user
-        boolean isCleared = postgreSQLManager.clearCitiesForUser(userId);
+        boolean isCleared = postgreSQLManager.clearCitiesForUser();
 
         if (isCleared) {
             response = CommandStatusResponse.ofString("Cleared!");

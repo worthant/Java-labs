@@ -1,6 +1,8 @@
 package requestLogic.requestWorkers;
 
+import clientLogic.ClientHandler;
 import commandManager.CommandManager;
+import exceptions.UserNotAuthenticatedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import requestLogic.requests.ServerRequest;
@@ -11,8 +13,16 @@ public class CommandClientRequestWorker implements RequestWorker {
 
     @Override
     public void workWithRequest(ServerRequest request) {
-        CommandClientRequest requestToWork = (CommandClientRequest) request.getUserRequest();
-        CommandManager manager = new CommandManager();
-        manager.executeCommand(requestToWork, request.getFrom(), request.getConnection());
+        try {
+            CommandClientRequest requestToWork = (CommandClientRequest) request.getUserRequest();
+
+            ClientHandler clientManager = ClientHandler.getInstance();
+            clientManager.authUserCommand();
+
+            CommandManager manager = new CommandManager();
+            manager.executeCommand(requestToWork, request.getFrom(), request.getConnection());
+        } catch (UserNotAuthenticatedException e) {
+            logger.error("Something went wrong during authentication: " + e.getMessage());
+        }
     }
 }

@@ -43,7 +43,6 @@ public class RemoveGreaterCommand implements BaseCommand, ArgumentConsumer<City>
     @Override
     public void execute(String[] args) {
         CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
-        long ownerId = ClientHandler.getUserId();
 
         logger.debug("Distance: " + obj.getPopulation());
 
@@ -51,14 +50,14 @@ public class RemoveGreaterCommand implements BaseCommand, ArgumentConsumer<City>
         int count = 0;
 
         for (City current : collectionHandler.getCollection()) {
-            if (dbManager.isCityOwnedByUser(current.getId(), ownerId) && obj.getPopulation() < current.getPopulation()) {
-                if (dbManager.removeCityById(current.getId(), ownerId)) {
+            if (dbManager.isCityOwnedByUser(current.getId()) && obj.getPopulation() < current.getPopulation()) {
+                if (dbManager.removeCityById(current.getId())) {
                     count++;
                 }
             }
         }
 
-        collectionHandler.getCollection().removeIf(current -> dbManager.isCityOwnedByUser(current.getId(), ownerId) && obj.getPopulation() < current.getPopulation());
+        collectionHandler.getCollection().removeIf(current -> dbManager.isCityOwnedByUser(current.getId()) && obj.getPopulation() < current.getPopulation());
         response = CommandStatusResponse.ofString("Removed " + count + " elements");
         logger.info(response.getResponse());
     }

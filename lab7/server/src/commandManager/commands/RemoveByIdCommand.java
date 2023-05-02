@@ -40,13 +40,12 @@ public class RemoveByIdCommand implements BaseCommand {
     @Override
     public void execute(String[] args) {
         CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
-        long ownerId = ClientHandler.getUserId();
         long cityId = Long.parseLong(args[1]);
 
         PostgreSQLManager dbManager = new PostgreSQLManager();
 
-        if (!dbManager.isCityOwnedByUser(cityId, ownerId)) {
-            boolean removed = dbManager.removeCityById(cityId, ownerId);
+        if (!dbManager.isCityOwnedByUser(cityId)) {
+            boolean removed = dbManager.removeCityById(cityId);
             if (removed) {
                 collectionHandler.getCollection().removeIf(city -> Objects.equals(city.getId(), cityId));
                 response = CommandStatusResponse.ofString("Element removed.");

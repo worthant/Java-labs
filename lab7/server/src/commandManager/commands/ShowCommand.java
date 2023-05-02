@@ -7,8 +7,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import responses.CommandStatusResponse;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Shows every element of the collection in toString() interpretation.
@@ -32,18 +36,44 @@ public class ShowCommand implements BaseCommand {
 
     @Override
     public void execute(String[] args) {
+        logger.debug("Received args: " + Arrays.toString(args));
+        int itemsPerPage = 10; // You can change this value to your desired number of items per page
+        int pageNumber = 0;
+
         CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
+        List<City> cityList = new ArrayList<>(collectionHandler.getCollection());
+        int totalPages = (int) Math.ceil((double) cityList.size() / itemsPerPage);
 
-        String output = collectionHandler.getCollection().stream()
-                .map(City::toString)
-                .collect(Collectors.joining("\n"));
+        String output;
+        if (args != null && args.length > 1) {
+            try {
+                pageNumber = Integer.parseInt(args[1]) - 1;
+            } catch (NumberFormatException e) {
+                response = CommandStatusResponse.ofString("Invalid page number.");
+                logger.warn(response.getResponse());
+                return;
+            }
 
-        response = output.isEmpty()
-                ? CommandStatusResponse.ofString("There's nothing to show.")
-                : CommandStatusResponse.ofString(output);
+            if (pageNumber < 0 || pageNumber >= totalPages) {
+                response = CommandStatusResponse.ofString("Page number out of range.");
+                logger.warn(response.getResponse());
+                return;
+            }
 
-        logger.info(response.getResponse());
+            output = IntStream.range(itemsPerPage * pageNumber, Math.min(itemsPerPage * (pageNumber + 1), cityList.size()))
+                    .mapToObj(i -> cityList.get(i).toString())
+                    .collect(Collectors.joining("\n"));
+
+            response = CommandStatusResponse.ofString("Page " + (pageNumber + 1) + " of " + totalPages + ":\n" + output);
+            logger.info(response.getResponse());
+
+        } else {
+            output = "Total pages: " + totalPages;
+            response = CommandStatusResponse.ofString(output);
+        }
     }
+
+
 
     @Override
     public CommandStatusResponse getResponse() {

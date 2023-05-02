@@ -16,7 +16,7 @@ public class RegWorker implements RequestWorker{
     public void workWithRequest(ServerRequest request) {
         try {
             RegRequest requestToWork = (RegRequest) request.getUserRequest();
-            ClientHandler manager = new ClientHandler(requestToWork.getName(), requestToWork.getPasswd());
+            ClientHandler manager = ClientHandler.getInstance(requestToWork.getName(), requestToWork.getPasswd());
             boolean reg = manager.regUser();
             RegResponse response = new RegResponse(reg);
             ResponseSender.sendResponse(response, request.getConnection(), request.getFrom());

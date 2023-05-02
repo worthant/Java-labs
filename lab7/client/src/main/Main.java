@@ -48,7 +48,6 @@ public class Main {
             connection.openConnection();
 
             System.out.println("\nWelcome to lab7 client!) Please, authorize or register to start working with commands:\n");
-            System.out.println("Write:\n  1 - to authorize,\n  {anything} - to register\n");
             String name;
             char[] passwd;
             String nextLine;
@@ -57,6 +56,7 @@ public class Main {
             InputValidator inputValidator = new InputValidator();
             inputValidator.canBeNull(false);
             do {
+                System.out.println("Write:\n  1 - to authorize,\n  {anything} - to register\n↓");
                 try {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                     nextLine = reader.readLine().trim();

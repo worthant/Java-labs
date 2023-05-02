@@ -44,27 +44,25 @@ public class UpdateCommand implements BaseCommand, ArgumentConsumer<City> {
     @Override
     public void execute(String[] args) {
         CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
-        long ownerId = ClientHandler.getUserId();
         long finalId = Long.parseLong(args[1]);
 
         PostgreSQLManager dbManager = new PostgreSQLManager();
 
-        if (dbManager.isCityOwnedByUser(finalId, ownerId)) {
+        if (!dbManager.isCityOwnedByUser(finalId)) {
             response = new CommandStatusResponse("Element with that id doesn't exist or you don't have permission to modify it.", 2);
             logger.warn(response.getResponse());
             return;
         }
 
-        // Updating the city in the database
-        boolean updated = dbManager.updateCity(obj, ownerId);
+        obj.setId(finalId); // Set ID before updating city in the database
+        boolean updated = dbManager.updateCity(obj); // Updating city in the database
 
         if (updated) {
             // Update the city in the collection
             collectionHandler.getCollection().removeIf(city -> Objects.equals(city.getId(), finalId));
-            obj.setId(finalId);
             collectionHandler.addElementToCollection(obj);
 
-            response = CommandStatusResponse.ofString("Object updated!");
+            response = CommandStatusResponse.ofString("Object updated!\n finalId: " + finalId);
         } else {
             response = new CommandStatusResponse("Failed to update the object.", 2);
         }

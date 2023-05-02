@@ -5,7 +5,7 @@ import models.City;
 import java.util.ArrayList;
 
 public interface DatabaseManager {
-    ArrayList<City> readFromDatabase();
+    ArrayList<City> getCollectionFromDatabase();
 
-    void writeToDatabase();
+    void writeCollectionToDatabase();
 }

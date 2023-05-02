@@ -118,7 +118,7 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
     @Override
     public void loadCollectionFromDatabase() {
         PostgreSQLManager dbManager = new PostgreSQLManager();
-        ArrayList<City> cities = dbManager.readFromDatabase();
+        ArrayList<City> cities = dbManager.getCollectionFromDatabase();
         CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
         for (City city: cities) {
             collectionHandler.addElementToCollection(city);
@@ -160,7 +160,7 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
     @Override
     public void writeCollectionToDatabase() {
         PostgreSQLManager dbManager = new PostgreSQLManager();
-        dbManager.writeToDatabase();
+        dbManager.writeCollectionToDatabase();
     }
 
     /**

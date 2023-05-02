@@ -52,7 +52,7 @@ public class AddCommand implements BaseCommand, ArgumentConsumer<City> {
         PostgreSQLManager manager = new PostgreSQLManager();
 
         // Add the new element to the database and retrieve its generated ID
-        long generatedId = manager.addElementToDatabase(obj);
+        long generatedId = manager.writeObjectToDatabase(obj);
 
         if (generatedId != -1) {
             // Set the generated ID for the new element

@@ -12,12 +12,8 @@ public class CommandConfigureResponseSender {
     private static final Logger logger = LogManager.getLogger("io.github.worthant.lab6");
 
     public static void sendResponse(CommandDescriptionsResponse response, ServerConnection connection, CallerBack to) {
-        try {
-            if (response != null) {
-                ResponseSender.sendResponse(response, connection, to);
-            }
-        } catch (IOException e) {
-            logger.fatal("Something went wrong during I/O", e);
+        if (response != null) {
+            ResponseSender.sendResponse(response, connection, to);
         }
     }
 }

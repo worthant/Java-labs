@@ -268,23 +268,33 @@ public class PostgreSQLManager implements DatabaseManager {
         return -1;
     }
 
-    public boolean clearCitiesForUser() {
+    public List<Long> clearCitiesForUser() {
         long userId = ClientHandler.getUserId();
+        List<Long> deletedCityIds = new ArrayList<>();
         try {
             Properties info = new Properties();
             info.load(this.getClass().getResourceAsStream("/db.cfg"));
             Connection connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/studs", info);
 
+            // Get city IDs that belong to the current user
+            String selectCityIdsQuery = "SELECT city_id FROM Creator WHERE user_id = ?";
+            PreparedStatement selectCityIdsStatement = connection.prepareStatement(selectCityIdsQuery);
+            selectCityIdsStatement.setLong(1, userId);
+            ResultSet cityIdsResultSet = selectCityIdsStatement.executeQuery();
+            while (cityIdsResultSet.next()) {
+                deletedCityIds.add(cityIdsResultSet.getLong("city_id"));
+            }
+
+            // Delete cities that belong to the current user
             String deleteCitiesQuery = "DELETE FROM City WHERE id IN (SELECT city_id FROM Creator WHERE user_id = ?)";
             PreparedStatement deleteCitiesStatement = connection.prepareStatement(deleteCitiesQuery);
             deleteCitiesStatement.setLong(1, userId);
-            int rowsAffected = deleteCitiesStatement.executeUpdate();
+            deleteCitiesStatement.executeUpdate();
 
-            return rowsAffected > 0;
         } catch (SQLException | IOException e) {
             logger.error("something went wrong during i/o ");
         }
-        return false;
+        return deletedCityIds;
     }
 
     public boolean isCityOwnedByUser(long cityId) {

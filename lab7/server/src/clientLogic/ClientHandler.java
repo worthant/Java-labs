@@ -1,4 +1,3 @@
-// ClientHandler.java
 package clientLogic;
 
 import collectionStorageManager.PostgreSQLManager;

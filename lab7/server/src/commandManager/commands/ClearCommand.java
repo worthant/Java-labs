@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import responses.CommandStatusResponse;
 
+import java.util.List;
 import java.util.TreeSet;
 
 /**
@@ -36,10 +37,12 @@ public class ClearCommand implements BaseCommand {
         CityHandler cityHandler = CityHandler.getInstance();
         PostgreSQLManager postgreSQLManager = new PostgreSQLManager();
 
-        // Clear the collection in the database for the specified user
-        boolean isCleared = postgreSQLManager.clearCitiesForUser();
+        // Clear the collection in the database for the specified user and get the list of deleted city IDs
+        List<Long> deletedCityIds = postgreSQLManager.clearCitiesForUser();
 
-        if (isCleared) {
+        if (!deletedCityIds.isEmpty()) {
+            // Remove cities with the deleted city IDs from the in-memory collection
+            cityHandler.getCollection().removeIf(city -> deletedCityIds.contains(city.getId()));
             response = CommandStatusResponse.ofString("Cleared!");
         } else {
             response = CommandStatusResponse.ofString("Failed to clear the collection.");
@@ -47,6 +50,7 @@ public class ClearCommand implements BaseCommand {
 
         logger.info(response.getResponse());
     }
+
 
     @Override
     public CommandStatusResponse getResponse() {

@@ -14,6 +14,7 @@ import responses.CommandStatusResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Current implementation of CollectionsHandler for HashSet of Route.
@@ -24,6 +25,7 @@ import java.util.*;
 public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
 
     private static final Logger logger = LogManager.getLogger("io.github.worthant.lab6.manager");
+    private final ReentrantLock lock = new ReentrantLock();
 
     private CommandStatusResponse response;
 
@@ -159,8 +161,13 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
      */
     @Override
     public void writeCollectionToDatabase() {
-        PostgreSQLManager dbManager = new PostgreSQLManager();
-        dbManager.writeCollectionToDatabase();
+        lock.lock();
+        try {
+            PostgreSQLManager dbManager = new PostgreSQLManager();
+            dbManager.writeCollectionToDatabase();
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -170,7 +177,12 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
      */
     @Override
     public TreeSet<City> getCollection() {
-        return cities;
+        lock.lock();
+        try {
+            return cities;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -180,7 +192,12 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
      */
     @Override
     public void setCollection(TreeSet<City> cities) {
-        this.cities = cities;
+        lock.lock();
+        try {
+            this.cities = cities;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -190,21 +207,27 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
      */
     @Override
     public void addElementToCollection(City city) {
-        if (cities != null){
-            cities.add(city);
-            // response = CommandStatusResponse.ofString("is element added? - " + cities.add(city));
-            // logger.info(response.getResponse());
-        } else {
-            TreeSet<City> cities = new TreeSet<>(new CityComparator());
-            cities.add(city);
-            CityHandler.getInstance().setCollection(cities);
+        lock.lock();
+        try {
+            if (cities != null)
+                cities.add(city);
+            else {
+                TreeSet<City> cities = new TreeSet<>(new CityComparator());
+                cities.add(city);
+                CityHandler.getInstance().setCollection(cities);
+            }
+        } finally {
+            lock.unlock();
         }
     }
 
     /**
      * Removes all elements from the cityTreeSet collection.
+     * @deprecated we should remove elements that curr user has access ONLY
+     * Definitely ot clear everything.
      */
     @Override
+    @Deprecated
     public void clearCollection() {
         cities.clear();
     }
@@ -217,15 +240,25 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
      */
     @Override
     public City getFirstOrNew() {
-        if (cities.iterator().hasNext())
-            return cities.iterator().next();
-        else
-            return new City();
+        lock.lock();
+        try {
+            if (cities.iterator().hasNext())
+                return cities.iterator().next();
+            else
+                return new City();
+        } finally {
+            lock.unlock();
+        }
     }
 
     @Override
     public Date getInitDate() {
-        return initDate;
+        lock.lock();
+        try {
+            return initDate;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -240,5 +273,4 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
     public CommandStatusResponse getResponse() {
         return response;
     }
-
 }

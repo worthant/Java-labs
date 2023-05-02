@@ -21,6 +21,7 @@ public class RequestWorkerManager {
         workers.put(ArgumentCommandClientRequest.class, new ArgumentCommandClientRequestWorker<>());
         workers.put(CommandDescriptionsRequest.class, new CommandConfigureRequestWorker());
         workers.put(AuthRequest.class, new AuthWorker());
+        workers.put(RegRequest.class, new RegWorker());
     }
 
     public void workWithRequest(ServerRequest request) {

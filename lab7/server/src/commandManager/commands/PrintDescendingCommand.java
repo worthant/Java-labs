@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import responses.CommandStatusResponse;
 
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  * Prints the population of all cities
@@ -33,15 +34,16 @@ public class PrintDescendingCommand implements BaseCommand {
     @Override
     public void execute(String[] args) {
         CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
+        TreeSet<City> cityCollection = collectionHandler.getCollection();
 
-        StringBuilder sb = new StringBuilder();
-        for (City city : collectionHandler.getCollection().descendingSet()) {
-            sb.append(city.getMetersAboveSeaLevel()).append('\n');
-        }
-        response = CommandStatusResponse.ofString(sb.toString());
-
-        if (collectionHandler.getCollection().isEmpty())
+        if (cityCollection.isEmpty()) {
             response = CommandStatusResponse.ofString("There's nothing to show...");
+        } else {
+            String output = cityCollection.descendingSet().stream()
+                    .map(city -> String.valueOf(city.getMetersAboveSeaLevel()))
+                    .collect(Collectors.joining("\n"));
+            response = CommandStatusResponse.ofString(output);
+        }
 
         logger.info(response.getResponse());
     }

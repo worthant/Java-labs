@@ -11,7 +11,8 @@ import java.util.Arrays;
 import java.util.TreeSet;
 
 /**
- Command that prints the command history
+ * Handwritten History command that prints the command history
+ * using 2 pointers algorithm
  */
 public class HistoryCommand implements BaseCommand {
     private static final Logger logger = LogManager.getLogger("io.github.worthant.lab6.commands.history");

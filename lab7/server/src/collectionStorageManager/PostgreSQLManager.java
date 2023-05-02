@@ -6,8 +6,6 @@ import models.handlers.CityHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.sql.*;
@@ -133,6 +131,69 @@ public class PostgreSQLManager implements DatabaseManager {
         }
     }
 
+    public long addElementToDatabase(City city) {
+        long generatedId = -1;
+
+        try {
+            Properties info = new Properties();
+            info.load(this.getClass().getResourceAsStream("/db.cfg"));
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/studs", info);
+
+            // Insert Coordinates
+            String insertCoordinatesQuery = "INSERT INTO Coordinates (x, y) VALUES (?, ?) RETURNING id";
+            PreparedStatement insertCoordinatesStatement = connection.prepareStatement(insertCoordinatesQuery);
+            insertCoordinatesStatement.setInt(1, city.getCoordinates().getX());
+            insertCoordinatesStatement.setDouble(2, city.getCoordinates().getY());
+            ResultSet coordinatesResultSet = insertCoordinatesStatement.executeQuery();
+            int coordinatesId = -1;
+            if (coordinatesResultSet.next()) {
+                coordinatesId = coordinatesResultSet.getInt(1);
+            }
+
+            // Insert Human (Governor)
+            String insertHumanQuery = "INSERT INTO Human (name) VALUES (?) RETURNING id";
+            PreparedStatement insertHumanStatement = connection.prepareStatement(insertHumanQuery);
+            insertHumanStatement.setString(1, city.getGovernor().getName());
+            ResultSet humanResultSet = insertHumanStatement.executeQuery();
+            int governorId = -1;
+            if (humanResultSet.next()) {
+                governorId = humanResultSet.getInt(1);
+            }
+
+            // Insert City
+            String insertCityQuery = "INSERT INTO City (name, coordinates_id, creation_date, area, population, meters_above_sea_level, climate, government, governor_id, standard_of_living) VALUES (?, ?, ?, ?, ?, ?, CAST(? AS climate_enum), CAST(? AS government_enum), ?, CAST(? AS standard_of_living_enum))";
+            PreparedStatement insertCityStatement = connection.prepareStatement(insertCityQuery);
+            // Запись в таблицу City
+            insertCityStatement.setString(1, city.getName());
+            insertCityStatement.setInt(2, coordinatesId);
+            insertCityStatement.setDate(3, new java.sql.Date(city.getCreationDate().getTime()));
+            insertCityStatement.setInt(4, city.getArea());
+            insertCityStatement.setInt(5, city.getPopulation());
+            if (city.getMetersAboveSeaLevel() != null) {
+                insertCityStatement.setDouble(6, city.getMetersAboveSeaLevel());
+            } else {
+                insertCityStatement.setNull(6, Types.DOUBLE);
+            }
+            insertCityStatement.setString(7, city.getClimate().toString());
+            insertCityStatement.setString(8, city.getGovernment().toString());
+            insertCityStatement.setInt(9, governorId);
+            insertCityStatement.setString(10, city.getStandardOfLiving().toString());
+
+            ResultSet cityResultSet = insertCityStatement.executeQuery();
+            if (cityResultSet.next()) {
+                generatedId = cityResultSet.getLong(1);
+            }
+
+            connection.close();
+        } catch (SQLException | IOException e) {
+            logger.error("Error adding element to database", e);
+        }
+
+        return generatedId;
+    }
+
+
+
     public boolean removeCityById(long cityId, long userId) {
         try {
             Properties info = new Properties();
@@ -152,13 +213,13 @@ public class PostgreSQLManager implements DatabaseManager {
         return false;
     }
 
-    public boolean authUser(String name, char[] passwd) {
+    public long authUser(String name, char[] passwd) {
         try {
             Properties info = new Properties();
             info.load(this.getClass().getResourceAsStream("/db.cfg"));
             Connection connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/studs", info);
 
-            String selectUserQuery = "SELECT passwd_hash, passwd_salt FROM \"User\" WHERE name = ?";
+            String selectUserQuery = "SELECT id, passwd_hash, passwd_salt FROM \"User\" WHERE name = ?";
             PreparedStatement selectUserStatement = connection.prepareStatement(selectUserQuery);
             selectUserStatement.setString(1, name);
             ResultSet resultSet = selectUserStatement.executeQuery();
@@ -168,17 +229,17 @@ public class PostgreSQLManager implements DatabaseManager {
                 String passwdSalt = resultSet.getString("passwd_salt");
                 String inputPasswdHash = ClientHandler.hashPassword(passwd, passwdSalt);
 
-                return passwdHash.equals(inputPasswdHash);
-            } else {
-                return false;
+                if (passwdHash.equals(inputPasswdHash)) {
+                    return resultSet.getLong("id");
+                }
             }
         } catch (SQLException | IOException e) {
             logger.error("something went wrong during i/o ");
         }
-        return false;
+        return -1;
     }
 
-    public boolean regUser(String name, char[] passwd) {
+    public long regUser(String name, char[] passwd) {
         try {
             Properties info = new Properties();
             info.load(this.getClass().getResourceAsStream("/db.cfg"));
@@ -191,7 +252,7 @@ public class PostgreSQLManager implements DatabaseManager {
             ResultSet resultSet = selectUserStatement.executeQuery();
 
             if (resultSet.next() && resultSet.getInt(1) > 0) {
-                return false; // A user with the provided name already exists
+                return -1; // A user with the provided name already exists
             }
 
             // Generate a unique salt for the new user
@@ -205,19 +266,113 @@ public class PostgreSQLManager implements DatabaseManager {
 
             // Insert the new user into the "User" table
             String insertUserQuery = "INSERT INTO \"User\" (name, passwd_hash, passwd_salt) VALUES (?, ?, ?)";
-            PreparedStatement insertUserStatement = connection.prepareStatement(insertUserQuery);
+            PreparedStatement insertUserStatement = connection.prepareStatement(insertUserQuery, Statement.RETURN_GENERATED_KEYS);
             insertUserStatement.setString(1, name);
             insertUserStatement.setString(2, passwdHash);
             insertUserStatement.setString(3, salt);
 
             int rowsAffected = insertUserStatement.executeUpdate();
-            return rowsAffected > 0;
+            if (rowsAffected > 0) {
+                ResultSet generatedKeys = insertUserStatement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    return generatedKeys.getLong(1);
+                }
+            }
+        } catch (SQLException | IOException e) {
+            logger.error("something went wrong during i/o ");
+        }
+        return -1;
+    }
 
+    public boolean clearCitiesForUser(long userId) {
+        try {
+            Properties info = new Properties();
+            info.load(this.getClass().getResourceAsStream("/db.cfg"));
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/studs", info);
+
+            String deleteCitiesQuery = "DELETE FROM City WHERE id IN (SELECT city_id FROM Creator WHERE user_id = ?)";
+            PreparedStatement deleteCitiesStatement = connection.prepareStatement(deleteCitiesQuery);
+            deleteCitiesStatement.setLong(1, userId);
+            int rowsAffected = deleteCitiesStatement.executeUpdate();
+
+            return rowsAffected > 0;
         } catch (SQLException | IOException e) {
             logger.error("something went wrong during i/o ");
         }
         return false;
     }
 
+    public boolean isCityOwnedByUser(long finalId, long ownerId) {
+        try {
+            Properties info = new Properties();
+            info.load(this.getClass().getResourceAsStream("/db.cfg"));
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/studs", info);
 
+            String checkOwnershipQuery = "SELECT COUNT(*) FROM Creator WHERE city_id = ? AND user_id = ?";
+            PreparedStatement checkOwnershipStatement = connection.prepareStatement(checkOwnershipQuery);
+            checkOwnershipStatement.setLong(1, finalId);
+            checkOwnershipStatement.setLong(2, ownerId);
+            ResultSet resultSet = checkOwnershipStatement.executeQuery();
+
+            if (resultSet.next()) {
+                int count = resultSet.getInt(1);
+                return count <= 0;
+            }
+        } catch (SQLException | IOException e) {
+            logger.error("something went wrong during i/o ");
+        }
+        return true;
+    }
+
+    public boolean updateCity(City obj, long ownerId) {
+        if (isCityOwnedByUser(obj.getId(), ownerId)) {
+            return false;
+        }
+
+        try {
+            Properties info = new Properties();
+            info.load(this.getClass().getResourceAsStream("/db.cfg"));
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/studs", info);
+            connection.setAutoCommit(false);
+
+            // Update the Human table
+            String updateHumanQuery = "UPDATE Human SET name = ? FROM City WHERE City.governor_id = Human.id AND City.id = ?";
+            PreparedStatement updateHumanStatement = connection.prepareStatement(updateHumanQuery);
+            updateHumanStatement.setString(1, obj.getGovernor().getName());
+            updateHumanStatement.setLong(2, obj.getId());
+            updateHumanStatement.executeUpdate();
+
+            // Update the Coordinates table
+            String updateCoordinatesQuery = "UPDATE Coordinates SET x = ?, y = ? FROM City WHERE City.coordinates_id = Coordinates.id AND City.id = ?";
+            PreparedStatement updateCoordinatesStatement = connection.prepareStatement(updateCoordinatesQuery);
+            updateCoordinatesStatement.setInt(1, obj.getCoordinates().getX());
+            updateCoordinatesStatement.setDouble(2, obj.getCoordinates().getY());
+            updateCoordinatesStatement.setLong(3, obj.getId());
+            updateCoordinatesStatement.executeUpdate();
+
+            // Update the City table
+            String updateCityQuery = "UPDATE City SET name = ?, creation_date = ?, area = ?, population = ?, meters_above_sea_level = ?, climate = CAST(? AS climate_enum), government = CAST(? AS government_enum), standard_of_living = CAST(? AS standard_of_living_enum) WHERE id = ?";
+            PreparedStatement updateCityStatement = connection.prepareStatement(updateCityQuery);
+            updateCityStatement.setString(1, obj.getName());
+            updateCityStatement.setDate(2, new java.sql.Date(obj.getCreationDate().getTime()));
+            updateCityStatement.setInt(3, obj.getArea());
+            updateCityStatement.setInt(4, obj.getPopulation());
+            if (obj.getMetersAboveSeaLevel() != null) {
+                updateCityStatement.setDouble(5, obj.getMetersAboveSeaLevel());
+            } else {
+                updateCityStatement.setNull(5, Types.DOUBLE);
+            }
+            updateCityStatement.setString(6, obj.getClimate().toString());
+            updateCityStatement.setString(7, obj.getGovernment().toString());
+            updateCityStatement.setString(8, obj.getStandardOfLiving().toString());
+            updateCityStatement.setLong(9, obj.getId());
+            updateCityStatement.executeUpdate();
+
+            connection.commit();
+            return true;
+        } catch (SQLException | IOException e) {
+            logger.error("something went wrong during i/o ");
+        }
+        return false;
+    }
 }

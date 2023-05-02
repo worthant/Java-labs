@@ -1,5 +1,7 @@
 package commandManager.commands;
 
+import clientLogic.ClientHandler;
+import collectionStorageManager.PostgreSQLManager;
 import models.City;
 import models.handlers.CityIDHandler;
 import models.handlers.CollectionHandler;
@@ -10,7 +12,6 @@ import responses.CommandStatusResponse;
 
 import java.time.Instant;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.TreeSet;
 
@@ -43,23 +44,33 @@ public class UpdateCommand implements BaseCommand, ArgumentConsumer<City> {
     @Override
     public void execute(String[] args) {
         CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
+        long ownerId = ClientHandler.getUserId();
+        long finalId = Long.parseLong(args[1]);
 
-        Long finalId = Long.valueOf(args[1]);
+        PostgreSQLManager dbManager = new PostgreSQLManager();
 
-        if (!collectionHandler.getCollection().removeIf(city -> Objects.equals(city.getId(), finalId))) {
-            response = new CommandStatusResponse("Element with that id doesn't exists.", 2);
+        if (dbManager.isCityOwnedByUser(finalId, ownerId)) {
+            response = new CommandStatusResponse("Element with that id doesn't exist or you don't have permission to modify it.", 2);
             logger.warn(response.getResponse());
             return;
         }
 
-        logger.info("Updated ID value: " + finalId);
-        obj.setId(finalId);
+        // Updating the city in the database
+        boolean updated = dbManager.updateCity(obj, ownerId);
 
-        collectionHandler.addElementToCollection(obj);
+        if (updated) {
+            // Update the city in the collection
+            collectionHandler.getCollection().removeIf(city -> Objects.equals(city.getId(), finalId));
+            obj.setId(finalId);
+            collectionHandler.addElementToCollection(obj);
 
-        response = CommandStatusResponse.ofString("Object updated!");
+            response = CommandStatusResponse.ofString("Object updated!");
+        } else {
+            response = new CommandStatusResponse("Failed to update the object.", 2);
+        }
         logger.info(response.getResponse());
     }
+
 
     @Override
     public CommandStatusResponse getResponse() {

@@ -52,7 +52,8 @@ public class Main {
             String name;
             char[] passwd;
             String nextLine;
-            boolean auth = false;
+            boolean auth;
+            boolean authorizationDone = false;
             InputValidator inputValidator = new InputValidator();
             inputValidator.canBeNull(false);
             do {
@@ -85,9 +86,10 @@ public class Main {
                         System.out.println("Checking if user exists in database");
                         AuthRequestSender rqSender = new AuthRequestSender();
                         AuthResponse response = rqSender.sendAuthData(name, passwd, ServerConnectionHandler.getCurrentConnection());
-                        if (response.isAuth())
+                        if (response.isAuth()) {
                             System.out.println("Successfully authenticated");
-                        else
+                            authorizationDone = true;
+                        } else
                             System.out.println("There is no user with this name, or passwd is incorrect");
                     } else {
                         System.out.println("Registering new user");
@@ -101,7 +103,7 @@ public class Main {
                 } catch (Exception e) {
                     System.out.println("При вводе произошла непредвиденная ошибка!" + e.getMessage());
                 }
-            } while (!auth);
+            } while (!authorizationDone);
 
             // request commands
             boolean commandsNotLoaded = true;

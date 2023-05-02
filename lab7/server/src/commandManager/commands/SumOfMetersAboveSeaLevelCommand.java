@@ -32,15 +32,15 @@ public class SumOfMetersAboveSeaLevelCommand implements BaseCommand {
     @Override
     public void execute(String[] args) {
         CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
+        TreeSet<City> cityCollection = collectionHandler.getCollection();
 
-        Double sum = 0.0;
-        for (City city: collectionHandler.getCollection()) {
-            sum += city.getMetersAboveSeaLevel();
-        }
-        response = CommandStatusResponse.ofString("Sum of all meters_above_sea_level fields is: " + sum);
-
-        if (collectionHandler.getCollection().isEmpty()) {
+        if (cityCollection.isEmpty()) {
             response = CommandStatusResponse.ofString("There's no elements in the collection");
+        } else {
+            double sum = cityCollection.stream()
+                    .mapToDouble(City::getMetersAboveSeaLevel)
+                    .sum();
+            response = CommandStatusResponse.ofString("Sum of all meters_above_sea_level fields is: " + sum);
         }
 
         logger.info(response.getResponse());

@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import responses.CommandStatusResponse;
 
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  * Shows every element of the collection in toString() interpretation.
@@ -33,14 +34,13 @@ public class ShowCommand implements BaseCommand {
     public void execute(String[] args) {
         CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
 
-        StringBuilder sb = new StringBuilder();
+        String output = collectionHandler.getCollection().stream()
+                .map(City::toString)
+                .collect(Collectors.joining("\n"));
 
-        collectionHandler.getCollection().forEach(e -> sb.append(e.toString()).append('\n'));
-        response = CommandStatusResponse.ofString(sb.toString());
-
-        if (collectionHandler.getCollection().isEmpty()) {
-            response = CommandStatusResponse.ofString("There's nothing to show.");
-        }
+        response = output.isEmpty()
+                ? CommandStatusResponse.ofString("There's nothing to show.")
+                : CommandStatusResponse.ofString(output);
 
         logger.info(response.getResponse());
     }

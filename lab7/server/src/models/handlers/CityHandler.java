@@ -123,7 +123,7 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
         for (City city: cities) {
             collectionHandler.addElementToCollection(city);
         }
-        CityHandler.getInstance().setCollection(collectionHandler.getCollection());
+        collectionHandler.setCollection(collectionHandler.getCollection());
     }
 
     /**

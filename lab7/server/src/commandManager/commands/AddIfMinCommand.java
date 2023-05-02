@@ -45,8 +45,10 @@ public class AddIfMinCommand implements BaseCommand, ArgumentConsumer<City> {
 
         if (obj.getPopulation() < collectionHandler.getCollection().first().getPopulation()) {
             PostgreSQLManager manager = new PostgreSQLManager();
-            long generatedId = manager.addElementToDatabase(obj);
+            long generatedId = manager.writeObjectToDatabase(obj);
+
             if (generatedId != -1) {
+                // Set the generated ID for the new element
                 obj.setId(generatedId);
                 collectionHandler.addElementToCollection(obj);
                 response = CommandStatusResponse.ofString("Element added with ID: " + generatedId);

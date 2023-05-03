@@ -262,6 +262,18 @@ public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
     }
 
     /**
+     * adds missing cities from database to collection
+     */
+    @Override
+    public void addMissingCitiesToCollection(List<City> citiesFromDatabase) {
+        for (City city : citiesFromDatabase) {
+            if (!this.cities.contains(city)) {
+                addElementToCollection(city);
+            }
+        }
+    }
+
+    /**
      * Sets the path to the .csv file.
      *
      * @param pathToDataFile the path to the .csv file to set

@@ -7,22 +7,10 @@ public class ClientHandler {
     private final String name;
     private final char[] passwd;
     private static long userId;
-    private static ClientHandler instance;
 
-    private ClientHandler(String name, char[] passwd) {
+    public ClientHandler(String name, char[] passwd) {
         this.name = name;
         this.passwd = passwd;
-    }
-
-    public static ClientHandler getInstance(String name, char[] passwd) {
-        if (instance == null) {
-            instance = new ClientHandler(name, passwd);
-        }
-        return instance;
-    }
-
-    public static ClientHandler getInstance() {
-        return instance;
     }
 
     public boolean regUser() {

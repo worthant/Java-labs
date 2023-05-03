@@ -26,9 +26,9 @@ public class ArgumentCityCommandReceiver implements ExternalArgumentReceiver<Cit
     }
 
     @Override
-    public boolean receiveCommand(CommandDescription command, String[] args) throws BuildObjectException {
+    public boolean receiveCommand(String name, char[] passwd, CommandDescription command, String[] args) throws BuildObjectException {
         city = modeManager.buildObject();
-        CommandStatusResponse response = new ArgumentRequestSender<City>().sendCommand(command, args, city, ServerConnectionHandler.getCurrentConnection());
+        CommandStatusResponse response = new ArgumentRequestSender<City>().sendCommand(name, passwd, command, args, city, ServerConnectionHandler.getCurrentConnection());
         if (response != null) {
             logger.info("Status code: " + response.getStatusCode());
             logger.info("Response: \n" + response.getResponse());

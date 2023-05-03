@@ -11,11 +11,11 @@ import responses.RegResponse;
 import java.io.IOException;
 
 public class RegWorker implements RequestWorker{
-    private static final Logger logger = LogManager.getLogger("io.github.worthant.lab7.AuthWorker");
+    private static final Logger logger = LogManager.getLogger("io.github.worthant.lab7.RegWorker");
     @Override
     public void workWithRequest(ServerRequest request) {
         RegRequest requestToWork = (RegRequest) request.getUserRequest();
-        ClientHandler manager = ClientHandler.getInstance(requestToWork.getName(), requestToWork.getPasswd());
+        ClientHandler manager = new ClientHandler(requestToWork.getName(), requestToWork.getPasswd());
         boolean reg = manager.regUser();
         RegResponse response = new RegResponse(reg);
         ResponseSender.sendResponse(response, request.getConnection(), request.getFrom());

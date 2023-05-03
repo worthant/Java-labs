@@ -1,5 +1,6 @@
 package commandManager;
 
+import Client.Client;
 import commandLogic.CommandDescription;
 import commandLogic.commandReceiverLogic.ReceiverManager;
 import commandLogic.commandReceiverLogic.enums.ReceiverType;
@@ -74,9 +75,10 @@ public class CommandExecutor {
             if (line.isEmpty()) continue;
             try {
                 try {
+                    Client client = Client.getInstance();
                     String[] lineArgs = line.split(" ");
                     CommandDescription description = Optional.ofNullable(commands).orElseThrow(CommandsNotLoadedException::new).stream().filter(x -> x.getName().equals(lineArgs[0])).findAny().orElseThrow(() -> new UnknownCommandException("Указанная команда не была обнаружена"));
-                    description.getReceiver().callReceivers(manager, description, lineArgs);
+                    description.getReceiver().callReceivers(client.getName(), client.getPasswd(), manager, description, lineArgs);
                 } catch (IllegalArgumentException | NullPointerException e) {
                     logger.warn("Выполнение команды пропущено из-за неправильных предоставленных аргументов! (" + e.getMessage() + ")");
                     throw new CommandInterruptedException(e);

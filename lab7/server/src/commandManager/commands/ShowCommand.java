@@ -1,5 +1,6 @@
 package commandManager.commands;
 
+import collectionStorageManager.PostgreSQLManager;
 import models.City;
 import models.handlers.CollectionHandler;
 import models.handlers.CityHandler;
@@ -36,12 +37,15 @@ public class ShowCommand implements BaseCommand {
 
     @Override
     public void execute(String[] args) {
+        PostgreSQLManager manager = new PostgreSQLManager();
+
         logger.debug("Received args: " + Arrays.toString(args));
         int itemsPerPage = 10; // You can change this value to your desired number of items per page
         int pageNumber = 0;
 
         CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
-        List<City> cityList = new ArrayList<>(collectionHandler.getCollection());
+        List<City> cityList = new ArrayList<>(manager.getCollectionFromDatabase());
+        collectionHandler.addMissingCitiesToCollection(cityList);
         int totalPages = (int) Math.ceil((double) cityList.size() / itemsPerPage);
 
         String output;

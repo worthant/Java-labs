@@ -15,7 +15,7 @@ public class AuthWorker implements RequestWorker{
     @Override
     public void workWithRequest(ServerRequest request) {
         AuthRequest requestToWork = (AuthRequest) request.getUserRequest();
-        ClientHandler manager = ClientHandler.getInstance(requestToWork.getName(), requestToWork.getPasswd());
+        ClientHandler manager = new ClientHandler(requestToWork.getName(), requestToWork.getPasswd());
         boolean auth = manager.authUser();
         AuthResponse response = new AuthResponse(auth);
         ResponseSender.sendResponse(response, request.getConnection(), request.getFrom());

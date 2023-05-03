@@ -1,5 +1,6 @@
 package main;
 
+import Client.Client;
 import commandManager.CommandDescriptionHolder;
 import commandManager.CommandExecutor;
 import commandManager.CommandLoaderUtility;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -87,6 +89,7 @@ public class Main {
                         AuthRequestSender rqSender = new AuthRequestSender();
                         AuthResponse response = rqSender.sendAuthData(name, passwd, ServerConnectionHandler.getCurrentConnection());
                         if (response.isAuth()) {
+                            Client.getInstance(name, passwd);
                             System.out.println("Successfully authenticated");
                             authorizationDone = true;
                         } else
@@ -95,9 +98,9 @@ public class Main {
                         System.out.println("Registering new user");
                         RegRequestSender rqSender = new RegRequestSender();
                         RegResponse response = rqSender.sendRegData(name, passwd, ServerConnectionHandler.getCurrentConnection());
-                        if (response.isReg())
-                            System.out.println("Successfully registered new user with:\n name: " + name + ",\n passwd: " + passwd);
-                        else
+                        if (response.isReg()) {
+                            System.out.println("Successfully registered new user with:\n name: " + name + ",\n passwd: " + Arrays.toString(passwd));
+                        } else
                             System.out.println("User with this credentials already exists in database");
                     }
                 } catch (Exception e) {

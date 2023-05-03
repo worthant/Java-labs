@@ -25,7 +25,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class CityHandler implements CollectionHandler<TreeSet<City>, City> {
 
     private static final Logger logger = LogManager.getLogger("io.github.worthant.lab6.manager");
-    private final ReentrantLock lock = new ReentrantLock();
+    private final ReentrantLock lock = new ReentrantLock(true);
 
     private CommandStatusResponse response;
 

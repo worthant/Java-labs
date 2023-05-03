@@ -14,10 +14,10 @@ import java.net.PortUnreachableException;
 public class CommandRequestSender {
     private static final Logger logger = LogManager.getLogger("io.github.worthant.lab6");
 
-    public CommandStatusResponse sendCommand(CommandDescription command, String[] args, ServerConnection connection) {
+    public CommandStatusResponse sendCommand(String name, char[] passwd, CommandDescription command, String[] args, ServerConnection connection) {
         CommandStatusResponse response = null;
         try {
-            var rq = new CommandClientRequest(command, args);
+            var rq = new CommandClientRequest(name, passwd, command, args);
             logger.info("Sending command request...");
             response = (CommandStatusResponse) new RequestSender().sendRequest(rq, connection);
         } catch (PortUnreachableException e) {

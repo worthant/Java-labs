@@ -16,7 +16,7 @@ public class CommandClientRequestWorker implements RequestWorker {
         try {
             CommandClientRequest requestToWork = (CommandClientRequest) request.getUserRequest();
 
-            ClientHandler clientManager = ClientHandler.getInstance();
+            ClientHandler clientManager = new ClientHandler(requestToWork.getName(), requestToWork.getPasswd());
             clientManager.authUserCommand();
 
             CommandManager manager = new CommandManager();

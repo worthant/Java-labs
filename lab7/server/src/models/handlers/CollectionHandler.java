@@ -1,7 +1,10 @@
 package models.handlers;
 
+import models.City;
+
 import java.util.AbstractCollection;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Base interface for handling Collection of Elements. You should implement it in your handler for correct command working.
@@ -73,4 +76,6 @@ public interface CollectionHandler<T extends AbstractCollection<E>, E> {
      *
      */
     void writeCollectionToFile();
+
+    void addMissingCitiesToCollection(List<City> citiesFromDatabase);
 }

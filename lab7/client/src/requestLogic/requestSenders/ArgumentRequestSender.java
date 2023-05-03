@@ -16,10 +16,10 @@ public class ArgumentRequestSender<T extends Serializable> {
 
     private static final Logger logger = LogManager.getLogger("io.github.worthant.lab6");
 
-    public CommandStatusResponse sendCommand(CommandDescription command, String[] args, T argument, ServerConnection connection) {
+    public CommandStatusResponse sendCommand(String name, char[] passwd, CommandDescription command, String[] args, T argument, ServerConnection connection) {
         CommandStatusResponse response = null;
         try {
-            ArgumentCommandClientRequest<T> rq = new ArgumentCommandClientRequest<>(command, args, argument);
+            ArgumentCommandClientRequest<T> rq = new ArgumentCommandClientRequest<>(name, passwd, command, args, argument);
             logger.info("Sending command request...");
             response = (CommandStatusResponse) new RequestSender().sendRequest(rq, connection);
         } catch (PortUnreachableException e) {

@@ -32,7 +32,7 @@ public class ExecuteScriptReceiver implements ExternalBaseReceiver {
     private static final Logger myLogger = Logger.getLogger("com.github.worthant.lab6");
 
     @Override
-    public boolean receiveCommand(CommandDescription commandDescription, String[] args) throws IllegalArgumentException, WrongAmountOfArgumentsException {
+    public boolean receiveCommand(String name, char[] passwd, CommandDescription commandDescription, String[] args) throws IllegalArgumentException, WrongAmountOfArgumentsException {
 
         if (!Objects.equals(commandDescription.getName(), "execute_script")) return true;
 

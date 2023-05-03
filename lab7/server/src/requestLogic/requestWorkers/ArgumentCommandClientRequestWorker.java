@@ -17,7 +17,7 @@ public class ArgumentCommandClientRequestWorker<T, Y> implements RequestWorker {
         try {
             ArgumentCommandClientRequest<T> requestToWork = (ArgumentCommandClientRequest<T>) request.getUserRequest();
 
-            ClientHandler clientManager = ClientHandler.getInstance();
+            ClientHandler clientManager = new ClientHandler(requestToWork.getName(), requestToWork.getPasswd());
             clientManager.authUserCommand();
 
             CommandManager manager = new CommandManager();

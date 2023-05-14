@@ -19,36 +19,23 @@ public class PostgreSQLManager implements DatabaseManager {
     @Override
     public ArrayList<City> getCollectionFromDatabase() {
         ArrayList<City> data = new ArrayList<>();
-        HashMap<Integer, Coordinates> coordinatesMap = new HashMap<>();
-        HashMap<Integer, Human> humansMap = new HashMap<>();
 
         try {
             Properties info = new Properties();
             info.load(this.getClass().getResourceAsStream("/db.cfg"));
-            // "jdbc:postgresql://localhost:5432/studs"
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/studs", info);
             Statement statement = connection.createStatement();
 
-            ResultSet resultCoordinatesSet = statement.executeQuery("SELECT * FROM Coordinates");
-            while (resultCoordinatesSet.next()) {
-                int id = resultCoordinatesSet.getInt("id");
-                int x = resultCoordinatesSet.getInt("x");
-                double y = resultCoordinatesSet.getDouble("y");
-                coordinatesMap.put(id, new Coordinates(x, y));
-            }
+            String query = "SELECT c.*, h.name AS governor_name, co.x, co.y " +
+                    "FROM City c " +
+                    "JOIN Human h ON c.governor_id = h.id " +
+                    "JOIN Coordinates co ON c.coordinates_id = co.id";
 
-            ResultSet resultHumanSet = statement.executeQuery("SELECT * FROM Human");
-            while (resultHumanSet.next()) {
-                int id = resultHumanSet.getInt("id");
-                String name = resultHumanSet.getString("name");
-                humansMap.put(id, new Human(name));
-            }
-
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM City");
+            ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
                 long id = resultSet.getLong("id");
                 String name = resultSet.getString("name");
-                Coordinates coordinates = coordinatesMap.get(resultSet.getInt("coordinates_id"));
+                Coordinates coordinates = new Coordinates(resultSet.getInt("x"), resultSet.getDouble("y"));
                 Date creationDate = resultSet.getDate("creation_date");
                 Integer area = resultSet.getInt("area");
                 int population = resultSet.getInt("population");
@@ -58,8 +45,7 @@ public class PostgreSQLManager implements DatabaseManager {
                 }
                 Climate climate = Climate.valueOf(resultSet.getString("climate"));
                 Government government = Government.valueOf(resultSet.getString("government"));
-                int governorId = resultSet.getInt("governor_id");
-                Human governor = humansMap.get(governorId);
+                Human governor = new Human(resultSet.getString("governor_name"));
                 StandardOfLiving standardOfLiving = StandardOfLiving.valueOf(resultSet.getString("standard_of_living"));
 
                 City city = new City(id, name, coordinates, creationDate, area, population, metersAboveSeaLevel, climate, government, standardOfLiving, governor);
@@ -68,10 +54,12 @@ public class PostgreSQLManager implements DatabaseManager {
             return data;
 
         } catch (SQLException | IOException e) {
-            logger.error("something went wrong during i/o ");
+            logger.error("something went wrong during i/o " + ClientHandler.getUserId());
+            e.printStackTrace();
         }
         return data;
     }
+
 
     @Override
     public void writeCollectionToDatabase() {

@@ -10,5 +10,6 @@ public enum Government implements Serializable {
     GERONTOCRACY,
     DEMARCHY,
     COMMUNISM,
-    NOOCRACY
+    NOOCRACY,
+    DEMOCRACY
 }

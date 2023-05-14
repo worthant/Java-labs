@@ -19,23 +19,36 @@ public class PostgreSQLManager implements DatabaseManager {
     @Override
     public ArrayList<City> getCollectionFromDatabase() {
         ArrayList<City> data = new ArrayList<>();
+        HashMap<Integer, Coordinates> coordinatesMap = new HashMap<>();
+        HashMap<Integer, Human> humansMap = new HashMap<>();
 
         try {
             Properties info = new Properties();
             info.load(this.getClass().getResourceAsStream("/db.cfg"));
+            // "jdbc:postgresql://localhost:5432/studs"
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/studs", info);
             Statement statement = connection.createStatement();
 
-            String query = "SELECT c.*, h.name AS governor_name, co.x, co.y " +
-                    "FROM City c " +
-                    "JOIN Human h ON c.governor_id = h.id " +
-                    "JOIN Coordinates co ON c.coordinates_id = co.id";
+            ResultSet resultCoordinatesSet = statement.executeQuery("SELECT * FROM Coordinates");
+            while (resultCoordinatesSet.next()) {
+                int id = resultCoordinatesSet.getInt("id");
+                int x = resultCoordinatesSet.getInt("x");
+                double y = resultCoordinatesSet.getDouble("y");
+                coordinatesMap.put(id, new Coordinates(x, y));
+            }
 
-            ResultSet resultSet = statement.executeQuery(query);
+            ResultSet resultHumanSet = statement.executeQuery("SELECT * FROM Human");
+            while (resultHumanSet.next()) {
+                int id = resultHumanSet.getInt("id");
+                String name = resultHumanSet.getString("name");
+                humansMap.put(id, new Human(name));
+            }
+
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM City");
             while (resultSet.next()) {
                 long id = resultSet.getLong("id");
                 String name = resultSet.getString("name");
-                Coordinates coordinates = new Coordinates(resultSet.getInt("x"), resultSet.getDouble("y"));
+                Coordinates coordinates = coordinatesMap.get(resultSet.getInt("coordinates_id"));
                 Date creationDate = resultSet.getDate("creation_date");
                 Integer area = resultSet.getInt("area");
                 int population = resultSet.getInt("population");
@@ -45,7 +58,8 @@ public class PostgreSQLManager implements DatabaseManager {
                 }
                 Climate climate = Climate.valueOf(resultSet.getString("climate"));
                 Government government = Government.valueOf(resultSet.getString("government"));
-                Human governor = new Human(resultSet.getString("governor_name"));
+                int governorId = resultSet.getInt("governor_id");
+                Human governor = humansMap.get(governorId);
                 StandardOfLiving standardOfLiving = StandardOfLiving.valueOf(resultSet.getString("standard_of_living"));
 
                 City city = new City(id, name, coordinates, creationDate, area, population, metersAboveSeaLevel, climate, government, standardOfLiving, governor);
@@ -54,19 +68,17 @@ public class PostgreSQLManager implements DatabaseManager {
             return data;
 
         } catch (SQLException | IOException e) {
-            logger.error("something went wrong during i/o " + ClientHandler.getUserId());
-            e.printStackTrace();
+            logger.error("something went wrong during i/o ");
         }
         return data;
     }
-
 
     @Override
     public void writeCollectionToDatabase() {
         try {
             Properties info = new Properties();
             info.load(this.getClass().getResourceAsStream("/db.cfg"));
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/studs", info);
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/studs", info);
             connection.setAutoCommit(false);
 
             // Retrieve all existing city IDs from the database
@@ -95,7 +107,7 @@ public class PostgreSQLManager implements DatabaseManager {
         try {
             Properties info = new Properties();
             info.load(this.getClass().getResourceAsStream("/db.cfg"));
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/studs", info);
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/studs", info);
             connection.setAutoCommit(false);
 
             generatedId = addElementToDatabase(city, connection);
@@ -171,7 +183,7 @@ public class PostgreSQLManager implements DatabaseManager {
         try {
             Properties info = new Properties();
             info.load(this.getClass().getResourceAsStream("/db.cfg"));
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/studs", info);
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/studs", info);
 
             String deleteCityQuery = "DELETE FROM City WHERE id = ? AND id IN (SELECT city_id FROM Creator WHERE user_id = ?)";
             PreparedStatement deleteCityStatement = connection.prepareStatement(deleteCityQuery);
@@ -190,7 +202,7 @@ public class PostgreSQLManager implements DatabaseManager {
         try {
             Properties info = new Properties();
             info.load(this.getClass().getResourceAsStream("/db.cfg"));
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/studs", info);
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/studs", info);
 
             String selectUserQuery = "SELECT id, passwd_hash, passwd_salt FROM \"User\" WHERE name = ?";
             PreparedStatement selectUserStatement = connection.prepareStatement(selectUserQuery);
@@ -216,7 +228,7 @@ public class PostgreSQLManager implements DatabaseManager {
         try {
             Properties info = new Properties();
             info.load(this.getClass().getResourceAsStream("/db.cfg"));
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/studs", info);
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/studs", info);
 
             // Check if a user with the provided name already exists
             String selectUserQuery = "SELECT COUNT(*) FROM \"User\" WHERE name = ?";
@@ -263,7 +275,7 @@ public class PostgreSQLManager implements DatabaseManager {
         try {
             Properties info = new Properties();
             info.load(this.getClass().getResourceAsStream("/db.cfg"));
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/studs", info);
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/studs", info);
 
             // Get city IDs that belong to the current user
             String selectCityIdsQuery = "SELECT city_id FROM Creator WHERE user_id = ?";
@@ -290,7 +302,7 @@ public class PostgreSQLManager implements DatabaseManager {
         try {
             Properties info = new Properties();
             info.load(this.getClass().getResourceAsStream("/db.cfg"));
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/studs", info);
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/studs", info);
 
             String checkOwnershipQuery = "SELECT COUNT(*) FROM Creator WHERE city_id = ? AND user_id = ?";
             PreparedStatement checkOwnershipStatement = connection.prepareStatement(checkOwnershipQuery);
@@ -312,7 +324,7 @@ public class PostgreSQLManager implements DatabaseManager {
         try {
             Properties info = new Properties();
             info.load(this.getClass().getResourceAsStream("/db.cfg"));
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/studs", info);
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/studs", info);
             connection.setAutoCommit(false);
 
             // Update the Human table

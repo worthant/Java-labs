@@ -17,7 +17,6 @@ import models.validators.*;
 
 import javax.swing.*;
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
@@ -61,17 +60,13 @@ public class Main {
             do {
                 System.out.println("Write:\n  1 - to authorize,\n  {anything} - to register\n↓");
                 try {
-                    Console console = System.console();
-                    if (console == null) {
-                        System.out.println("Console is not available.");
-                        System.exit(1);
-                    }
-                    nextLine = console.readLine().trim();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                    nextLine = reader.readLine().trim();
                     auth = nextLine.equals("1");
 
                     while (true) {
                         System.out.print("Enter your name(not null!)(type: String): ");
-                        nextLine = console.readLine().trim();
+                        nextLine = reader.readLine().trim();
 
                         if (inputValidator.validate(nextLine)) {
                             name = nextLine.split(" ")[0];
@@ -81,9 +76,10 @@ public class Main {
 
                     while (true) {
                         System.out.print("Enter your password(not null!)(type: charArray): ");
-                        passwd = console.readPassword();
+                        nextLine = reader.readLine().trim();
 
-                        if (passwd != null && passwd.length > 0) {
+                        if (inputValidator.validate(nextLine)) {
+                            passwd = nextLine.split(" ")[0].toCharArray();
                             break;
                         } else System.out.println("Input should not be empty!(passwd is not null)");
                     }

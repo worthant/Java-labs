@@ -6,6 +6,8 @@ import commandManager.CommandExecutor;
 import commandManager.CommandLoaderUtility;
 import commandManager.CommandMode;
 import exceptions.CommandsNotLoadedException;
+import gui.LoginWindow;
+import javafx.application.Platform;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import requestLogic.requestSenders.AuthRequestSender;
@@ -42,6 +44,7 @@ public class Main {
      * @param args Command-line arguments
      */
     public static void main(String[] args) {
+
         // server connecting
         try {
             //ServerConnection connection = new UdpServerConnectionFactory().openConnection(InetAddress.getByName(HOST_ADDRESS), PORT);

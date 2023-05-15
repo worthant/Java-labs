@@ -1,4 +1,4 @@
-package gui;
+package gui.collections;
 
 import Client.Client;
 import javafx.collections.FXCollections;

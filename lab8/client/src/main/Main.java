@@ -6,8 +6,6 @@ import commandManager.CommandExecutor;
 import commandManager.CommandLoaderUtility;
 import commandManager.CommandMode;
 import exceptions.CommandsNotLoadedException;
-import gui.LoginWindow;
-import javafx.application.Platform;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import requestLogic.requestSenders.AuthRequestSender;

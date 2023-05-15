@@ -1,0 +1,54 @@
+.button-style {
+    -fx-background-color: #466443;
+    -fx-text-fill: white;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+
+.borderPane-style {
+    -fx-background-color: #F9FCF8;
+    -fx-border-width: 1px;
+    -fx-border-color: rgba(40, 49, 66, 100);
+    -fx-border-radius: 0px;
+}
+
+.straight-rectangle {
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+}
+
+.welcomeBack-style {
+    -fx-font-size: 14px;
+    -fx-letter-spacing: 10px;
+}
+
+.globeIcon-style {
+
+}
+
+
+.signUp-style {
+    -fx-text-fill: #6D775A;
+    -fx-font-size: 8px;
+    -fx-font-family: "Arial";
+}
+
+.label-style {
+    -fx-text-fill: #194144;
+    -fx-font-size: 8px;
+    -fx-font-family: "Arial";
+}
+
+.light-gray-field {
+    -fx-border-width: 1px;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-text-fill: #6B866B;
+    -fx-border-color: rgba(211, 211, 211, 0.5);
+}
+
+.green-icon {
+    -fx-opacity: 1.0;
+    -fx-background-color: #008000; /* Green color */
+}
+

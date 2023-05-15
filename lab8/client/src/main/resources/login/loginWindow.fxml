@@ -15,29 +15,29 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="456.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginWindow">
+<AnchorPane prefHeight="456.0" prefWidth="680.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.login.LoginWindowController">
    <children>
       <BorderPane prefHeight="456.0" prefWidth="680.0" styleClass="borderPane-style">
          <right>
             <ImageView fitHeight="455.0" fitWidth="373.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                <image>
-                  <Image url="@../../../../docs/img.png" />
+                  <Image url="@../pics/img.png" />
                </image>
             </ImageView>
          </right>
          <left>
             <GridPane prefHeight="400.0" prefWidth="303.0" BorderPane.alignment="CENTER">
               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="188.99996185302734" minWidth="10.0" prefWidth="14.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="188.99996185302734" minWidth="10.0" prefWidth="46.666666666666664" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="188.99996185302734" minWidth="10.0" prefWidth="17.666625022888184" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="188.99996185302734" minWidth="10.0" prefWidth="41.00004164377848" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="261.6666704813639" minWidth="10.0" prefWidth="29.444435119628906" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="261.6666704813639" minWidth="10.0" prefWidth="158.2222188313802" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="261.6666704813639" minWidth="10.0" prefWidth="60.44444783528644" />
               </columnConstraints>
               <rowConstraints>
                   <RowConstraints maxHeight="178.0" minHeight="10.0" prefHeight="11.777771313985188" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="178.0" minHeight="10.0" prefHeight="22.222228686014812" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="178.0" minHeight="10.0" prefHeight="65.11110369364421" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="178.0" minHeight="10.0" prefHeight="33.666668574015304" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="178.0" minHeight="10.0" prefHeight="48.333331425984696" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="154.66663869222003" minHeight="6.666666666666657" prefHeight="89.55556233723959" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="153.33336639404297" minHeight="10.0" prefHeight="11.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="187.99999237060547" minHeight="10.0" prefHeight="17.222208658854157" vgrow="SOMETIMES" />
@@ -51,36 +51,36 @@
                   <RowConstraints maxHeight="130.2222188313802" minHeight="10.0" prefHeight="48.333353678385436" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button accessibleText="signInButton" mnemonicParsing="false" prefHeight="21.0" prefWidth="180.0" styleClass="button-style" stylesheets="@login/style.css" text="Sign in" textFill="WHITE" wrapText="true" GridPane.columnIndex="3" GridPane.rowIndex="10">
+                  <Button fx:id="signInButton" accessibleText="signInButton" mnemonicParsing="false" onAction="#onSignInButtonClick" prefHeight="21.0" prefWidth="180.0" styleClass="button-style" stylesheets="@style.css" text="Sign in" textFill="WHITE" wrapText="true" GridPane.columnIndex="3" GridPane.rowIndex="10">
                      <font>
                         <Font size="8.0" />
                      </font></Button>
-                  <Label prefHeight="17.0" prefWidth="136.0" styleClass="label-style" stylesheets="@login/style.css" text="Email" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="6">
+                  <Label fx:id="usernameLabel" prefHeight="17.0" prefWidth="136.0" styleClass="label-style" stylesheets="@style.css" text="Username" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="6">
                      <font>
                         <Font size="8.0" />
                      </font>
                   </Label>
-                  <TextField styleClass="light-gray-field" stylesheets="@login/style.css" text="Enter your email" GridPane.columnIndex="3" GridPane.rowIndex="7">
+                  <TextField fx:id="usernameField" styleClass="light-gray-field" stylesheets="@style.css" GridPane.columnIndex="3" GridPane.rowIndex="7">
                      <font>
                         <Font size="8.0" />
                      </font>
                   </TextField>
-                  <Label prefHeight="17.0" prefWidth="146.0" styleClass="label-style" stylesheets="@login/style.css" text="Password" GridPane.columnIndex="3" GridPane.rowIndex="8">
+                  <Label fx:id="passwordLabel" prefHeight="17.0" prefWidth="146.0" styleClass="label-style" stylesheets="@style.css" text="Password" GridPane.columnIndex="3" GridPane.rowIndex="8">
                      <font>
                         <Font size="10.0" />
                      </font>
                   </Label>
-                  <PasswordField prefHeight="18.0" prefWidth="145.0" styleClass="light-gray-field" stylesheets="@login/style.css" text=" Enter  " GridPane.columnIndex="3" GridPane.rowIndex="9">
+                  <PasswordField fx:id="passwordField" prefHeight="18.0" prefWidth="145.0" styleClass="light-gray-field" stylesheets="@style.css" GridPane.columnIndex="3" GridPane.rowIndex="9">
                      <font>
                         <Font size="8.0" />
                      </font>
                   </PasswordField>
-                  <Label alignment="BOTTOM_CENTER" prefHeight="85.0" prefWidth="181.0" text="Welcome back" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                  <Label fx:id="welcomeLabel" alignment="BOTTOM_CENTER" prefHeight="85.0" prefWidth="181.0" text="Welcome back" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="3">
                      <font>
                         <Font name="Georgia Bold" size="14.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER" opacity="0.79" prefHeight="17.0" prefWidth="180.0" text="Please enter your details" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="4">
+                  <Label fx:id="detailsLabel" alignment="CENTER" opacity="0.79" prefHeight="17.0" prefWidth="180.0" text="Please enter your details" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="4">
                      <font>
                         <Font size="7.0" />
                      </font>
@@ -96,8 +96,8 @@
                       <RowConstraints maxHeight="6.888885498046875" minHeight="3.3333444595336914" prefHeight="3.3333444595336914" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="10.0" prefWidth="126.0" styleClass="label-style" stylesheets="@login/style.css" text="Don't have an account?" textAlignment="RIGHT" GridPane.rowIndex="1" />
-                        <Label prefHeight="17.0" prefWidth="58.0" stylesheets="@login/style.css" text=" Sign up" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label fx:id="accountLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="10.0" prefWidth="126.0" styleClass="label-style" stylesheets="@style.css" text="Don't have an account?" textAlignment="RIGHT" GridPane.rowIndex="1" />
+                        <Label fx:id="signUpLabel"  prefHeight="17.0" prefWidth="58.0" stylesheets="@style.css" text=" Sign up" GridPane.columnIndex="1" GridPane.rowIndex="1"  onMouseClicked="#onSignUpLabelClick">
                            <styleClass>
                               <String fx:value="signUp-style" />
                               <String fx:value="signUp-style" />
@@ -105,17 +105,17 @@
                         </Label>
                      </children>
                   </GridPane>
-                  <ImageView fitHeight="21.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <ImageView fx:id="geoIcon" fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" onMouseClicked="#onGeoIconClick">
                      <image>
-                        <Image url="@icons/map.png" />
+                        <Image url="@../icons/geo.png" />
                      </image>
                   </ImageView>
                </children>
             </GridPane>
          </left>
          <stylesheets>
-            <URL value="@login/style.css" />
-            <URL value="@login/style.css" />
+            <URL value="@style.css" />
+            <URL value="@style.css" />
          </stylesheets>
       </BorderPane>
    </children>

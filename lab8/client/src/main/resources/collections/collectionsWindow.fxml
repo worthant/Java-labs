@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.collections.CollectionsWindowController">
+    <children>
+        <Text fx:id="usernameText" fill="#333333" text="Username" styleClass="bold-text" AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="20.0"/>
+        <ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.topAnchor="50.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+            <content>
+                <TableView fx:id="table" prefHeight="300.0" prefWidth="600.0">
+                    <columns>
+                        <TableColumn fx:id="idColumn" text="id" />
+                        <TableColumn fx:id="nameColumn" text="name" />
+                        <TableColumn fx:id="coordXColumn" text="coord X" />
+                        <TableColumn fx:id="coordYColumn" text="coord Y" />
+                        <TableColumn fx:id="creationColumn" text="creation" />
+                        <TableColumn fx:id="areaColumn" text="area" />
+                        <TableColumn fx:id="populationColumn" text="population" />
+                        <TableColumn fx:id="governmentColumn" text="government" />
+                        <TableColumn fx:id="standardsColumn" text="standards" />
+                        <TableColumn fx:id="climateColumn" text="climate" />
+                        <TableColumn fx:id="governorColumn" text="governor" />
+                    </columns>
+                </TableView>
+            </content>
+        </ScrollPane>
+        <HBox alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="20.0">
+            <children>
+                <Button fx:id="createButton" text="Create" onAction="#onCreateButtonClick" />
+                <Button fx:id="editButton" text="Edit" onAction="#onEditButtonClick" />
+                <Button fx:id="deleteButton" text="Delete" onAction="#onDeleteButtonClick" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0">
+            <children>
+                <Button fx:id="visualizeButton" text="Visualize" onAction="#onVisualizeButtonClick" />
+                <Button fx:id="commandsButton" text="Commands" onAction="#onCommandsButtonClick" />
+            </children>
+        </HBox>
+    </children>
+</AnchorPane>
+

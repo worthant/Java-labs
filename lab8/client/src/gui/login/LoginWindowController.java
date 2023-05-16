@@ -1,11 +1,10 @@
 package gui.login;
 
-import Client.Client;
+import client.Client;
 import gui.UTF8Control;
 import gui.collections.CollectionsWindow;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import requestLogic.requestSenders.AuthRequestSender;
 import requestLogic.requestSenders.RegRequestSender;
@@ -13,7 +12,6 @@ import responses.AuthResponse;
 import responses.RegResponse;
 import serverLogic.ServerConnectionHandler;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -49,7 +47,7 @@ public class LoginWindowController {
 
     @FXML
     private Label accountLabel;
-    private List<Locale> supportedLocales = Arrays.asList(
+    private final List<Locale> supportedLocales = Arrays.asList(
             new Locale("en", "NZ"),
             new Locale("ru"),
             new Locale("hr"),

@@ -1,5 +1,6 @@
 package gui;
 
+import commandManager.CommandLoaderUtility;
 import gui.login.LoginWindow;
 import javafx.application.Application;
 import javafx.stage.Stage;

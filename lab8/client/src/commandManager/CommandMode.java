@@ -14,5 +14,9 @@ public enum CommandMode {
     /**
      * Commands will use simple interaction w/o user-orientation. Envisage that it will be used with file streams, e.t.c.
      */
-    NonUserMode
+    NonUserMode,
+    /**
+     * Commands will use gui-friendly interaction.
+     */
+    GUIMode
 }

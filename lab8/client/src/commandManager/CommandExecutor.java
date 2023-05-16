@@ -1,6 +1,6 @@
 package commandManager;
 
-import Client.Client;
+import client.Client;
 import commandLogic.CommandDescription;
 import commandLogic.commandReceiverLogic.ReceiverManager;
 import commandLogic.commandReceiverLogic.enums.ReceiverType;
@@ -66,6 +66,10 @@ public class CommandExecutor {
         manager.registerReceiver(ReceiverType.ArgumentRoute, new ArgumentCityCommandReceiver(modeManager));
     }
 
+
+    public void executeCommand() {
+
+    }
     /**
      * Start executing commands from InputStream.
      */

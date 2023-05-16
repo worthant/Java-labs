@@ -1,6 +1,6 @@
 package main;
 
-import Client.Client;
+import client.Client;
 import commandManager.CommandDescriptionHolder;
 import commandManager.CommandExecutor;
 import commandManager.CommandLoaderUtility;
@@ -118,9 +118,6 @@ public class Main {
                     CommandExecutor executor = new CommandExecutor(CommandDescriptionHolder.getInstance().getCommands(), System.in, CommandMode.CLI_UserMode);
                     commandsNotLoaded = false;
 
-                    // start executing
-                    System.out.println("Welcome to CLI! We've established connection to a server.");
-                    System.out.println("Now you can enter the commands. Use help for reference.");
                     executor.startExecuting();
                 } catch (CommandsNotLoadedException e) {
                     logger.warn("We couldn't get commands from server last time, so now we'll try to do this again...");

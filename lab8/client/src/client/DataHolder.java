@@ -1,7 +1,12 @@
 package client;
 
+import models.City;
+
+import java.util.TreeSet;
+
 public class DataHolder {
     private static DataHolder instance;
+    private TreeSet<City> collection;
 
     private String name;
     private String coordX;
@@ -22,6 +27,12 @@ public class DataHolder {
         return instance;
     }
 
+    public TreeSet<City> getCollection() {
+        return collection;
+    }
+    public void setCollection(TreeSet<City> collection) {
+        this.collection = collection;
+    }
     public String getName() {
         return name;
     }

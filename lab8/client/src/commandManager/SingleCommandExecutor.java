@@ -6,10 +6,7 @@ import commandLogic.commandReceiverLogic.ReceiverManager;
 import commandLogic.commandReceiverLogic.enums.ReceiverType;
 import commandLogic.commandReceiverLogic.handlers.ArgumentReceiverHandler;
 import commandLogic.commandReceiverLogic.handlers.NonArgReceiversHandler;
-import commandManager.externalRecievers.ArgumentCityCommandReceiver;
-import commandManager.externalRecievers.ExecuteScriptReceiver;
-import commandManager.externalRecievers.ExitReceiver;
-import commandManager.externalRecievers.NonArgumentReceiver;
+import commandManager.externalRecievers.*;
 import exceptions.*;
 import models.City;
 import models.handlers.ModeManager;
@@ -44,6 +41,7 @@ public class SingleCommandExecutor {
         manager.registerReceiver(ReceiverType.NoArgs, new NonArgumentReceiver());
         manager.registerReceiver(ReceiverType.NoArgs, new ExecuteScriptReceiver());
         manager.registerReceiver(ReceiverType.NoArgs, new ExitReceiver());
+        manager.registerReceiver(ReceiverType.NoArgs, new NonArgumentShowReceiver());
 
         ModeManager<City> modeManager = new GUIManager();
         manager.registerReceiver(ReceiverType.ArgumentRoute, new ArgumentCityCommandReceiver(modeManager));

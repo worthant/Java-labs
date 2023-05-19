@@ -1,4 +1,4 @@
-package gui;
+package gui.commands;
 
 public class CommandsWindow {
 }

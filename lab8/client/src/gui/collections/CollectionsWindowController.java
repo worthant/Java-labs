@@ -39,8 +39,13 @@ public class CollectionsWindowController {
         String currentUsername = Client.getInstance().getName();
         usernameText.setText(currentUsername);
 
+
+    }
+
+    private void loadCollection() {
         // Retrieve data from DataHolder
         DataHolder data = DataHolder.getInstance();
+
     }
 
 //    /**

@@ -7,6 +7,7 @@ import models.handlers.CityHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import responses.CommandStatusResponse;
+import responses.ShowResponse;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +24,9 @@ import java.util.stream.IntStream;
  */
 public class ShowCommand implements BaseCommand {
     private static final Logger logger = LogManager.getLogger("io.github.worthant.lab6.commands.show");
-    private CommandStatusResponse response;
+    private ShowResponse response;
+
+    private CommandStatusResponse oldResponse;
 
     @Override
     public String getName() {
@@ -37,6 +40,24 @@ public class ShowCommand implements BaseCommand {
 
     @Override
     public void execute(String[] args) {
+        PostgreSQLManager manager = new PostgreSQLManager();
+        CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
+        List<City> cityList = new ArrayList<>(manager.getCollectionFromDatabase());
+        collectionHandler.addMissingCitiesToCollection(cityList);
+
+        // Set the response as ShowResponse with the cityTreeSet
+        response = ShowResponse.of("Command executed successfully.", collectionHandler.getCollection());
+        logger.info(response.getResponse());
+    }
+
+
+
+    /**
+     * old method, that executes old via cool pages logic
+     * T am proud of it, hence I don't want to delete it ^-^
+     */
+    @Deprecated
+    public void executeOld(String[] args) {
         PostgreSQLManager manager = new PostgreSQLManager();
 
         logger.debug("Received args: " + Arrays.toString(args));
@@ -53,14 +74,14 @@ public class ShowCommand implements BaseCommand {
             try {
                 pageNumber = Integer.parseInt(args[1]) - 1;
             } catch (NumberFormatException e) {
-                response = CommandStatusResponse.ofString("Invalid page number.");
-                logger.warn(response.getResponse());
+                oldResponse = CommandStatusResponse.ofString("Invalid page number.");
+                logger.warn(oldResponse.getResponse());
                 return;
             }
 
             if (pageNumber < 0 || pageNumber >= totalPages) {
-                response = CommandStatusResponse.ofString("Page number out of range.");
-                logger.warn(response.getResponse());
+                oldResponse = CommandStatusResponse.ofString("Page number out of range.");
+                logger.warn(oldResponse.getResponse());
                 return;
             }
 
@@ -68,12 +89,12 @@ public class ShowCommand implements BaseCommand {
                     .mapToObj(i -> cityList.get(i).toString())
                     .collect(Collectors.joining("\n"));
 
-            response = CommandStatusResponse.ofString("Page " + (pageNumber + 1) + " of " + totalPages + ":\n" + output);
-            logger.info(response.getResponse());
+            oldResponse = CommandStatusResponse.ofString("Page " + (pageNumber + 1) + " of " + totalPages + ":\n" + output);
+            logger.info(oldResponse.getResponse());
 
         } else {
             output = "Total pages: " + totalPages;
-            response = CommandStatusResponse.ofString(output);
+            oldResponse = CommandStatusResponse.ofString(output);
         }
     }
 

@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author worthant
  * @since 1.0
  */
-public class Main {
+public class    Main {
     public static final int PORT = 50457;
     private static final Logger logger = LogManager.getLogger("lab6");
 

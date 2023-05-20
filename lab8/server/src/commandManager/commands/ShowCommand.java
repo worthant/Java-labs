@@ -26,6 +26,7 @@ public class ShowCommand implements BaseCommand {
     private static final Logger logger = LogManager.getLogger("io.github.worthant.lab6.commands.show");
     private ShowResponse response;
 
+    @Deprecated
     private CommandStatusResponse oldResponse;
 
     @Override
@@ -47,7 +48,6 @@ public class ShowCommand implements BaseCommand {
 
         // Set the response as ShowResponse with the cityTreeSet
         response = ShowResponse.of("Command executed successfully.", collectionHandler.getCollection());
-        logger.info(response.getResponse());
     }
 
 

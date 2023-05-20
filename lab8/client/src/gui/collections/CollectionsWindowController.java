@@ -2,22 +2,59 @@ package gui.collections;
 import client.Client;
 import client.DataHolder;
 import commandManager.*;
+import exceptions.CommandsNotLoadedException;
 import gui.create.CreateWindow;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import models.City;
+import models.Climate;
+import models.Government;
+import models.StandardOfLiving;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.Date;
+import java.util.TreeSet;
 
 public class CollectionsWindowController {
+    private static final Logger logger = LogManager.getLogger("lab6");
     @FXML
     private TableView<City> table;
-
+    @FXML
+    private TableColumn<City, Long> idColumn;
     @FXML
     private TableColumn<City, String> nameColumn;
+    @FXML
+    private TableColumn<City, Integer> coordXColumn;
+    @FXML
+    private TableColumn<City, Double> coordYColumn;
+    @FXML
+    private TableColumn<City, Date> creationColumn;
+    @FXML
+    private TableColumn<City, Integer> areaColumn;
+    @FXML
+    private TableColumn<City, Integer> populationColumn;
+    @FXML
+    private TableColumn<City, Government> governmentColumn;
+    @FXML
+    private TableColumn<City, StandardOfLiving> standardsColumn;
+    @FXML
+    private TableColumn<City, Climate> climateColumn;
+    @FXML
+    private TableColumn<City, String> governorColumn;
 
     @FXML
     private Text usernameText;
@@ -39,14 +76,50 @@ public class CollectionsWindowController {
         String currentUsername = Client.getInstance().getName();
         usernameText.setText(currentUsername);
 
+        // Setup cellValueFactories
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        coordXColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getCoordinates().getX()));
+        coordYColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getCoordinates().getY()));
+        creationColumn.setCellValueFactory(new PropertyValueFactory<>("creationDate"));
+        areaColumn.setCellValueFactory(new PropertyValueFactory<>("area"));
+        populationColumn.setCellValueFactory(new PropertyValueFactory<>("population"));
+        governmentColumn.setCellValueFactory(new PropertyValueFactory<>("government"));
+        standardsColumn.setCellValueFactory(new PropertyValueFactory<>("standardOfLiving"));
+        climateColumn.setCellValueFactory(new PropertyValueFactory<>("climate"));
+        governorColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGovernor() != null ? cellData.getValue().getGovernor().getName() : ""));
 
+        // Start the timeline
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(4), event -> loadCollection()));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
     }
+
+
 
     private void loadCollection() {
-        // Retrieve data from DataHolder
-        DataHolder data = DataHolder.getInstance();
+        try {
+            SingleCommandExecutor executor = new SingleCommandExecutor(CommandDescriptionHolder.getInstance().getCommands(), CommandMode.GUIMode);
+            executor.executeCommand("show");
+//            TreeSet<City> collection = DataHolder.getInstance().getCollection();
 
+            // fill TableView columns with collection
+            ObservableList<City> observableList = FXCollections.observableArrayList(DataHolder.getInstance().getCollection());
+            table.setItems(observableList);
+
+//            for (City obj2: collection) {
+//                System.out.println(obj2.toString());
+//            }
+//            for (City obj: observableList) {
+//                System.out.println(obj.toString());
+//            }
+        } catch (CommandsNotLoadedException e) {
+            logger.info("something wrong while loading collection" + e.getMessage());
+        }
     }
+
+
+
 
 //    /**
 //     * method for loading commands from the old Main class

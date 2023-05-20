@@ -5,7 +5,6 @@ import models.City;
 import java.util.TreeSet;
 
 public class DataHolder {
-    private static DataHolder instance;
     private TreeSet<City> collection;
 
     private String name;
@@ -18,13 +17,15 @@ public class DataHolder {
     private String government;
     private String standards;
     private String governor;
+
     private DataHolder() {}
 
+    private static class Holder {
+        private static final DataHolder INSTANCE = new DataHolder();
+    }
+
     public static DataHolder getInstance() {
-        if (instance == null) {
-            instance = new DataHolder();
-        }
-        return instance;
+        return Holder.INSTANCE;
     }
 
     public TreeSet<City> getCollection() {

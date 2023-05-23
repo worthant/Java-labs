@@ -16,12 +16,12 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="578.0" prefWidth="925.0" styleClass="borderPane-style" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.collections.CollectionsWindowController">
+<AnchorPane prefHeight="578.0" prefWidth="925.0"  xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.collections.CollectionsWindowController">
     <children>
         <Text fx:id="usernameText" fill="#333333" layoutX="429.0" layoutY="52.0" styleClass="bold-text" text="Username" AnchorPane.leftAnchor="429.0" AnchorPane.topAnchor="30.41796875" />
-        <ScrollPane fitToHeight="true" fitToWidth="true" layoutY="113.0" prefHeight="421.0" prefWidth="885.0" stylesheets="@style.css" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="113.0">
+        <ScrollPane fitToHeight="true" fitToWidth="true" layoutY="113.0" prefHeight="421.0" prefWidth="885.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="113.0">
             <content>
-                <TableView fx:id="table" prefHeight="455.0" prefWidth="869.0" styleClass="column-header" stylesheets="@style.css">
+                <TableView fx:id="table" prefHeight="455.0" prefWidth="869.0">
                     <columns>
                         <TableColumn fx:id="idColumn" text="id" />
                         <TableColumn fx:id="nameColumn" text="name" />
@@ -30,9 +30,10 @@
                         <TableColumn fx:id="creationColumn" text="creation" />
                         <TableColumn fx:id="areaColumn" text="area" />
                         <TableColumn fx:id="populationColumn" text="population" />
+                        <TableColumn fx:id="metersAboveSeaLevelColumn" text="(m) sea level" />
+                        <TableColumn fx:id="climateColumn" text="climate" />
                         <TableColumn fx:id="governmentColumn" text="government" />
                         <TableColumn fx:id="standardsColumn" text="standards" />
-                        <TableColumn fx:id="climateColumn" text="climate" />
                         <TableColumn fx:id="governorColumn" text="governor" />
                     </columns>
                 </TableView>

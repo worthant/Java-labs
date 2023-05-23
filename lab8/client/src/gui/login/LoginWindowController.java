@@ -1,6 +1,7 @@
 package gui.login;
 
 import client.Client;
+import gui.LocalizationUtility;
 import gui.UTF8Control;
 import gui.collections.CollectionsWindow;
 import javafx.fxml.FXML;
@@ -12,13 +13,13 @@ import responses.AuthResponse;
 import responses.RegResponse;
 import serverLogic.ServerConnectionHandler;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class LoginWindowController {
-
     private ResourceBundle currentBundle;
 
     @FXML
@@ -103,7 +104,10 @@ public class LoginWindowController {
                 alert.showAndWait();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setContentText("Server is dead :(");
+            alert.showAndWait();
         }
     }
 

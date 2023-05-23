@@ -1,13 +1,17 @@
 package gui.collections;
 import client.Client;
 import client.DataHolder;
+import commandLogic.CommandDescription;
+import commandLogic.commandReceiverLogic.callers.ExternalBaseReceiverCaller;
 import commandManager.*;
 import exceptions.CommandsNotLoadedException;
+import gui.LocalizationUtility;
+import gui.UTF8Control;
 import gui.create.CreateWindow;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.application.Platform;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -25,12 +29,30 @@ import models.Government;
 import models.StandardOfLiving;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import requestLogic.requestSenders.AuthRequestSender;
+import requestLogic.requestSenders.ShowRequestSender;
+import responses.AuthResponse;
+import responses.ShowResponse;
+import serverLogic.ServerConnectionHandler;
 
-import java.util.Date;
-import java.util.TreeSet;
+import java.text.DateFormat;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class CollectionsWindowController {
-    private static final Logger logger = LogManager.getLogger("lab6");
+    private static final Logger logger = LogManager.getLogger("lab8");
+
+    private ResourceBundle currentBundle;
+
+    private final List<Locale> supportedLocales = Arrays.asList(
+            new Locale("en", "NZ"),
+            new Locale("ru"),
+            new Locale("hr"),
+            new Locale("cs")
+    );
+    private int currentLocaleIndex = 0;
+
+    private TreeSet<City> collection;
     @FXML
     private TableView<City> table;
     @FXML
@@ -42,17 +64,19 @@ public class CollectionsWindowController {
     @FXML
     private TableColumn<City, Double> coordYColumn;
     @FXML
-    private TableColumn<City, Date> creationColumn;
+    private TableColumn<City, String> creationColumn;
     @FXML
     private TableColumn<City, Integer> areaColumn;
     @FXML
     private TableColumn<City, Integer> populationColumn;
     @FXML
-    private TableColumn<City, Government> governmentColumn;
+    private TableColumn<City, Double> metersAboveSeaLevelColumn;
     @FXML
-    private TableColumn<City, StandardOfLiving> standardsColumn;
+    private TableColumn<City, String> governmentColumn;
     @FXML
-    private TableColumn<City, Climate> climateColumn;
+    private TableColumn<City, String> standardsColumn;
+    @FXML
+    private TableColumn<City, String> climateColumn;
     @FXML
     private TableColumn<City, String> governorColumn;
 
@@ -64,6 +88,10 @@ public class CollectionsWindowController {
 
     @FXML
     public void initialize() {
+        // handle locales
+        currentBundle = ResourceBundle.getBundle("MessagesBundle", supportedLocales.get(currentLocaleIndex), new UTF8Control());
+        updateUI();
+
         // init commands
         CommandLoaderUtility.initializeCommands();
 
@@ -77,16 +105,17 @@ public class CollectionsWindowController {
         usernameText.setText(currentUsername);
 
         // Setup cellValueFactories
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        coordXColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getCoordinates().getX()));
-        coordYColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getCoordinates().getY()));
-        creationColumn.setCellValueFactory(new PropertyValueFactory<>("creationDate"));
-        areaColumn.setCellValueFactory(new PropertyValueFactory<>("area"));
-        populationColumn.setCellValueFactory(new PropertyValueFactory<>("population"));
-        governmentColumn.setCellValueFactory(new PropertyValueFactory<>("government"));
-        standardsColumn.setCellValueFactory(new PropertyValueFactory<>("standardOfLiving"));
-        climateColumn.setCellValueFactory(new PropertyValueFactory<>("climate"));
+        idColumn.setCellValueFactory(cellData -> new SimpleLongProperty(cellData.getValue().getId()).asObject());
+        nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+        coordXColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getCoordinates().getX()).asObject());
+        coordYColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getCoordinates().getY()).asObject());
+        creationColumn.setCellValueFactory(cellData -> new SimpleStringProperty(getDate(cellData.getValue().getCreationDate())));
+        areaColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getArea()).asObject());
+        populationColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getPopulation()).asObject());
+        metersAboveSeaLevelColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getMetersAboveSeaLevel()).asObject());
+        climateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getClimate().toString()));
+        governmentColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGovernment().toString()));
+        standardsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStandardOfLiving().toString()));
         governorColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGovernor() != null ? cellData.getValue().getGovernor().getName() : ""));
 
         // Start the timeline
@@ -95,94 +124,65 @@ public class CollectionsWindowController {
         timeline.play();
     }
 
-
-
-    private void loadCollection() {
-        try {
-            SingleCommandExecutor executor = new SingleCommandExecutor(CommandDescriptionHolder.getInstance().getCommands(), CommandMode.GUIMode);
-            executor.executeCommand("show");
-//            TreeSet<City> collection = DataHolder.getInstance().getCollection();
-
-            // fill TableView columns with collection
-            ObservableList<City> observableList = FXCollections.observableArrayList(DataHolder.getInstance().getCollection());
-            table.setItems(observableList);
-
-//            for (City obj2: collection) {
-//                System.out.println(obj2.toString());
-//            }
-//            for (City obj: observableList) {
-//                System.out.println(obj.toString());
-//            }
-        } catch (CommandsNotLoadedException e) {
-            logger.info("something wrong while loading collection" + e.getMessage());
-        }
+    private String getDate(Date date) {
+        if (date == null) return "null";
+        DateFormat formatter = DateFormat.getDateInstance(DateFormat.FULL, currentBundle.getLocale());
+        return formatter.format(date);
     }
 
+    private void loadCollection() {
+        Client client = Client.getInstance();
+        ShowRequestSender rqSender = new ShowRequestSender();
+        ShowResponse response = rqSender.sendCommand(client.getName(), client.getPasswd(), new CommandDescription("show", new ExternalBaseReceiverCaller()), new String[]{"show"}, ServerConnectionHandler.getCurrentConnection());
+        setCollection(response.getCityTreeSet());
+    }
 
-
-
-//    /**
-//     * method for loading commands from the old Main class
-//     */
-//    private void loadCommands() {
-//        boolean commandsNotLoaded = true;
-//        int waitingCount = 4000;
-//        while (commandsNotLoaded) {
-//            try {
-//                SingleCommandExecutor executor = new SingleCommandExecutor(CommandDescriptionHolder.getInstance().getCommands(), CommandMode.GUIMode);
-//                commandsNotLoaded = false;
-//
-//                executor.executeCommand();
-//            } catch (CommandsNotLoadedException e) {
-//                Alert alert = new Alert(Alert.AlertType.ERROR);
-//                alert.setHeaderText(null);
-//                alert.setContentText("We couldn't get commands from server last time, so now we'll try to do this again...");
-//                alert.showAndWait();
-//
-//                AtomicInteger secondsRemained = new AtomicInteger(waitingCount / 1000 - 1);
-//
-//                javax.swing.Timer timer = new Timer(1000, (x) -> alert.setContentText("Re-attempt in " + secondsRemained.getAndDecrement() + " seconds. You may interrupt awaiting by hitting Enter."));
-//                alert.showAndWait();
-//
-//                timer.start();
-//
-//                CountDownLatch latch = new CountDownLatch(1);
-//
-//                int finalWaitingCount = waitingCount;
-//                Runnable wait = () -> {
-//                    try {
-//                        Thread.sleep(finalWaitingCount);
-//                        latch.countDown();
-//                    } catch (InterruptedException ex) {
-//                        alert.setContentText("Continuing...");
-//                        alert.showAndWait();
-//                    }
-//                };
-//
-//                Thread tWait = new Thread(wait);
-//                //Thread tForceInt = new Thread(forceInterrupt);
-//
-//                tWait.start();
-//                //tForceInt.start();
-//
-//                try {
-//                    latch.await();
-//                    timer.stop();
-//                    tWait.interrupt();
-//                } catch (InterruptedException ex) {
-//                    alert.setContentText("Interrupted loading");
-//                    alert.showAndWait();
-//                }
-//
-//                waitingCount += 2000;
-//            }
-//        }
-//    }
+    public void setCollection(TreeSet<City> collection) {
+        this.collection = collection;
+        if (collection != null) {
+            for (City city : collection) {
+                System.out.println(city.toString());
+            }
+            table.setItems(FXCollections.observableArrayList(collection));
+            table.refresh();
+        }
+    }
 
     @FXML
     protected void onCreateButtonClick() {
         CreateWindow createWindow = new CreateWindow();
         createWindow.show();
+    }
+
+    @FXML
+    protected void onGeoIconClick() {
+        currentLocaleIndex = (currentLocaleIndex + 1) % supportedLocales.size();
+        currentBundle = ResourceBundle.getBundle("MessagesBundle", supportedLocales.get(currentLocaleIndex), new UTF8Control());
+        updateUI();
+    }
+
+    private void updateUI() {
+//        exitButton.setText(locally.getKeyString("Exit"));
+//        logoutButton.setText(locally.getKeyString("LogOut"));
+//        helpButton.setText(locally.getKeyString("Help"));
+//        infoButton.setText(locally.getKeyString("Info"));
+//        addButton.setText(locally.getKeyString("Add"));
+//        updateButton.setText(locally.getKeyString("Update"));
+//        removeByIdButton.setText(locally.getKeyString("RemoveByID"));
+//        clearButton.setText(locally.getKeyString("Clear"));
+//        executeScriptButton.setText(locally.getKeyString("ExecuteScript"));
+//        headButton.setText(locally.getKeyString("Head"));
+//        addIfMaxButton.setText(locally.getKeyString("AddIfMax"));
+//        addIfMinButton.setText(locally.getKeyString("AddIfMin"));
+//        sumOfPriceButton.setText(locally.getKeyString("SumOfPrice"));
+//        filterByPriceButton.setText(locally.getKeyString("FilterByPrice"));
+//        filterContainsPartNumberButton.setText(locally.getKeyString("FilterContainsPartNumber"));
+//
+//        tableTab.setText(locally.getKeyString("TableTab"));
+//        visualTab.setText(locally.getKeyString("VisualTab"));
+
+//        nameColumn.setText(currentBundle.getString("name"));
+//        creationColumn.setText(currentBundle.getString("creationDate"));
     }
 
     @FXML

@@ -41,10 +41,10 @@ public class ShowCommand implements BaseCommand {
 
     @Override
     public void execute(String[] args) {
-        PostgreSQLManager manager = new PostgreSQLManager();
+        //PostgreSQLManager manager = new PostgreSQLManager();
         CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
-        List<City> cityList = new ArrayList<>(manager.getCollectionFromDatabase());
-        collectionHandler.addMissingCitiesToCollection(cityList);
+        //List<City> cityList = new ArrayList<>(manager.getCollectionFromDatabase());
+        //collectionHandler.addMissingCitiesToCollection(cityList);
 
         // Set the response as ShowResponse with the cityTreeSet
         response = ShowResponse.of("Command executed successfully.", collectionHandler.getCollection());

@@ -2,12 +2,12 @@ package collectionStorageManager;
 
 import clientLogic.ClientHandler;
 import clientLogic.PasswordHandler;
+import main.ConnectionUtility;
 import models.*;
 import models.handlers.CityHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.security.SecureRandom;
 import java.sql.*;
 import java.sql.Date;
@@ -15,18 +15,14 @@ import java.util.*;
 
 public class PostgreSQLManager implements DatabaseManager {
     private static final Logger logger = LogManager.getLogger("io.github.worthant.lab7.PostgreSQLManager");
-
     @Override
     public ArrayList<City> getCollectionFromDatabase() {
         ArrayList<City> data = new ArrayList<>();
         HashMap<Integer, Coordinates> coordinatesMap = new HashMap<>();
         HashMap<Integer, Human> humansMap = new HashMap<>();
+        Connection connection = ConnectionUtility.getConnection();
 
         try {
-            Properties info = new Properties();
-            info.load(this.getClass().getResourceAsStream("/db.cfg"));
-            // "jdbc:postgresql://localhost:5432/studs"
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/studs", info);
             Statement statement = connection.createStatement();
 
             ResultSet resultCoordinatesSet = statement.executeQuery("SELECT * FROM Coordinates");
@@ -67,18 +63,17 @@ public class PostgreSQLManager implements DatabaseManager {
             }
             return data;
 
-        } catch (SQLException | IOException e) {
-            logger.error("something went wrong during i/o ");
+        } catch (SQLException e) {
+            logger.error("something went wrong during getting collection from db", e);
         }
         return data;
     }
 
     @Override
     public void writeCollectionToDatabase() {
+        Connection connection = ConnectionUtility.getConnection();
+
         try {
-            Properties info = new Properties();
-            info.load(this.getClass().getResourceAsStream("/db.cfg"));
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/studs", info);
             connection.setAutoCommit(false);
 
             // Retrieve all existing city IDs from the database
@@ -96,24 +91,22 @@ public class PostgreSQLManager implements DatabaseManager {
                 }
             }
             connection.commit();
-        } catch (SQLException | IOException e) {
-            logger.error("something went wrong during i/o ", e);
+        } catch (SQLException e) {
+            logger.error("something went wrong during writing collection to db", e);
         }
     }
 
 
     public long writeObjectToDatabase(City city) {
+        Connection connection = ConnectionUtility.getConnection();
         long generatedId = -1;
         try {
-            Properties info = new Properties();
-            info.load(this.getClass().getResourceAsStream("/db.cfg"));
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/studs", info);
             connection.setAutoCommit(false);
 
             generatedId = addElementToDatabase(city, connection);
             connection.commit();
-        } catch (SQLException | IOException e) {
-            logger.error("something went wrong during i/o ");
+        } catch (SQLException e) {
+            logger.error("something went wrong during writing object to db", e);
         }
         return generatedId;
     }
@@ -180,11 +173,8 @@ public class PostgreSQLManager implements DatabaseManager {
 
 
     public boolean removeCityById(long cityId) {
+        Connection connection = ConnectionUtility.getConnection();
         try {
-            Properties info = new Properties();
-            info.load(this.getClass().getResourceAsStream("/db.cfg"));
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/studs", info);
-
             String deleteCityQuery = "DELETE FROM City WHERE id = ? AND id IN (SELECT city_id FROM Creator WHERE user_id = ?)";
             PreparedStatement deleteCityStatement = connection.prepareStatement(deleteCityQuery);
             deleteCityStatement.setLong(1, cityId);
@@ -192,18 +182,15 @@ public class PostgreSQLManager implements DatabaseManager {
             int rowsAffected = deleteCityStatement.executeUpdate();
 
             return rowsAffected > 0;
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
 
     public long authUser(String name, char[] passwd) {
+        Connection connection = ConnectionUtility.getConnection();
         try {
-            Properties info = new Properties();
-            info.load(this.getClass().getResourceAsStream("/db.cfg"));
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/studs", info);
-
             String selectUserQuery = "SELECT id, passwd_hash, passwd_salt FROM \"User\" WHERE name = ?";
             PreparedStatement selectUserStatement = connection.prepareStatement(selectUserQuery);
             selectUserStatement.setString(1, name);
@@ -218,18 +205,15 @@ public class PostgreSQLManager implements DatabaseManager {
                     return resultSet.getLong("id");
                 }
             }
-        } catch (SQLException | IOException e) {
-            logger.error("something went wrong during i/o ");
+        } catch (SQLException e) {
+            logger.error("something went wrong during authentication process", e);
         }
         return -1;
     }
 
     public long regUser(String name, char[] passwd) {
+        Connection connection = ConnectionUtility.getConnection();
         try {
-            Properties info = new Properties();
-            info.load(this.getClass().getResourceAsStream("/db.cfg"));
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/studs", info);
-
             // Check if a user with the provided name already exists
             String selectUserQuery = "SELECT COUNT(*) FROM \"User\" WHERE name = ?";
             PreparedStatement selectUserStatement = connection.prepareStatement(selectUserQuery);
@@ -263,20 +247,17 @@ public class PostgreSQLManager implements DatabaseManager {
                     return generatedKeys.getLong(1);
                 }
             }
-        } catch (SQLException | IOException e) {
-            logger.error("something went wrong during i/o ");
+        } catch (SQLException e) {
+            logger.error("something went wrong during registration process", e);
         }
         return -1;
     }
 
     public List<Long> clearCitiesForUser() {
+        Connection connection = ConnectionUtility.getConnection();
         long userId = ClientHandler.getUserId();
         List<Long> deletedCityIds = new ArrayList<>();
         try {
-            Properties info = new Properties();
-            info.load(this.getClass().getResourceAsStream("/db.cfg"));
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/studs", info);
-
             // Get city IDs that belong to the current user
             String selectCityIdsQuery = "SELECT city_id FROM Creator WHERE user_id = ?";
             PreparedStatement selectCityIdsStatement = connection.prepareStatement(selectCityIdsQuery);
@@ -292,18 +273,15 @@ public class PostgreSQLManager implements DatabaseManager {
             deleteCitiesStatement.setLong(1, userId);
             deleteCitiesStatement.executeUpdate();
 
-        } catch (SQLException | IOException e) {
-            logger.error("something went wrong during i/o ");
+        } catch (SQLException e) {
+            logger.error("something went wrong during clearing collections for user", e);
         }
         return deletedCityIds;
     }
 
     public boolean isCityOwnedByUser(long cityId) {
+        Connection connection = ConnectionUtility.getConnection();
         try {
-            Properties info = new Properties();
-            info.load(this.getClass().getResourceAsStream("/db.cfg"));
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/studs", info);
-
             String checkOwnershipQuery = "SELECT COUNT(*) FROM Creator WHERE city_id = ? AND user_id = ?";
             PreparedStatement checkOwnershipStatement = connection.prepareStatement(checkOwnershipQuery);
             checkOwnershipStatement.setLong(1, cityId);
@@ -314,17 +292,15 @@ public class PostgreSQLManager implements DatabaseManager {
                 int count = resultSet.getInt(1);
                 return count <= 0;
             }
-        } catch (SQLException | IOException e) {
-            logger.error("something went wrong during i/o ");
+        } catch (SQLException e) {
+            logger.error("something went wrong during checking object ownership", e);
         }
         return true;
     }
 
     public boolean updateCity(City obj) {
+        Connection connection = ConnectionUtility.getConnection();
         try {
-            Properties info = new Properties();
-            info.load(this.getClass().getResourceAsStream("/db.cfg"));
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/studs", info);
             connection.setAutoCommit(false);
 
             // Update the Human table
@@ -362,8 +338,8 @@ public class PostgreSQLManager implements DatabaseManager {
 
             connection.commit();
             return true;
-        } catch (SQLException | IOException e) {
-            logger.error("something went wrong during i/o ");
+        } catch (SQLException e) {
+            logger.error("something went wrong during updating city object", e);
         }
         return false;
     }

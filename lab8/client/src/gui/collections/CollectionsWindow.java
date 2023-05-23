@@ -11,7 +11,6 @@ import java.net.URL;
 public class CollectionsWindow {
 
     private Stage stage;
-    private Scene scene;
 
     public CollectionsWindow() {
         try {
@@ -20,7 +19,7 @@ public class CollectionsWindow {
             FXMLLoader loader = new FXMLLoader(fxmlLocation);
             Parent root = loader.load();
 
-            scene = new Scene(root, 920, 600);
+            Scene scene = new Scene(root, 920, 600);
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();

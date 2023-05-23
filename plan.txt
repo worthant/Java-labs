@@ -1,7 +1,0 @@
-1) Прочитать мануал к лабе: https://docs.google.com/document/d/1ZV8LvnAlaZj17FwegsXJwbwSMUkyRLKhDj3FfvMCWbM/edit
-2) Прочитать про шаблоны проектирования: https://se.ifmo.ru/documents/10180/1422934/patterns_notes.pdf/f3975b88-e287-a663-91f4-61be1c0fb739
-3) Прочитать про многопоточность: https://se.ifmo.ru/documents/10180/1422934/prog-concurrency.pdf/da25f4c8-02fc-506d-79da-7ea9a2186dac
-.
-.
-.
-4) Разобраться, сотавить структуру своей программы на примере варианта 4. Попробовать сделать UML и написать код, чтобы показать потом практику.

@@ -11,5 +11,13 @@ public enum Government implements Serializable {
     DEMARCHY,
     COMMUNISM,
     NOOCRACY,
-    DEMOCRACY
+    DEMOCRACY,
+    MONARCHY,
+    OLIGARCHY,
+    PLUTOCRACY,
+    THEOCRACY,
+    TECHNOCRACY,
+    FEDERAL_REPUBLIC,
+    PARLIAMENTARY_SYSTEM,
+    AUTOCRACY
 }

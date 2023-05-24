@@ -1,14 +1,50 @@
 package gui.create;
 
+import client.Client;
 import client.DataHolder;
+import commandLogic.CommandDescription;
+import commandLogic.commandReceiverLogic.callers.ExternalBaseReceiverCaller;
+import commandManager.CommandDescriptionHolder;
+import commandManager.CommandMode;
+import commandManager.SingleCommandExecutor;
+import exceptions.CommandsNotLoadedException;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+import main.Utilities;
+import models.*;
+import models.validators.*;
+import org.controlsfx.validation.ValidationResult;
+import org.controlsfx.validation.ValidationSupport;
+import org.controlsfx.validation.Validator;
+import org.controlsfx.validation.decoration.GraphicValidationDecoration;
+import requestLogic.requestSenders.CommandRequestSender;
+import responses.CommandStatusResponse;
+import serverLogic.ServerConnectionHandler;
 
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+/**
+ * Controller class for the Create Window.
+ * This class handles user interactions in the Create Window UI.
+ */
 public class CreateWindowController {
     @FXML
-    private TextField CoordYField;
+    private Button cancelButton;
+    @FXML
+    private Button createButton;
+    @FXML
+    private TextField nameField;
+    @FXML
+    private TextField coordXField;
+    @FXML
+    private TextField coordYField;
     @FXML
     private TextField areaField;
     @FXML
@@ -16,35 +52,173 @@ public class CreateWindowController {
     @FXML
     private TextField metersAboveSeaLevelField;
     @FXML
-    private ComboBox climateComboBox;
+    private ChoiceBox<String> climateChoiceBox;
     @FXML
-    private ComboBox governmentComboBox;
+    private ChoiceBox<String> governmentChoiceBox;
     @FXML
-    private ComboBox standardsComboBox;
+    private ChoiceBox<String> standardsChoiceBox;
     @FXML
     private TextField governorField;
-    @FXML
-    private TextField CoordXField;
-    @FXML
-    private TextField nameField;
 
+    private ValidationSupport validationSupport;
+
+    @FXML
+    public void initialize() {
+        Arrays.stream(Climate.values()).forEach(value -> climateChoiceBox.getItems().add(value.name()));
+        Arrays.stream(Government.values()).forEach(value -> governmentChoiceBox.getItems().add(value.name()));
+        Arrays.stream(StandardOfLiving.values()).forEach(value -> standardsChoiceBox.getItems().add(value.name()));
+    }
+
+
+    /**
+     * This method is invoked when the "Create" button is clicked.
+     * It validates the input fields and, if valid, creates a new City object and sends it to the server.
+     * If the fields are not valid, it shows an error message.
+     */
     @FXML
     protected void onCreateButtonClick() {
-        // pass all the data to data holder for buildObject()
-        DataHolder data = DataHolder.getInstance();
-        data.setName(nameField.getText());
-        data.setCoordX(CoordXField.getText());
-        data.setCoordY(CoordYField.getText());
-        data.setArea(areaField.getText());
-        data.setPopulation(populationField.getText());
-        data.setMetersAboveSeaLevel(metersAboveSeaLevelField.getText());
-        data.setClimate(climateComboBox.getValue().toString());
-        data.setGovernment(governmentComboBox.getValue().toString());
-        data.setStandards(standardsComboBox.getValue().toString());
-        data.setGovernor(governorField.getText());
+        // Initialize the validation support
+        ValidationSupport validationSupport = new ValidationSupport();
+        validationSupport.setValidationDecorator(new GraphicValidationDecoration());
 
-        // that's all, now we can close that window
+
+        // Validators for each field
+        validationSupport.registerValidator(nameField, Validator.createPredicateValidator(
+                (String value) -> new NameValidator().validate(value),
+                "Name is not valid. " + new NameValidator().getDescr()
+        ));
+        validationSupport.registerValidator(coordXField, Validator.createPredicateValidator(
+                (String value) -> value.matches("\\d+") && new CoordinateXValidator().validate(Integer.valueOf(value)),
+                "CoordX is not valid. " + new CoordinateXValidator().getDescr()
+        ));
+        validationSupport.registerValidator(coordYField, Validator.createPredicateValidator(
+                (String value) -> value.matches("-?\\d+(\\.\\d+)?") && new CoordinateYValidator().validate(Double.valueOf(value)),
+                "CoordY is not valid. " + new CoordinateYValidator().getDescr()
+        ));
+        validationSupport.registerValidator(areaField, Validator.createPredicateValidator(
+                (String value) -> value.matches("\\d+") && new AreaValidator().validate(Integer.valueOf(value)),
+                "Area is not valid. " + new AreaValidator().getDescr()
+        ));
+        validationSupport.registerValidator(populationField, Validator.createPredicateValidator(
+                (String value) -> value.matches("\\d+") && new PopulationValidator().validate(Integer.valueOf(value)),
+                "Population is not valid. " + new PopulationValidator().getDescr()
+        ));
+        validationSupport.registerValidator(metersAboveSeaLevelField, Validator.createPredicateValidator(
+                (String value) -> value.matches("-?\\d+(\\.\\d+)?") && new MetersAboveSeaLevelValidator().validate(Double.valueOf(value)),
+                "Meters Above Sea Level is not valid. " + new MetersAboveSeaLevelValidator().getDescr()
+        ));
+        validationSupport.registerValidator(climateChoiceBox, Validator.createPredicateValidator(
+                (String value) -> Arrays.stream(Climate.values()).anyMatch((v) -> v.name().equals(value)),
+                "Climate is not valid. It should be one of " + Arrays.toString(Climate.values())
+        ));
+        validationSupport.registerValidator(governmentChoiceBox, Validator.createPredicateValidator(
+                (String value) -> Arrays.stream(Government.values()).anyMatch((v) -> v.name().equals(value)),
+                "Government is not valid. It should be one of " + Arrays.toString(Government.values())
+        ));
+        validationSupport.registerValidator(standardsChoiceBox, Validator.createPredicateValidator(
+                (String value) -> Arrays.stream(StandardOfLiving.values()).anyMatch((v) -> v.name().equals(value)),
+                "Standard Of Living is not valid. It should be one of " + Arrays.toString(StandardOfLiving.values())
+        ));
+
+
+        // Check the validity of all the fields
+        if (!validationSupport.isInvalid()) {
+            long id = Utilities.generateId();
+            String name = nameField.getText();
+            Coordinates coordinates = new Coordinates(Integer.parseInt(coordXField.getText()), Double.parseDouble(coordYField.getText()));
+            java.util.Date creationDate = java.sql.Date.valueOf(LocalDate.now());
+            Integer area = Integer.valueOf(areaField.getText());
+            int population = Integer.parseInt(populationField.getText());
+            Double metersAboveSeaLevel = Double.valueOf(metersAboveSeaLevelField.getText());
+            Climate climate = climateChoiceBox.getValue() != null ? Climate.valueOf(climateChoiceBox.getValue()) : null;
+            Government government = governmentChoiceBox.getValue() != null ? Government.valueOf(governmentChoiceBox.getValue()) : null;
+            StandardOfLiving standards = standardsChoiceBox.getValue() != null ? StandardOfLiving.valueOf(standardsChoiceBox.getValue()) : null;
+            Human human = new Human(governorField.getText());
+
+            City city = new City(id, name, coordinates, creationDate, area, population,
+                    metersAboveSeaLevel, climate, government, standards, human);
+
+            // Validate created City object again
+            models.validators.Validator<City> validator = new CityValidator();
+            if (validator.validate(city)) {
+                DataHolder.getInstance().setCityObject(city);
+                try {
+                    ExecutorService service = Executors.newSingleThreadExecutor();
+                    Future<Boolean> future = service.submit(() -> {
+                        try {
+                            SingleCommandExecutor executor = new SingleCommandExecutor(CommandDescriptionHolder.getInstance().getCommands(), CommandMode.GUIMode);
+                            executor.executeCommand("add");
+                            return true;
+                        } catch (CommandsNotLoadedException e) {
+                            Platform.runLater(() -> {
+                                errorAlert("Can't load commands from server. Please wait until the server will come back");
+                            });
+                            return false;
+                        }
+                    });
+
+                    future.get();  // Wait until the command execution is completed
+
+                    Platform.runLater(() -> {
+                        CommandStatusResponse response = (CommandStatusResponse) DataHolder.getInstance().getBaseResponse();
+                        if (response != null) {
+                            infoAlert(response.getResponse());
+                        } else {
+                            errorAlert("idk why but you're object is not added, or server is just taking a nap");
+                        }
+                        ((Stage) nameField.getScene().getWindow()).close();
+                    });
+
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                displayValidationErrors();
+            }
+        } else {
+            displayValidationErrors();
+        }
+    }
+
+    /**
+     * This method is invoked when the "Cancel" button is clicked.
+     * It closes the Create Window.
+     */
+    @FXML
+    protected void onCancelButtonClick() {
         ((Stage) nameField.getScene().getWindow()).close();
     }
 
+    /**
+     * Shows an alert dialog with the given information.
+     * @param info The information to be shown in the alert dialog.
+     */
+    private void infoAlert(String info) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.setContentText(info);
+        alert.showAndWait();
+    }
+
+    /**
+     * Shows an alert dialog with the given error message.
+     * @param error The error message to be shown in the alert dialog.
+     */
+    private void errorAlert(String error) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(null);
+        alert.setContentText(error);
+        alert.showAndWait();
+    }
+
+    private void displayValidationErrors() {
+        validationSupport.getRegisteredControls().forEach(control -> {
+            ValidationResult result = validationSupport.getValidationResult();
+            if (result != null && !result.getErrors().isEmpty()) {
+                String errorMessage = result.getErrors().toString();
+                errorAlert(errorMessage);
+            }
+        });
+    }
 }

@@ -133,7 +133,8 @@ public class CollectionsWindowController {
     private void loadCollection() {
         Client client = Client.getInstance();
         ShowRequestSender rqSender = new ShowRequestSender();
-        ShowResponse response = rqSender.sendCommand(client.getName(), client.getPasswd(), new CommandDescription("show", new ExternalBaseReceiverCaller()), new String[]{"show"}, ServerConnectionHandler.getCurrentConnection());
+        ShowResponse response = rqSender.sendCommand(client.getName(), client.getPasswd(),
+                new CommandDescription("show", new ExternalBaseReceiverCaller()), new String[]{"show"}, ServerConnectionHandler.getCurrentConnection());
         setCollection(response.getCityTreeSet());
     }
 

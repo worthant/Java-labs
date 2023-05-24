@@ -1,5 +1,6 @@
 package commandManager.externalRecievers;
 
+import client.DataHolder;
 import commandLogic.CommandDescription;
 import commandLogic.commandReceiverLogic.receivers.ExternalArgumentReceiver;
 import exceptions.BuildObjectException;
@@ -10,6 +11,11 @@ import org.apache.logging.log4j.Logger;
 import requestLogic.requestSenders.ArgumentRequestSender;
 import responses.CommandStatusResponse;
 import serverLogic.ServerConnectionHandler;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class ArgumentCityCommandReceiver implements ExternalArgumentReceiver<City> {
 
@@ -27,15 +33,27 @@ public class ArgumentCityCommandReceiver implements ExternalArgumentReceiver<Cit
 
     @Override
     public boolean receiveCommand(String name, char[] passwd, CommandDescription command, String[] args) throws BuildObjectException {
+        ExecutorService service = Executors.newSingleThreadExecutor();
         city = modeManager.buildObject();
-        CommandStatusResponse response = new ArgumentRequestSender<City>().sendCommand(name, passwd, command, args, city, ServerConnectionHandler.getCurrentConnection());
-        if (response != null) {
-            logger.info("Status code: " + response.getStatusCode());
-            logger.info("Response: \n" + response.getResponse());
-            return true;
+
+        Future<CommandStatusResponse> futureResponse = service.submit(() -> new ArgumentRequestSender<City>().sendCommand(name, passwd, command, args, city, ServerConnectionHandler.getCurrentConnection()));
+
+        try {
+            CommandStatusResponse response = futureResponse.get();
+
+            if (response != null) {
+                logger.info("Status code: " + response.getStatusCode());
+                logger.info("Response: \n" + response.getResponse());
+                DataHolder.getInstance().setBaseResponse(response);
+                return true;
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         }
+
         return false;
     }
+
 
     @Override
     public City getArguemnt() {

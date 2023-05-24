@@ -89,7 +89,6 @@ public class LoginWindowController {
             AuthResponse response = rqSender.sendAuthData(username, password, ServerConnectionHandler.getCurrentConnection());
 
             if (response.isAuth()) {
-                // If authentication is successful, close the login window and open the collections window
                 Client.getInstance(username, password);
                 Stage stage = (Stage) signInButton.getScene().getWindow();
                 stage.close();
@@ -97,17 +96,10 @@ public class LoginWindowController {
                 CollectionsWindow collectionsWindow = new CollectionsWindow();
                 collectionsWindow.show();
             } else {
-                // If authentication fails, show an error message
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeaderText(null);
-                alert.setContentText("There is no user with this name, or password is incorrect");
-                alert.showAndWait();
+                errorAlert("There is no user with this name, or password is incorrect");
             }
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText(null);
-            alert.setContentText("Server is dead :(");
-            alert.showAndWait();
+            errorAlert("Server is dead :(");
         }
     }
 
@@ -121,23 +113,36 @@ public class LoginWindowController {
             RegResponse response = rqSender.sendRegData(username, password, ServerConnectionHandler.getCurrentConnection());
 
             if (response.isReg()) {
-                // If authentication is successful, close the login window and open the collections window
                 Client.getInstance(username, password);
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText(null);
-                alert.setContentText("User successfully registered");
-                alert.showAndWait();
+                infoAlert("User successfully registered");
             } else {
-                // If authentication fails, show an error message
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeaderText(null);
-                alert.setContentText("There is no user with this name, or password is incorrect");
-                alert.showAndWait();
+                errorAlert("There is no user with this name, or password is incorrect");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Shows an alert dialog with the given information.
+     * @param info The information to be shown in the alert dialog.
+     */
+    private void infoAlert(String info) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.setContentText(info);
+        alert.showAndWait();
+    }
+
+    /**
+     * Shows an alert dialog with the given error message.
+     * @param error The error message to be shown in the alert dialog.
+     */
+    private void errorAlert(String error) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(null);
+        alert.setContentText(error);
+        alert.showAndWait();
     }
 }
 

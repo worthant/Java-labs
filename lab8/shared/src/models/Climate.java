@@ -8,5 +8,13 @@ import java.io.Serializable;
 public enum Climate implements Serializable {
     TROPICAL_SAVANNA,
     OCEANIC,
-    STEPPE
+    STEPPE,
+    MEDITERRANEAN,
+    SUBARCTIC,
+    TUNDRA,
+    DESERT,
+    RAINFOREST,
+    CONTINENTAL,
+    MARINE_WEST_COAST,
+    HIGHLAND
 }

@@ -15,57 +15,41 @@ import java.util.*;
 
 public class PostgreSQLManager implements DatabaseManager {
     private static final Logger logger = LogManager.getLogger("io.github.worthant.lab7.PostgreSQLManager");
+
     @Override
     public ArrayList<City> getCollectionFromDatabase() {
         ArrayList<City> data = new ArrayList<>();
-        HashMap<Integer, Coordinates> coordinatesMap = new HashMap<>();
-        HashMap<Integer, Human> humansMap = new HashMap<>();
         Connection connection = ConnectionUtility.getConnection();
 
         try {
             Statement statement = connection.createStatement();
 
-            ResultSet resultCoordinatesSet = statement.executeQuery("SELECT * FROM Coordinates");
-            while (resultCoordinatesSet.next()) {
-                int id = resultCoordinatesSet.getInt("id");
-                int x = resultCoordinatesSet.getInt("x");
-                double y = resultCoordinatesSet.getDouble("y");
-                coordinatesMap.put(id, new Coordinates(x, y));
-            }
+            String query = "SELECT * FROM City " +
+                    "JOIN Coordinates ON City.coordinates_id = Coordinates.id " +
+                    "JOIN Human ON City.governor_id = Human.id";
 
-            ResultSet resultHumanSet = statement.executeQuery("SELECT * FROM Human");
-            while (resultHumanSet.next()) {
-                int id = resultHumanSet.getInt("id");
-                String name = resultHumanSet.getString("name");
-                humansMap.put(id, new Human(name));
-            }
+            ResultSet resultSet = statement.executeQuery(query);
 
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM City");
             while (resultSet.next()) {
                 long id = resultSet.getLong("id");
                 String name = resultSet.getString("name");
-                Coordinates coordinates = coordinatesMap.get(resultSet.getInt("coordinates_id"));
+                Coordinates coordinates = new Coordinates(resultSet.getInt("x"), resultSet.getDouble("y"));
                 Date creationDate = resultSet.getDate("creation_date");
                 Integer area = resultSet.getInt("area");
                 int population = resultSet.getInt("population");
                 Double metersAboveSeaLevel = resultSet.getDouble("meters_above_sea_level");
-                if (resultSet.wasNull()) {
-                    metersAboveSeaLevel = null;
-                }
                 Climate climate = Climate.valueOf(resultSet.getString("climate"));
                 Government government = Government.valueOf(resultSet.getString("government"));
-                int governorId = resultSet.getInt("governor_id");
-                Human governor = humansMap.get(governorId);
+                Human governor = new Human(resultSet.getString("name"));
                 StandardOfLiving standardOfLiving = StandardOfLiving.valueOf(resultSet.getString("standard_of_living"));
 
                 City city = new City(id, name, coordinates, creationDate, area, population, metersAboveSeaLevel, climate, government, standardOfLiving, governor);
                 data.add(city);
             }
-            return data;
-
         } catch (SQLException e) {
             logger.error("something went wrong during getting collection from db", e);
         }
+
         return data;
     }
 
@@ -343,4 +327,29 @@ public class PostgreSQLManager implements DatabaseManager {
         }
         return false;
     }
+
+    @Override
+    public Map<Long, String> getOwnerShipMap() {
+        Map<Long, String> ownershipMap = new HashMap<>();
+        Connection connection = ConnectionUtility.getConnection();
+
+        try {
+            String query = "SELECT c.id as city_id, u.name as client_name FROM City c " +
+                    "JOIN Creator cr ON c.id = cr.city_id " +
+                    "JOIN \"User\" u ON cr.user_id = u.id";
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                long cityId = resultSet.getLong("city_id");
+                String clientName = resultSet.getString("client_name");
+                ownershipMap.put(cityId, clientName);
+            }
+        } catch (SQLException e) {
+            logger.error("Error during getting ownership map", e);
+        }
+
+        return ownershipMap;
+    }
+
 }

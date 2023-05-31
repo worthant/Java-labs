@@ -99,7 +99,7 @@ public class LoginWindowController {
                 errorAlert("There is no user with this name, or password is incorrect");
             }
         } catch (Exception e) {
-            errorAlert("Server is dead :(");
+            //errorAlert("Server is dead :(");
         }
     }
 

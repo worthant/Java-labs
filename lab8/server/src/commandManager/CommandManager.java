@@ -47,6 +47,7 @@ public class CommandManager {
         commands.put("add", new AddCommand());
         commands.put("add_if_min", new AddIfMinCommand());
         commands.put("remove_greater", new RemoveGreaterCommand());
+        commands.put("get_ownership", new GetOwnershipCommand());
 
     }
 

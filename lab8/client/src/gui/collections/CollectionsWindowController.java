@@ -1,43 +1,35 @@
 package gui.collections;
+
 import client.Client;
-import client.DataHolder;
 import commandLogic.CommandDescription;
 import commandLogic.commandReceiverLogic.callers.ExternalBaseReceiverCaller;
-import commandManager.*;
-import exceptions.CommandsNotLoadedException;
-import gui.LocalizationUtility;
+import commandManager.CommandLoaderUtility;
 import gui.UTF8Control;
 import gui.create.CreateWindow;
+import gui.visualization.VisualizationWindow;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
-import javafx.beans.property.*;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import models.City;
-import models.Climate;
-import models.Government;
-import models.StandardOfLiving;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import requestLogic.requestSenders.AuthRequestSender;
 import requestLogic.requestSenders.ShowRequestSender;
-import responses.AuthResponse;
 import responses.ShowResponse;
 import serverLogic.ServerConnectionHandler;
 
 import java.text.DateFormat;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 public class CollectionsWindowController {
     private static final Logger logger = LogManager.getLogger("lab8");
@@ -193,7 +185,26 @@ public class CollectionsWindowController {
     protected void onDeleteButtonClick() {}
 
     @FXML
-    protected void onVisualizeButtonClick() {}
+    protected void onVisualizeButtonClick() {
+        VisualizationWindow visualizationWindow = new VisualizationWindow(collection);
+        visualizationWindow.show();
+        // Start the timeline
+         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(4), event -> loadCollectionToVisualizationWindow(visualizationWindow)));
+         timeline.setCycleCount(Timeline.INDEFINITE);
+         timeline.play();
+    }
+
+    private void loadCollectionToVisualizationWindow(VisualizationWindow visualizationWindow) {
+        visualizationWindow.loadCities(collection);
+//        for (City city : collection) {
+//            String color = "red";
+//            int size = (int) Math.log(city.getPopulation());
+//            double lng = convertCoordinate(city.getCoordinates().getX(), Integer.MIN_VALUE, Integer.MAX_VALUE, -180, 180);
+//            double lat = convertCoordinate(city.getCoordinates().getY(), Double.MIN_VALUE, Double.MAX_VALUE, -90, 90);
+//
+//            visualizationWindow.addCity(lat, lng, color, size, city.getName());
+//        }
+    }
 
     @FXML
     protected void onCommandsButtonClick() {}

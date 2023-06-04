@@ -11,17 +11,16 @@ function init() {
     });
 }
 
-function addCity(name, latitude, longitude, owner, iconColor) {
+function addCity(name, latitude, longitude, owner, iconName) {
     var placemark = new ymaps.Placemark([latitude, longitude], {
         hintContent: name,
         balloonContent: 'Owner: ' + owner
     }, {
         iconLayout: 'default#image',
-        iconImageHref: '../icons/building.png',
+        iconImageHref: '../icons/svg/' + iconName,  // The path to the icon depends on how your project is structured
         iconImageSize: [15, 15],
         iconImageOffset: [-24, -24],
-        iconContentLayout: MyIconContentLayout,
-        iconColor: iconColor
+        iconContentLayout: MyIconContentLayout
     });
 
     myMap.geoObjects.add(placemark);

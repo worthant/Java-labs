@@ -1,9 +1,6 @@
 package gui.create;
 
-import client.Client;
 import client.DataHolder;
-import commandLogic.CommandDescription;
-import commandLogic.commandReceiverLogic.callers.ExternalBaseReceiverCaller;
 import commandManager.CommandDescriptionHolder;
 import commandManager.CommandMode;
 import commandManager.SingleCommandExecutor;
@@ -12,16 +9,14 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import main.Utilities;
+import main.utilities.Utilities;
 import models.*;
 import models.validators.*;
 import org.controlsfx.validation.ValidationResult;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 import org.controlsfx.validation.decoration.GraphicValidationDecoration;
-import requestLogic.requestSenders.CommandRequestSender;
 import responses.CommandStatusResponse;
-import serverLogic.ServerConnectionHandler;
 
 import java.time.LocalDate;
 import java.util.Arrays;

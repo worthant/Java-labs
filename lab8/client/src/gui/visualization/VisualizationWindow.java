@@ -31,7 +31,7 @@ public class VisualizationWindow {
         stage = new Stage();
         WebView webView = new WebView();
         webEngine = webView.getEngine();
-        URL url = getClass().getResource("/visualization/object_manager.html");
+        URL url = getClass().getResource("/visualization/map.html");
         if (url == null) {
             throw new RuntimeException("Cannot find file map.html in html directory");
         }
@@ -61,7 +61,7 @@ public class VisualizationWindow {
                 double lng = random.nextDouble() * (179.9 - (-179.9)) + (-179.9);
                 double lat = random.nextDouble() * (89.9 - (-89.9)) + (-89.9);
 
-                String color = getIconColor(city.getId());
+                String color = getIconName(city.getId());
                 webEngine.executeScript("addCity('" + city.getName() + "', " + lng + ", " + lat + ", '" + ownershipMap.get(city.getId()) + "', '" + color + "');");
                 System.out.println(city.getName() + ": lng - " + lng + ", lat - " + lat);
             }
@@ -78,7 +78,7 @@ public class VisualizationWindow {
     }
 
 
-    private String getIconColor(Long city_id) {
+    private String getIconName(Long city_id) {
         String user = ownershipMap.get(city_id);
         return userColorMap.getOrDefault(user, null);
     }
@@ -99,13 +99,21 @@ public class VisualizationWindow {
 
         for (String user : new HashSet<>(ownershipMap.values())) {
             if (user.equals(Client.getInstance().getName())) {
-                userColorMap.put(user, "green");
+                userColorMap.put(user, "main.png");
             } else {
-                String color = String.format("#%06x", new Random().nextInt(256*256*256));
-                userColorMap.put(user, color);
+                String iconName = generateRandomIconName();
+                userColorMap.put(user, iconName);
             }
         }
     }
+
+    private String generateRandomIconName() {
+        // This depends on how you named your icons.
+        // In this example we assume you have icons named 'icon_#.svg', where # is a number between 1 and 100.
+        int iconNumber = new Random().nextInt(100) + 1;
+        return "icon_" + iconNumber + ".svg";
+    }
+
 
     public void show() {
         stage.show();

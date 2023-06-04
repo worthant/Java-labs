@@ -1,4 +1,4 @@
-package main;
+package main.utilities;
 
 import exceptions.StreamInterruptedException;
 import exceptions.WrongAmountOfArgumentsException;

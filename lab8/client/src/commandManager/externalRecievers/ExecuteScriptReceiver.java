@@ -7,7 +7,7 @@ import commandManager.CommandExecutor;
 import commandManager.CommandMode;
 import exceptions.CommandsNotLoadedException;
 import exceptions.WrongAmountOfArgumentsException;
-import main.Utilities;
+import main.utilities.Utilities;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

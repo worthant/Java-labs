@@ -2,18 +2,15 @@ package models.handlers.userMode;
 
 
 import exceptions.BuildObjectException;
-import main.Utilities;
+import main.utilities.Utilities;
 import models.City;
 import models.handlers.ModeManager;
 import models.validators.*;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * This class implements the ModeManager interface for City objects.

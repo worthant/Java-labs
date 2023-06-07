@@ -8,10 +8,13 @@ package models.validators;
  */
 public class CoordinateYValidator implements Validator<Double> {
     public String getDescr() {
-        return "value > -27";
+        return "0 <= y <= 1000";
     }
-    @Override
-    public boolean validate(Double value) {
+    @Deprecated
+    public boolean validateOld(Double value) {
         return value > -274 && value <= Double.MAX_VALUE;
     }
+
+    @Override
+    public boolean validate(Double value) {return value >= 0 & value <= 1000;}
 }

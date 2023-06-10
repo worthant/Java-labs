@@ -1,7 +1,7 @@
 package gui.login;
 
 import client.Client;
-import gui.LocalizationUtility;
+import gui.AlertUtility;
 import gui.UTF8Control;
 import gui.collections.CollectionsWindow;
 import javafx.fxml.FXML;
@@ -13,7 +13,6 @@ import responses.AuthResponse;
 import responses.RegResponse;
 import serverLogic.ServerConnectionHandler;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -62,6 +61,9 @@ public class LoginWindowController {
         updateUI();
     }
 
+    /**
+     * Update LoginWindow UI
+     */
     private void updateUI() {
         accountLabel.setText(currentBundle.getString("accountLabel"));
         welcomeLabel.setText(currentBundle.getString("welcomeLabel"));
@@ -93,10 +95,11 @@ public class LoginWindowController {
                 Stage stage = (Stage) signInButton.getScene().getWindow();
                 stage.close();
 
-                CollectionsWindow collectionsWindow = new CollectionsWindow();
+
+                CollectionsWindow collectionsWindow = new CollectionsWindow(currentLocaleIndex);
                 collectionsWindow.show();
             } else {
-                errorAlert("There is no user with this name, or password is incorrect");
+                AlertUtility.errorAlert("There is no user with this name, or password is incorrect");
             }
         } catch (Exception e) {
             //errorAlert("Server is dead :(");
@@ -114,35 +117,13 @@ public class LoginWindowController {
 
             if (response.isReg()) {
                 Client.getInstance(username, password);
-                infoAlert("User successfully registered");
+                AlertUtility.infoAlert("User successfully registered");
             } else {
-                errorAlert("There is no user with this name, or password is incorrect");
+                AlertUtility.errorAlert("There is no user with this name, or password is incorrect");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Shows an alert dialog with the given information.
-     * @param info The information to be shown in the alert dialog.
-     */
-    private void infoAlert(String info) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText(null);
-        alert.setContentText(info);
-        alert.showAndWait();
-    }
-
-    /**
-     * Shows an alert dialog with the given error message.
-     * @param error The error message to be shown in the alert dialog.
-     */
-    private void errorAlert(String error) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setHeaderText(null);
-        alert.setContentText(error);
-        alert.showAndWait();
     }
 }
 

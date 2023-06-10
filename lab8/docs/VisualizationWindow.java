@@ -1,4 +1,4 @@
-package gui.visualization;
+package gui.worldMap;
 
 import com.sun.source.tree.Tree;
 import javafx.concurrent.Worker;

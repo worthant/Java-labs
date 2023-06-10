@@ -5,6 +5,7 @@ import commandManager.CommandDescriptionHolder;
 import commandManager.CommandMode;
 import commandManager.SingleCommandExecutor;
 import exceptions.CommandsNotLoadedException;
+import gui.AlertUtility;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -146,7 +147,7 @@ public class CreateWindowController {
                             return true;
                         } catch (CommandsNotLoadedException e) {
                             Platform.runLater(() -> {
-                                errorAlert("Can't load commands from server. Please wait until the server will come back");
+                                AlertUtility.errorAlert("Can't load commands from server. Please wait until the server will come back");
                             });
                             return false;
                         }
@@ -157,9 +158,9 @@ public class CreateWindowController {
                     Platform.runLater(() -> {
                         CommandStatusResponse response = (CommandStatusResponse) DataHolder.getInstance().getBaseResponse();
                         if (response != null) {
-                            infoAlert(response.getResponse());
+                            AlertUtility.infoAlert(response.getResponse());
                         } else {
-                            errorAlert("idk why but you're object is not added, or server is just taking a nap");
+                            AlertUtility.errorAlert("idk why but you're object is not added, or server is just taking a nap");
                         }
                         ((Stage) nameField.getScene().getWindow()).close();
                     });
@@ -185,34 +186,12 @@ public class CreateWindowController {
         ((Stage) nameField.getScene().getWindow()).close();
     }
 
-    /**
-     * Shows an alert dialog with the given information.
-     * @param info The information to be shown in the alert dialog.
-     */
-    private void infoAlert(String info) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText(null);
-        alert.setContentText(info);
-        alert.showAndWait();
-    }
-
-    /**
-     * Shows an alert dialog with the given error message.
-     * @param error The error message to be shown in the alert dialog.
-     */
-    private void errorAlert(String error) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setHeaderText(null);
-        alert.setContentText(error);
-        alert.showAndWait();
-    }
-
     private void displayValidationErrors() {
         validationSupport.getRegisteredControls().forEach(control -> {
             ValidationResult result = validationSupport.getValidationResult();
             if (result != null && !result.getErrors().isEmpty()) {
                 String errorMessage = result.getErrors().toString();
-                errorAlert(errorMessage);
+                AlertUtility.errorAlert(errorMessage);
             }
         });
     }

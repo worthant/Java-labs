@@ -26,7 +26,6 @@
     -fx-font-size: 16px;
 }
 
-
 .table-view {
     -fx-border-color: #797979;
     -fx-border-radius: 2;
@@ -38,10 +37,4 @@
     -fx-font-weight: bold;
     -fx-background-color: #E7E8E8;
     -fx-padding: 10 0;
-}
-
-.table-row-cell {
-    -fx-border-color: #D8D8D8;
-    -fx-font-size: 11px;
-    -fx-padding: 7.5 0;
 }

@@ -1,4 +1,4 @@
-package gui.visualization;
+package gui.worldMap;
 
 import client.Client;
 import commandLogic.CommandDescription;
@@ -17,7 +17,7 @@ import serverLogic.ServerConnectionHandler;
 import java.net.URL;
 import java.util.*;
 
-public class VisualizationWindow {
+public class WorldMapWindow {
     private Stage stage;
     private WebEngine webEngine;
     private TreeSet<City> collection;
@@ -25,13 +25,13 @@ public class VisualizationWindow {
     private Map<Long, String> ownershipMap;
     private Map<String, String> userColorMap = new HashMap<>(); // Stores user-color pairs
 
-    public VisualizationWindow(TreeSet<City> collection) {
+    public WorldMapWindow(TreeSet<City> collection) {
         this.collection = collection;
 
         stage = new Stage();
         WebView webView = new WebView();
         webEngine = webView.getEngine();
-        URL url = getClass().getResource("/visualization/map.html");
+        URL url = getClass().getResource("/worldMap/map.html");
         if (url == null) {
             throw new RuntimeException("Cannot find file map.html in html directory");
         }

@@ -59,7 +59,7 @@ public class CoordinatesCLIManager implements ModeManager<Coordinates> {
             }
 
             // coordinate y
-            Double y;
+            double y;
             Validator<Double> coordYValidator = new CoordinateYValidator();
             while(true) {
                 try {

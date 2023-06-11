@@ -18,7 +18,7 @@
 
 <AnchorPane prefHeight="578.0" prefWidth="1005.0" styleClass="borderPane-style" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.collections.CollectionsWindowController">
     <children>
-        <Text fx:id="usernameText" fill="#333333" layoutX="429.0" layoutY="52.0" styleClass="bold-text" text="Username" AnchorPane.leftAnchor="429.0" AnchorPane.topAnchor="30.41796875" />
+        <Text fx:id="usernameText" fill="#333333" layoutX="401.0" layoutY="56.58203125" styleClass="bold-text" text="Username" textAlignment="CENTER" wrappingWidth="172.65167236328125" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="34.0" />
         <ScrollPane fitToHeight="true" fitToWidth="true" layoutY="113.0" prefHeight="421.0" prefWidth="885.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="113.0">
             <content>
                 <TableView fx:id="table" prefHeight="455.0" prefWidth="869.0">
@@ -39,11 +39,11 @@
                 </TableView>
             </content>
         </ScrollPane>
-        <Label layoutX="667.0" layoutY="90.0" prefHeight="25.0" prefWidth="79.0" styleClass="collections-text" stylesheets="@style.css" text="Filter by" />
+        <Label fx:id="filterByLabel" layoutX="636.0" layoutY="89.0" prefHeight="25.0" prefWidth="119.0" styleClass="collections-text" stylesheets="@style.css" text="Filter by" textAlignment="RIGHT" />
         <ComboBox fx:id="comboBox" layoutX="756.0" layoutY="85.0" prefHeight="25.0" prefWidth="110.0" />
-        <Line endX="97.0" endY="2.288818359375E-5" layoutX="886.0" layoutY="111.0" startX="-242.99993896484375" startY="2.288818359375E-5" />
+        <Line endX="97.0" endY="2.288818359375E-5" layoutX="886.0" layoutY="111.0" startX="-260.6666259765625" startY="2.288818359375E-5" />
         <Line endX="22.666671752929688" endY="2.288818359375E-5" layoutX="122.0" layoutY="112.0" startX="-100.0" />
-        <Label fx:id="citiesCountLabel" layoutX="52.0" layoutY="90.0" prefHeight="17.0" prefWidth="106.0" styleClass="collections-text" stylesheets="@style.css" text="3 Cities" />
+        <Label fx:id="citiesLabel" layoutX="71.0" layoutY="90.0" prefHeight="25.0" prefWidth="73.0" styleClass="collections-text" stylesheets="@style.css" text="Cities" textAlignment="CENTER" />
         <ImageView fitHeight="25.0" fitWidth="27.0" layoutX="22.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../icons/city2.png" />
@@ -91,6 +91,7 @@
                 <Image url="@../icons/spotify (1).png" />
             </image>
         </ImageView>
+      <Label fx:id="citiesCountLabel" layoutX="55.0" layoutY="91.0" styleClass="collections-text" stylesheets="@style.css" text="3" />
 
     </children>
 </AnchorPane>

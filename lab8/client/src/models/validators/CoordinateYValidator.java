@@ -8,7 +8,7 @@ package models.validators;
  */
 public class CoordinateYValidator implements Validator<Double> {
     public String getDescr() {
-        return "0 <= y <= 1000";
+        return "Constraints: 0 <= y <= 1000";
     }
     @Deprecated
     public boolean validateOld(Double value) {

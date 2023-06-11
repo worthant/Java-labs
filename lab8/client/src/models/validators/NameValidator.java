@@ -9,7 +9,7 @@ package models.validators;
 public class NameValidator implements Validator<String> {
     @Override
     public String getDescr() {
-        return "Validates name field";
+        return "Constraints: shouldn't be empty";
     }
 
     /**

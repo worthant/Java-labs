@@ -8,7 +8,7 @@ package models.validators;
  */
 public class CoordinateXValidator implements Validator<Integer> {
     public String getDescr() {
-        return "0 <= x <= 1000";
+        return "Constraints: 0 <= x <= 1000";
     }
     @Deprecated
     public boolean validateOld(Integer value) {

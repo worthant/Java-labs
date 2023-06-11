@@ -16,11 +16,9 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -37,7 +35,23 @@ import java.util.*;
 public class CollectionsWindowController {
     private static final Logger logger = LogManager.getLogger("lab8");
     @FXML
+    private Button commandsButton;
+    @FXML
+    private Button deleteButton;
+    @FXML
+    private Button editButton;
+    @FXML
+    private Button createButton;
+    @FXML
+    private Button visualizeButton;
+    @FXML
+    private Button worldMapButton;
+    @FXML
+    private Label filterByLabel;
+    @FXML
     private Label citiesCountLabel;
+    @FXML
+    private Label citiesLabel;
     private ResourceBundle currentBundle;
 
     private final List<Locale> supportedLocales = Arrays.asList(
@@ -158,20 +172,15 @@ public class CollectionsWindowController {
             }
             table.setItems(FXCollections.observableArrayList(collection));
             table.refresh();
-            citiesCountLabel.setText(collection.size() + " Cities");
+            citiesCountLabel.setText(Integer.toString(collection.size()));
         }
-    }
-
-    @FXML
-    protected void onCreateButtonClick() {
-        CreateWindow createWindow = new CreateWindow();
-        createWindow.show();
     }
 
     /**
      * Update CollectionsWindow UI
      */
     private void updateUI() {
+        // TableView
         idColumn.setText(currentBundle.getString("id"));
         nameColumn.setText(currentBundle.getString("name"));
         coordXColumn.setText(currentBundle.getString("coordX"));
@@ -184,6 +193,36 @@ public class CollectionsWindowController {
         governmentColumn.setText(currentBundle.getString("government"));
         standardsColumn.setText(currentBundle.getString("standards"));
         governorColumn.setText(currentBundle.getString("governor"));
+        // buttons & labels
+        citiesLabel.setText(currentBundle.getString("citiesCountLabel"));
+        filterByLabel.setText(currentBundle.getString("filterByLabel"));
+        ObservableList<String> localizedItems = FXCollections.observableArrayList(
+                currentBundle.getString("id"),
+                currentBundle.getString("name"),
+                currentBundle.getString("coordX"),
+                currentBundle.getString("coordY"),
+                currentBundle.getString("creation"),
+                currentBundle.getString("area"),
+                currentBundle.getString("population"),
+                currentBundle.getString("metersAboveSeaLevel"),
+                currentBundle.getString("climate"),
+                currentBundle.getString("government"),
+                currentBundle.getString("standards"),
+                currentBundle.getString("governor")
+        );
+        comboBox.getItems().setAll(localizedItems);
+        commandsButton.setText(currentBundle.getString("commandsButton"));
+        deleteButton.setText(currentBundle.getString("deleteButton"));
+        editButton.setText(currentBundle.getString("editButton"));
+        createButton.setText(currentBundle.getString("createButton"));
+        visualizeButton.setText(currentBundle.getString("visualizeButton"));
+        worldMapButton.setText(currentBundle.getString("worldMapButton"));
+    }
+
+    @FXML
+    protected void onCreateButtonClick() {
+        CreateWindow createWindow = new CreateWindow();
+        createWindow.show();
     }
 
     @FXML

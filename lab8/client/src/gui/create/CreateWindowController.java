@@ -9,6 +9,7 @@ import gui.AlertUtility;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import main.utilities.Utilities;
 import models.*;
@@ -19,12 +20,17 @@ import org.controlsfx.validation.Validator;
 import org.controlsfx.validation.decoration.GraphicValidationDecoration;
 import responses.CommandStatusResponse;
 
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 /**
  * Controller class for the Create Window.
@@ -56,15 +62,16 @@ public class CreateWindowController {
     @FXML
     private TextField governorField;
 
-    private ValidationSupport validationSupport;
+    private Map<String, Boolean> validationState;
 
     @FXML
     public void initialize() {
         Arrays.stream(Climate.values()).forEach(value -> climateChoiceBox.getItems().add(value.name()));
         Arrays.stream(Government.values()).forEach(value -> governmentChoiceBox.getItems().add(value.name()));
         Arrays.stream(StandardOfLiving.values()).forEach(value -> standardsChoiceBox.getItems().add(value.name()));
+        validationState = new HashMap<>();
+        validation();
     }
-
 
     /**
      * This method is invoked when the "Create" button is clicked.
@@ -73,52 +80,11 @@ public class CreateWindowController {
      */
     @FXML
     protected void onCreateButtonClick() {
-        // Initialize the validation support
-        ValidationSupport validationSupport = new ValidationSupport();
-        validationSupport.setValidationDecorator(new GraphicValidationDecoration());
+        if (validationState.values().stream().allMatch(valid -> valid) &&
+                climateChoiceBox.getValue() != null &&
+                governmentChoiceBox.getValue() != null &&
+                standardsChoiceBox.getValue() != null) {
 
-
-        // Validators for each field
-        validationSupport.registerValidator(nameField, Validator.createPredicateValidator(
-                (String value) -> new NameValidator().validate(value),
-                "Name is not valid. " + new NameValidator().getDescr()
-        ));
-        validationSupport.registerValidator(coordXField, Validator.createPredicateValidator(
-                (String value) -> value.matches("\\d+") && new CoordinateXValidator().validate(Integer.valueOf(value)),
-                "CoordX is not valid. " + new CoordinateXValidator().getDescr()
-        ));
-        validationSupport.registerValidator(coordYField, Validator.createPredicateValidator(
-                (String value) -> value.matches("-?\\d+(\\.\\d+)?") && new CoordinateYValidator().validate(Double.valueOf(value)),
-                "CoordY is not valid. " + new CoordinateYValidator().getDescr()
-        ));
-        validationSupport.registerValidator(areaField, Validator.createPredicateValidator(
-                (String value) -> value.matches("\\d+") && new AreaValidator().validate(Integer.valueOf(value)),
-                "Area is not valid. " + new AreaValidator().getDescr()
-        ));
-        validationSupport.registerValidator(populationField, Validator.createPredicateValidator(
-                (String value) -> value.matches("\\d+") && new PopulationValidator().validate(Integer.valueOf(value)),
-                "Population is not valid. " + new PopulationValidator().getDescr()
-        ));
-        validationSupport.registerValidator(metersAboveSeaLevelField, Validator.createPredicateValidator(
-                (String value) -> value.matches("-?\\d+(\\.\\d+)?") && new MetersAboveSeaLevelValidator().validate(Double.valueOf(value)),
-                "Meters Above Sea Level is not valid. " + new MetersAboveSeaLevelValidator().getDescr()
-        ));
-        validationSupport.registerValidator(climateChoiceBox, Validator.createPredicateValidator(
-                (String value) -> Arrays.stream(Climate.values()).anyMatch((v) -> v.name().equals(value)),
-                "Climate is not valid. It should be one of " + Arrays.toString(Climate.values())
-        ));
-        validationSupport.registerValidator(governmentChoiceBox, Validator.createPredicateValidator(
-                (String value) -> Arrays.stream(Government.values()).anyMatch((v) -> v.name().equals(value)),
-                "Government is not valid. It should be one of " + Arrays.toString(Government.values())
-        ));
-        validationSupport.registerValidator(standardsChoiceBox, Validator.createPredicateValidator(
-                (String value) -> Arrays.stream(StandardOfLiving.values()).anyMatch((v) -> v.name().equals(value)),
-                "Standard Of Living is not valid. It should be one of " + Arrays.toString(StandardOfLiving.values())
-        ));
-
-
-        // Check the validity of all the fields
-        if (!validationSupport.isInvalid()) {
             long id = Utilities.generateId();
             String name = nameField.getText();
             Coordinates coordinates = new Coordinates(Integer.parseInt(coordXField.getText()), Double.parseDouble(coordYField.getText()));
@@ -134,46 +100,26 @@ public class CreateWindowController {
             City city = new City(id, name, coordinates, creationDate, area, population,
                     metersAboveSeaLevel, climate, government, standards, human);
 
-            // Validate created City object again
-            models.validators.Validator<City> validator = new CityValidator();
-            if (validator.validate(city)) {
-                DataHolder.getInstance().setCityObject(city);
-                try {
-                    ExecutorService service = Executors.newSingleThreadExecutor();
-                    Future<Boolean> future = service.submit(() -> {
-                        try {
-                            SingleCommandExecutor executor = new SingleCommandExecutor(CommandDescriptionHolder.getInstance().getCommands(), CommandMode.GUIMode);
-                            executor.executeCommand("add");
-                            return true;
-                        } catch (CommandsNotLoadedException e) {
-                            Platform.runLater(() -> {
-                                AlertUtility.errorAlert("Can't load commands from server. Please wait until the server will come back");
-                            });
-                            return false;
-                        }
-                    });
+            DataHolder.getInstance().setCityObject(city);
 
-                    future.get();  // Wait until the command execution is completed
-
-                    Platform.runLater(() -> {
-                        CommandStatusResponse response = (CommandStatusResponse) DataHolder.getInstance().getBaseResponse();
-                        if (response != null) {
-                            AlertUtility.infoAlert(response.getResponse());
-                        } else {
-                            AlertUtility.errorAlert("idk why but you're object is not added, or server is just taking a nap");
-                        }
-                        ((Stage) nameField.getScene().getWindow()).close();
-                    });
-
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
-
-            } else {
-                displayValidationErrors();
+            try {
+                SingleCommandExecutor executor = new SingleCommandExecutor(CommandDescriptionHolder.getInstance().getCommands(), CommandMode.GUIMode);
+                executor.executeCommand("add");
+            } catch (CommandsNotLoadedException e) {
+                AlertUtility.errorAlert("Can't load commands from server. Please wait until the server will come back");
             }
+
+            Platform.runLater(() -> {
+                CommandStatusResponse response = (CommandStatusResponse) DataHolder.getInstance().getBaseResponse();
+                if (response != null) {
+                    AlertUtility.infoAlert(response.getResponse());
+                } else {
+                    AlertUtility.errorAlert("idk why but you're object is not added, or server is just taking a nap");
+                }
+                ((Stage) nameField.getScene().getWindow()).close();
+            });
         } else {
-            displayValidationErrors();
+            AlertUtility.errorAlert("Please correct all errors and fill the enums before proceeding.");
         }
     }
 
@@ -186,13 +132,110 @@ public class CreateWindowController {
         ((Stage) nameField.getScene().getWindow()).close();
     }
 
-    private void displayValidationErrors() {
-        validationSupport.getRegisteredControls().forEach(control -> {
-            ValidationResult result = validationSupport.getValidationResult();
-            if (result != null && !result.getErrors().isEmpty()) {
-                String errorMessage = result.getErrors().toString();
-                AlertUtility.errorAlert(errorMessage);
+    private void validation() {
+        NameValidator nameValidator = new NameValidator();
+        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
+            boolean valid = nameValidator.validate(newValue);
+            validationState.put("name", valid);
+            updateValidationState(nameField, valid, "Name is not valid. " + nameValidator.getDescr());
+        });
+
+        CoordinateXValidator coordinateXValidator = new CoordinateXValidator();
+        coordXField.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                boolean valid = newValue.matches("\\d+") && coordinateXValidator.validate(Integer.valueOf(newValue));
+                validationState.put("coordX", valid);
+                updateValidationState(coordXField, valid, "CoordX is not valid. " + coordinateXValidator.getDescr());
+            } catch (NumberFormatException e) {
+                updateValidationState(coordXField, false, "CoordX is not valid. It should be a number.");
             }
         });
+
+        CoordinateYValidator coordinateYValidator = new CoordinateYValidator();
+        coordYField.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                boolean valid = newValue.matches("-?\\d+(\\.\\d+)?") && coordinateYValidator.validate(Double.valueOf(newValue));
+                validationState.put("coordY", valid);
+                updateValidationState(coordYField, valid, "CoordY is not valid. " + coordinateYValidator.getDescr());
+            } catch (NumberFormatException e) {
+                updateValidationState(coordYField, false, "CoordY is not valid. It should be a number.");
+            }
+        });
+
+        AreaValidator areaValidator = new AreaValidator();
+        areaField.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                boolean valid = newValue.matches("\\d+") && areaValidator.validate(Integer.valueOf(newValue));
+                validationState.put("area", valid);
+                updateValidationState(areaField, valid, "Area is not valid. " + areaValidator.getDescr());
+            } catch (NumberFormatException e) {
+                updateValidationState(areaField, false, "Area is not valid. It should be a number.");
+            }
+        });
+        PopulationValidator populationValidator = new PopulationValidator();
+        populationField.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                boolean valid = newValue.matches("\\d+") && populationValidator.validate(Integer.valueOf(newValue));
+                validationState.put("population", valid);
+                updateValidationState(populationField, valid, "Population is not valid. " + populationValidator.getDescr());
+            } catch (NumberFormatException e) {
+                updateValidationState(populationField, false, "Population is not valid. It should be a number.");
+            }
+        });
+        MetersAboveSeaLevelValidator metersAboveSeaLevelValidator = new MetersAboveSeaLevelValidator();
+        metersAboveSeaLevelField.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                boolean valid = newValue.matches("-?\\d+(\\.\\d+)?") && metersAboveSeaLevelValidator.validate(Double.valueOf(newValue));
+                validationState.put("seaLevel", valid);
+                updateValidationState(metersAboveSeaLevelField, valid, "Meters Above Sea Level is not valid. " + metersAboveSeaLevelValidator.getDescr());
+            } catch (NumberFormatException e) {
+                updateValidationState(metersAboveSeaLevelField, false, "Meters Above Sea Level is not valid. It should be a number.");
+            }
+        });
+
+        climateChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            boolean valid = newValue != null && Arrays.stream(Climate.values()).map(Enum::name).toList().contains(newValue);
+            validationState.put("climate", valid);
+            updateValidationState(climateChoiceBox, valid, "Climate is not valid. It should be one of " + Arrays.toString(Climate.values()));
+        });
+
+        governmentChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            boolean valid = newValue != null && Arrays.stream(Government.values()).map(Enum::name).toList().contains(newValue);
+            validationState.put("government", valid);
+            updateValidationState(governmentChoiceBox, valid, "Government is not valid. It should be one of " + Arrays.toString(Government.values()));
+        });
+
+        standardsChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            boolean valid = newValue != null && Arrays.stream(StandardOfLiving.values()).map(Enum::name).toList().contains(newValue);
+            validationState.put("standards", valid);
+            updateValidationState(standardsChoiceBox, valid, "Standards is not valid. It should be one of " + Arrays.toString(StandardOfLiving.values()));
+        });
+
+        governorField.textProperty().addListener((observable, oldValue, newValue) -> {
+            boolean valid = nameValidator.validate(newValue);
+            validationState.put("governor", valid);
+            updateValidationState(governorField, valid, "Name is not valid. " + nameValidator.getDescr());
+        });
     }
+
+    private void updateValidationState(TextField field, boolean valid, String message) {
+        if (valid) {
+            field.setStyle("-fx-background-color: #00ff00;"); //green color
+            field.setTooltip(null);
+        } else {
+            field.setStyle("-fx-background-color: #ff0000;"); //red color
+            field.setTooltip(new Tooltip(message));
+        }
+    }
+
+    private void updateValidationState(ChoiceBox<String> choiceBox, boolean valid, String message) {
+        if (valid) {
+            choiceBox.setStyle("-fx-background-color: #00ff00;"); //green color
+            choiceBox.setTooltip(null);
+        } else {
+            choiceBox.setStyle("-fx-background-color: #ff0000;"); //red color
+            choiceBox.setTooltip(new Tooltip(message));
+        }
+    }
+
 }

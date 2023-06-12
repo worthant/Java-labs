@@ -1,4 +1,24 @@
-## GUI prototype (accepted)
+# Final JavaFX GUI demonstration
+
+|Login witn .en_NZ locally|Login with .ru locally|
+|-|-|
+|![изображение](https://github.com/worthant/Java_labs/assets/43885024/c97764e5-f7df-4986-9589-2fdfa7dcb50e)|![изображение](https://github.com/worthant/Java_labs/assets/43885024/ecdf1d24-d85e-4121-8605-d51e81b09b00)|
+
+|Main window with .hr locally + YandexAPI city objects map|
+|-|
+|![изображение](https://github.com/worthant/Java_labs/assets/43885024/949c527d-215c-4644-b4ac-2760b0ce87b5)|
+
+|Main window also with .en_NZ locally|Main window with .ru locally|
+|-|-|
+|![изображение](https://github.com/worthant/Java_labs/assets/43885024/964a335b-d10d-4982-81da-2d1b3bed9d1c)|![изображение](https://github.com/worthant/Java_labs/assets/43885024/12ea1972-fb5a-4b36-99b1-3b2ccb9b8e14)|
+
+|Validation failed|Validation success|
+|-|-|
+|![изображение](https://github.com/worthant/Java_labs/assets/43885024/87a80cfa-5390-424f-9da5-846e8a7410bb)|![изображение](https://github.com/worthant/Java_labs/assets/43885024/53a04284-6717-451f-8c7f-8ab1e599face)|
+
+
+
+# GUI prototype (accepted)
 ![image_2023-05-14_01-14-45](https://github.com/worthant/Java_labs/assets/43885024/c75f712c-cf44-411d-82b1-a9a3af8cccf7)
 
 ## Вариант `3131900`

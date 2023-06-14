@@ -16,6 +16,7 @@ public class CreateWindow {
     public CreateWindow() {
         try {
             stage = new Stage();
+            stage.setResizable(false);
             URL fxmlLocation = getClass().getResource("/create/createWindow.fxml");
             FXMLLoader loader = new FXMLLoader(fxmlLocation);
             Parent root = loader.load();

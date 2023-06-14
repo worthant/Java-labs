@@ -7,6 +7,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -16,7 +17,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="578.0" prefWidth="1005.0" styleClass="borderPane-style" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.collections.CollectionsWindowController">
+<AnchorPane prefHeight="632.0" prefWidth="1005.0" styleClass="borderPane-style" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.collections.CollectionsWindowController">
     <children>
         <Text fx:id="usernameText" fill="#333333" layoutX="401.0" layoutY="56.58203125" styleClass="bold-text" text="Username" textAlignment="CENTER" wrappingWidth="172.65167236328125" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="34.0" />
         <ScrollPane fitToHeight="true" fitToWidth="true" layoutY="113.0" prefHeight="421.0" prefWidth="885.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="113.0">
@@ -92,6 +93,20 @@
             </image>
         </ImageView>
       <Label fx:id="citiesCountLabel" layoutX="55.0" layoutY="91.0" styleClass="collections-text" stylesheets="@style.css" text="3" />
+      <ToolBar fx:id="commandsToolBar" layoutX="23.0" layoutY="580.0" prefHeight="43.0" prefWidth="959.0" styleClass="borderPane-style" stylesheets="@style.css">
+        <items>
+            <Button fx:id="sumOfMetersAboveSeaLevelButton" mnemonicParsing="false" text="Σ (m) above sea level" />
+            <Button fx:id="clearButton" mnemonicParsing="false" onAction="#onClearButtonClick" text="Clear" />
+            <Button fx:id="executeScriptButton" mnemonicParsing="false" onAction="#onExecuteScriptButtonClick" text="Execute script" />
+            <Button fx:id="browseButton" onAction="#onBrowseButtonClick" text="Browse..." />
+            <Button fx:id="removeById" mnemonicParsing="false" text="Remove by id" />
+            <TextField fx:id="removeByIdTextField" prefHeight="25.0" prefWidth="78.0" />
+            <Button fx:id="exitButton" mnemonicParsing="false" text="Exit" />
+            <Button fx:id="helpButton" layoutX="502.0" layoutY="10.0" mnemonicParsing="false" text="Need help!" />
+            <Button fx:id="addIfMinAreaButton" mnemonicParsing="false" text="Add if city area is min" />
+            <Button fx:id="commandsHistoryButton" mnemonicParsing="false" text="Commands history" />
+        </items>
+      </ToolBar>
 
     </children>
 </AnchorPane>

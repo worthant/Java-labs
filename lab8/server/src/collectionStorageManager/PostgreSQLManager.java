@@ -24,15 +24,19 @@ public class PostgreSQLManager implements DatabaseManager {
         try {
             Statement statement = connection.createStatement();
 
-            String query = "SELECT * FROM City " +
+            String query = "SELECT City.id, City.name as city_name, Coordinates.x, Coordinates.y, " +
+                    "City.creation_date, City.area, City.population, City.meters_above_sea_level, " +
+                    "City.climate, City.government, Human.name as governor_name, City.standard_of_living " +
+                    "FROM City " +
                     "JOIN Coordinates ON City.coordinates_id = Coordinates.id " +
                     "JOIN Human ON City.governor_id = Human.id";
+
 
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
                 long id = resultSet.getLong("id");
-                String name = resultSet.getString("name");
+                String name = resultSet.getString("city_name");
                 Coordinates coordinates = new Coordinates(resultSet.getInt("x"), resultSet.getDouble("y"));
                 Date creationDate = resultSet.getDate("creation_date");
                 Integer area = resultSet.getInt("area");
@@ -40,7 +44,7 @@ public class PostgreSQLManager implements DatabaseManager {
                 Double metersAboveSeaLevel = resultSet.getDouble("meters_above_sea_level");
                 Climate climate = Climate.valueOf(resultSet.getString("climate"));
                 Government government = Government.valueOf(resultSet.getString("government"));
-                Human governor = new Human(resultSet.getString("name"));
+                Human governor = new Human(resultSet.getString("governor_name"));
                 StandardOfLiving standardOfLiving = StandardOfLiving.valueOf(resultSet.getString("standard_of_living"));
 
                 City city = new City(id, name, coordinates, creationDate, area, population, metersAboveSeaLevel, climate, government, standardOfLiving, governor);

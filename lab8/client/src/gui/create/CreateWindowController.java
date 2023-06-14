@@ -103,7 +103,7 @@ public class CreateWindowController {
             DataHolder.getInstance().setCityObject(city);
 
             try {
-                SingleCommandExecutor executor = new SingleCommandExecutor(CommandDescriptionHolder.getInstance().getCommands(), CommandMode.GUIMode);
+                SingleCommandExecutor executor = new SingleCommandExecutor(CommandDescriptionHolder.getInstance().getCommands(), System.in, CommandMode.GUIMode);
                 executor.executeCommand("add");
             } catch (CommandsNotLoadedException e) {
                 AlertUtility.errorAlert("Can't load commands from server. Please wait until the server will come back");

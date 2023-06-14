@@ -3,8 +3,8 @@ package commandManager.externalRecievers;
 import commandLogic.CommandDescription;
 import commandLogic.commandReceiverLogic.receivers.ExternalBaseReceiver;
 import commandManager.CommandDescriptionHolder;
-import commandManager.CommandExecutor;
 import commandManager.CommandMode;
+import commandManager.SingleCommandExecutor;
 import exceptions.CommandsNotLoadedException;
 import exceptions.WrongAmountOfArgumentsException;
 import main.utilities.Utilities;
@@ -39,13 +39,13 @@ public class ExecuteScriptReceiver implements ExternalBaseReceiver {
         Utilities.checkArgumentsOrThrow(args.length, 1);
 
         try {
-            CommandExecutor executor = new CommandExecutor(CommandDescriptionHolder.getInstance().getCommands(), new FileInputStream(Path.of(args[1]).toFile()), CommandMode.NonUserMode);
+            SingleCommandExecutor executor = new SingleCommandExecutor(CommandDescriptionHolder.getInstance().getCommands(), new FileInputStream(Path.of(args[1]).toFile()), CommandMode.NonUserMode);
             if (checkRecursion(Path.of(args[1]), new ArrayDeque<>())) {
                 myLogger.log(Level.WARNING, "При анализе скрипта обнаружена рекурсия. Устраните ее перед исполнением.");
                 return false;
             }
             myLogger.log(Level.INFO, "Executing script " + args[1]);
-            executor.startExecuting();
+            executor.startExecutingScript();
         } catch (InvalidPathException e) {
             System.out.println("Provided argument path isn't legal. Try again.");
             throw new IllegalArgumentException(e);

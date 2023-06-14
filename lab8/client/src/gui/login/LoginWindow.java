@@ -14,6 +14,7 @@ public class LoginWindow {
     public LoginWindow(Stage stage) {
         try {
             this.stage = stage;
+            stage.setResizable(false);
             URL fxmlLocation = getClass().getResource("/login/loginWindow.fxml");
             FXMLLoader loader = new FXMLLoader(fxmlLocation);
             Parent root = loader.load();

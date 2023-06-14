@@ -33,7 +33,9 @@ public class CollectionsWindow {
     }
 
     private void setup() {
+        stage.setResizable(false);
         controller.setLocale(localeIndex);
+        controller.setStage(stage);
     }
 
     public void show() {

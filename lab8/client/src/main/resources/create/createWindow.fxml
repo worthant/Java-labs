@@ -7,9 +7,9 @@
 <?import javafx.scene.text.Font?>
 
 <?import javafx.scene.control.ChoiceBox?>
-<AnchorPane prefHeight="456.0" prefWidth="287.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.create.CreateWindowController">
+<AnchorPane prefHeight="456.0" prefWidth="287.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.create.CityManagementWindowController">
    <children>
-      <Label layoutX="86.0" layoutY="14.0" prefHeight="30.0" prefWidth="115.0" text="Creating City">
+      <Label fx:id="actionLabel" layoutX="86.0" layoutY="14.0" prefHeight="30.0" prefWidth="115.0" text="Creating City">
          <font>
             <Font size="20.0" />
          </font>

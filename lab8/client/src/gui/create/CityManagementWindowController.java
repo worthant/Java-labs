@@ -1,6 +1,9 @@
 package gui.create;
 
+import client.Client;
 import client.DataHolder;
+import commandLogic.CommandDescription;
+import commandLogic.commandReceiverLogic.callers.ExternalBaseReceiverCaller;
 import commandManager.CommandDescriptionHolder;
 import commandManager.CommandMode;
 import commandManager.SingleCommandExecutor;
@@ -9,34 +12,27 @@ import gui.AlertUtility;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import main.utilities.Utilities;
 import models.*;
 import models.validators.*;
-import org.controlsfx.validation.ValidationResult;
-import org.controlsfx.validation.ValidationSupport;
-import org.controlsfx.validation.Validator;
-import org.controlsfx.validation.decoration.GraphicValidationDecoration;
+import requestLogic.requestSenders.GetOwnershipRequestSender;
 import responses.CommandStatusResponse;
+import responses.GetOwnershipResponse;
+import serverLogic.ServerConnectionHandler;
 
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.stream.Collectors;
 
 /**
  * Controller class for the Create Window.
  * This class handles user interactions in the Create Window UI.
  */
-public class CreateWindowController {
+public class CityManagementWindowController {
+    @FXML
+    private Label actionLabel;
     @FXML
     private Button cancelButton;
     @FXML
@@ -63,14 +59,31 @@ public class CreateWindowController {
     private TextField governorField;
 
     private Map<String, Boolean> validationState;
+    private String actionText;
+    private Map<Long, String> ownershipMap; // Map of (city_id, client_name)
 
     @FXML
     public void initialize() {
+        actionLabel.setText(actionText);
         Arrays.stream(Climate.values()).forEach(value -> climateChoiceBox.getItems().add(value.name()));
         Arrays.stream(Government.values()).forEach(value -> governmentChoiceBox.getItems().add(value.name()));
         Arrays.stream(StandardOfLiving.values()).forEach(value -> standardsChoiceBox.getItems().add(value.name()));
+        loadOwnershipMap();
+        checkOwnership();
         validationState = new HashMap<>();
         validation();
+    }
+
+    private void loadOwnershipMap() {
+        Client client = Client.getInstance();
+        GetOwnershipRequestSender rqSender = new GetOwnershipRequestSender();
+        GetOwnershipResponse response = rqSender.sendCommand(client.getName(), client.getPasswd(),
+                new CommandDescription("get_ownership", new ExternalBaseReceiverCaller()), new String[]{"get_ownership"}, ServerConnectionHandler.getCurrentConnection());
+        this.ownershipMap = response.getOwnershipMap();
+    }
+
+    private void checkOwnership() {
+
     }
 
     /**
@@ -238,4 +251,7 @@ public class CreateWindowController {
         }
     }
 
+    public void setActionText(String actionText) {
+        this.actionText = actionText;
+    }
 }

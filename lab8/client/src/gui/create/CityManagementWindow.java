@@ -8,18 +8,23 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 
-public class CreateWindow {
+public class CityManagementWindow {
 
     private Stage stage;
     private Scene scene;
 
-    public CreateWindow() {
+    private CityManagementWindowController controller;
+
+    public CityManagementWindow(String actionText) {
         try {
             stage = new Stage();
             stage.setResizable(false);
             URL fxmlLocation = getClass().getResource("/create/createWindow.fxml");
             FXMLLoader loader = new FXMLLoader(fxmlLocation);
             Parent root = loader.load();
+
+            controller = loader.getController();
+            controller.setActionText(actionText);
 
             scene = new Scene(root, 300, 500);
             stage.setScene(scene);

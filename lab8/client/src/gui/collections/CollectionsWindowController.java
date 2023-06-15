@@ -11,7 +11,7 @@ import commandManager.SingleCommandExecutor;
 import exceptions.CommandsNotLoadedException;
 import gui.AlertUtility;
 import gui.UTF8Control;
-import gui.create.CreateWindow;
+import gui.create.CityManagementWindow;
 import gui.music.MusicWindow;
 import gui.visualization.VisualizationWindow;
 import gui.worldMap.WorldMapWindow;
@@ -26,6 +26,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -34,8 +36,10 @@ import javafx.util.Duration;
 import models.City;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import requestLogic.requestSenders.GetOwnershipRequestSender;
 import requestLogic.requestSenders.ShowRequestSender;
 import responses.CommandStatusResponse;
+import responses.GetOwnershipResponse;
 import responses.ShowResponse;
 import serverLogic.ServerConnectionHandler;
 
@@ -91,15 +95,16 @@ public class CollectionsWindowController {
 
     private FileChooser fileChooser;
     private String scriptPath;
-
+    private Map<Long, String> ownershipMap; // Map of (city_id, client_name)
+    private Map<String, Color> clientColorMap = new HashMap<>();
     private final List<Locale> supportedLocales = Arrays.asList(
             new Locale("en", "NZ"),
             new Locale("ru"),
             new Locale("hr"),
             new Locale("cs")
     );
-    private int currentLocaleIndex = 0;
 
+    private int currentLocaleIndex = 0;
     private TreeSet<City> collection;
     @FXML
     private TableView<City> table;
@@ -188,11 +193,52 @@ public class CollectionsWindowController {
         // Set the initial directory
         fileChooser.setInitialDirectory(new File("C:\\Users\\Admin\\Itmo\\Java_labs\\lab8\\client\\src\\main\\resources\\scripts"));
 
+        // setup ownership logic
+        loadOwnershipMap();
+        table.setRowFactory(tv -> new TableRow<City>() {
+            @Override
+            public void updateItem(City city, boolean empty) {
+                super.updateItem(city, empty);
+                if (city == null) {
+                    setStyle("");
+                } else {
+                    Color color = clientColorMap.get(ownershipMap.get(city.getId()));
+                    String rgb = String.format("#%02X%02X%02X",
+                            (int)(color.getRed() * 255),
+                            (int)(color.getGreen() * 255),
+                            (int)(color.getBlue() * 255));
+                    setStyle("-fx-border-color: " + rgb + ";");
+                }
+            }
+        });
+
 
         // Start the timeline for loading collection to TableView
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(4), event -> loadCollection()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+    }
+
+    /**
+     * Loads ownership map from the server
+     */
+    private void loadOwnershipMap() {
+        Client client = Client.getInstance();
+        GetOwnershipRequestSender rqSender = new GetOwnershipRequestSender();
+        GetOwnershipResponse response = rqSender.sendCommand(client.getName(), client.getPasswd(),
+                new CommandDescription("get_ownership", new ExternalBaseReceiverCaller()), new String[]{"get_ownership"}, ServerConnectionHandler.getCurrentConnection());
+        this.ownershipMap = response.getOwnershipMap();
+
+        for (String clientName : new HashSet<>(ownershipMap.values())) {
+            if (clientName.equals(Client.getInstance().getName())) {
+                clientColorMap.put(clientName, Color.GREEN);
+            } else {
+                if (!clientColorMap.containsKey(clientName)) {
+                    Color randomColor = Color.color(Math.random(), Math.random(), Math.random());
+                    clientColorMap.put(clientName, randomColor);
+                }
+            }
+        }
     }
 
     /**
@@ -287,12 +333,14 @@ public class CollectionsWindowController {
 
     @FXML
     protected void onCreateButtonClick() {
-        CreateWindow createWindow = new CreateWindow();
-        createWindow.show();
+        CityManagementWindow cityManagementWindow = new CityManagementWindow("Creating City");
+        cityManagementWindow.show();
     }
 
     @FXML
     protected void onEditButtonClick() {
+        CityManagementWindow cityManagementWindow = new CityManagementWindow("Editing City");
+        cityManagementWindow.show();
     }
 
     @FXML
@@ -369,7 +417,7 @@ public class CollectionsWindowController {
                 if (response != null) {
                     AlertUtility.infoAlert(response.getResponse());
                 } else {
-                    AlertUtility.errorAlert("idk why clearing the collection isn't done, maybe because there is no wage for that lab8");
+                    AlertUtility.errorAlert("something wrong with execute_script command. It's suddenly silent -_-");
                 }
             });
         }
@@ -400,5 +448,12 @@ public class CollectionsWindowController {
                 AlertUtility.errorAlert("idk why clearing the collection isn't done, maybe because there is no wage for that lab8");
             }
         });
+    }
+
+    private String colorToRgb(Color color) {
+        int red = (int) (color.getRed() * 255);
+        int green = (int) (color.getGreen() * 255);
+        int blue = (int) (color.getBlue() * 255);
+        return "rgb(" + red + ", " + green + ", " + blue + ")";
     }
 }

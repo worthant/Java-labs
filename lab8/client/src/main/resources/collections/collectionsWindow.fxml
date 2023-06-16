@@ -56,7 +56,7 @@
                 <Image url="@../icons/pointer.png" />
             </image>
         </ImageView>
-        <TextField layoutX="877.0" layoutY="85.0" prefHeight="25.0" prefWidth="106.0" />
+        <TextField fx:id="filterByText" layoutX="877.0" layoutY="85.0" prefHeight="25.0" prefWidth="106.0" />
         <Label layoutX="868.0" layoutY="85.0" styleClass="collections-text" stylesheets="@style.css" text=":" />
         <GridPane layoutX="21.0" layoutY="549.0" prefHeight="16.0" prefWidth="959.0">
             <columnConstraints>

@@ -12,6 +12,7 @@ import exceptions.CommandsNotLoadedException;
 import gui.AlertUtility;
 import gui.UTF8Control;
 import gui.create.CityManagementWindow;
+import gui.login.LoginWindow;
 import gui.music.MusicWindow;
 import gui.visualization.VisualizationWindow;
 import gui.worldMap.WorldMapWindow;
@@ -103,6 +104,7 @@ public class CollectionsWindowController {
     private String scriptPath;
     private Map<Long, String> ownershipMap; // Map of (city_id, client_name)
     private Map<String, Color> clientColorMap = new HashMap<>();
+    private Client client;
     private final List<Locale> supportedLocales = Arrays.asList(
             new Locale("en", "NZ"),
             new Locale("ru"),
@@ -200,9 +202,12 @@ public class CollectionsWindowController {
 
         // Set the initial directory
         // for laptop:
-        // fileChooser.setInitialDirectory(new File("C:\\Users\\Admin\\Itmo\\Java_labs\\lab8\\client\\src\\main\\resources\\scripts"));
+         fileChooser.setInitialDirectory(new File("C:\\Users\\Admin\\Itmo\\Java_labs\\lab8\\client\\src\\main\\resources\\scripts"));
         // for pc:
-        fileChooser.setInitialDirectory(new File("C:\\Users\\Boris\\Itmo\\Java_labs\\lab8\\client\\src\\main\\resources\\scripts"));
+        //fileChooser.setInitialDirectory(new File("C:\\Users\\Boris\\Itmo\\Java_labs\\lab8\\client\\src\\main\\resources\\scripts"));
+
+        // setup Client
+        client = Client.getInstance();
 
         // setup ownership logic
         loadOwnershipMap();
@@ -234,7 +239,6 @@ public class CollectionsWindowController {
             }
         });
 
-
         // Start the timeline for loading collection to TableView
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(4), event -> loadCollection()));
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -245,7 +249,7 @@ public class CollectionsWindowController {
      * Loads ownership map from the server
      */
     private void loadOwnershipMap() {
-        Client client = Client.getInstance();
+        client = Client.getInstance();
         GetOwnershipRequestSender rqSender = new GetOwnershipRequestSender();
         GetOwnershipResponse response = rqSender.sendCommand(client.getName(), client.getPasswd(),
                 new CommandDescription("get_ownership", new ExternalBaseReceiverCaller()), new String[]{"get_ownership"}, ServerConnectionHandler.getCurrentConnection());
@@ -279,7 +283,7 @@ public class CollectionsWindowController {
      * Load collection from server
      */
     private void loadCollection() {
-        Client client = Client.getInstance();
+        loadOwnershipMap();
         ShowRequestSender rqSender = new ShowRequestSender();
         ShowResponse response = rqSender.sendCommand(client.getName(), client.getPasswd(),
                 new CommandDescription("show", new ExternalBaseReceiverCaller()), new String[]{"show"}, ServerConnectionHandler.getCurrentConnection());
@@ -352,6 +356,15 @@ public class CollectionsWindowController {
         createButton.setText(currentBundle.getString("createButton"));
         visualizeButton.setText(currentBundle.getString("visualizeButton"));
         worldMapButton.setText(currentBundle.getString("worldMapButton"));
+
+        // let's update buttons in toolBox
+        sumOfMetersAboveSeaLevelButton.setText(currentBundle.getString("sumOfMetersAboveSeaLevelButton"));
+        clearButton.setText(currentBundle.getString("clearButton"));
+        executeScriptButton.setText(currentBundle.getString("executeScriptButton"));
+        browseButton.setText(currentBundle.getString("browseButton"));
+        exitButton.setText(currentBundle.getString("exitButton"));
+        helpButton.setText(currentBundle.getString("helpButton"));
+        commandsHistoryButton.setText(currentBundle.getString("commandsHistoryButton"));
     }
 
     @FXML
@@ -440,6 +453,25 @@ public class CollectionsWindowController {
         stage.setHeight(commandsToolBar.isVisible() ? 670 : 615);
     }
 
+    @FXML
+    protected void onCommandsHistoryButtonClick() {
+        try {
+            SingleCommandExecutor executor = new SingleCommandExecutor(CommandDescriptionHolder.getInstance().getCommands(), System.in, CommandMode.GUIMode);
+            executor.executeCommand("history");
+        } catch (CommandsNotLoadedException e) {
+            AlertUtility.errorAlert("Can't load commands from server. Please wait until the server will come back");
+        }
+
+        Platform.runLater(() -> {
+            CommandStatusResponse response = (CommandStatusResponse) DataHolder.getInstance().getBaseResponse();
+            if (response != null) {
+                AlertUtility.infoAlert(response.getResponse());
+            } else {
+                AlertUtility.errorAlert("something wrong with execute_script command. It's suddenly silent -_-");
+            }
+        });
+    }
+
     public void setLocale(int index) {
         this.currentLocaleIndex = index;
     }
@@ -475,6 +507,50 @@ public class CollectionsWindowController {
         }
     }
 
+    @FXML
+    protected void onSumOfMetersAboveSeaLevelButtonClick() {
+        try {
+            SingleCommandExecutor executor = new SingleCommandExecutor(CommandDescriptionHolder.getInstance().getCommands(), System.in, CommandMode.GUIMode);
+            executor.executeCommand("sum_of_meters_above_sea_level");
+        } catch (CommandsNotLoadedException e) {
+            AlertUtility.errorAlert("Can't load commands from server. Please wait until the server will come back");
+        }
+
+        Platform.runLater(() -> {
+            CommandStatusResponse response = (CommandStatusResponse) DataHolder.getInstance().getBaseResponse();
+            if (response != null) {
+                AlertUtility.infoAlert(response.getResponse());
+            } else {
+                AlertUtility.errorAlert("idk why clearing the collection isn't done, maybe because there is no wage for that lab8");
+            }
+        });
+    }
+
+    @FXML
+    protected void onExitButtonClick() {
+        stage.close();
+        LoginWindow loginWindow = new LoginWindow(new Stage());
+        loginWindow.show();
+    }
+
+    @FXML
+    protected void onHelpButtonClick() {
+        try {
+            SingleCommandExecutor executor = new SingleCommandExecutor(CommandDescriptionHolder.getInstance().getCommands(), System.in, CommandMode.GUIMode);
+            executor.executeCommand("help");
+        } catch (CommandsNotLoadedException e) {
+            AlertUtility.errorAlert("Can't load commands from server. Please wait until the server will come back");
+        }
+
+        Platform.runLater(() -> {
+            CommandStatusResponse response = (CommandStatusResponse) DataHolder.getInstance().getBaseResponse();
+            if (response != null) {
+                AlertUtility.infoAlert(response.getResponse());
+            } else {
+                AlertUtility.errorAlert("idk why clearing the collection isn't done, maybe because there is no wage for that lab8");
+            }
+        });
+    }
     @FXML
     protected void onBrowseButtonClick() {
         File selectedFile = fileChooser.showOpenDialog(executeScriptButton.getScene().getWindow());

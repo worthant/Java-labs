@@ -22,6 +22,8 @@ public class ShowRequestSender {
             response = (ShowResponse) new RequestSender().sendRequest(rq, connection);
         } catch (PortUnreachableException e) {
             logger.warn("Server is unavailable. Please, wait until server will come back.");
+        } catch (ClassCastException e) {
+            System.err.println(e.getMessage());
         } catch (ServerNotAvailableException e) {
             logger.error("Your session was expired. Please, wait until server will come back.");
             logger.warn("The application will be terminated.");

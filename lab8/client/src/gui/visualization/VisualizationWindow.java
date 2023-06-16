@@ -3,11 +3,13 @@ package gui.visualization;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import models.City;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
 import java.util.TreeSet;
 
 public class VisualizationWindow {
@@ -24,7 +26,7 @@ public class VisualizationWindow {
 
             controller = loader.getController();
 
-            this.stage.setScene(new Scene(root, 984, 1012));
+            this.stage.setScene(new Scene(root, 1020, 1012));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -32,6 +34,10 @@ public class VisualizationWindow {
 
     public void loadCollection(TreeSet<City> cities) {
         controller.setCities(cities);
+    }
+
+    public void loadColorMap(Map<String, Color> colorMap, Map<Long, String> ownershipMap) {
+        controller.loadColorMap(colorMap, ownershipMap);
     }
 
     public void show() {

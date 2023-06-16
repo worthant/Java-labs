@@ -83,7 +83,6 @@ public class MusicWindow {
             }
         });
 
-        // Create layout
         VBox root = new VBox(10, songLabel, playButton, nextButton, prevButton, shuffleButton, volumeSlider);
         root.setAlignment(Pos.CENTER);
 

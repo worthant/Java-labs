@@ -10,25 +10,32 @@ import serverLogic.ServerConnection;
 
 import java.io.IOException;
 import java.net.PortUnreachableException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class CommandRequestSender {
     private static final Logger logger = LogManager.getLogger("io.github.worthant.lab6");
 
-    public CommandStatusResponse sendCommand(String name, char[] passwd, CommandDescription command, String[] args, ServerConnection connection) {
-        CommandStatusResponse response = null;
-        try {
-            var rq = new CommandClientRequest(name, passwd, command, args);
-            logger.info("Sending command request...");
-            response = (CommandStatusResponse) new RequestSender().sendRequest(rq, connection);
-        } catch (PortUnreachableException e) {
-            logger.warn("Server is unavailable. Please, wait until server will come back.");
-        } catch (ServerNotAvailableException e) {
-            logger.error("Your session was expired. Please, wait until server will come back.");
-            logger.warn("The application will be terminated.");
-            System.exit(0);
-        } catch (IOException e) {
-            logger.error("Something went wrong during I/O operations", e);
-        }
-        return response;
+    public Future<CommandStatusResponse> sendCommand(String name, char[] passwd, CommandDescription command, String[] args, ServerConnection connection) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        return executor.submit(() -> {
+            CommandStatusResponse response = null;
+            try {
+                var rq = new CommandClientRequest(name, passwd, command, args);
+                logger.info("Sending command request...");
+                response = (CommandStatusResponse) new RequestSender().sendRequest(rq, connection);
+            } catch (PortUnreachableException e) {
+                logger.warn("Server is unavailable. Please, wait until server will come back.");
+            } catch (ServerNotAvailableException e) {
+                logger.error("Your session was expired. Please, wait until server will come back.");
+                logger.warn("The application will be terminated.");
+                System.exit(0);
+            } catch (IOException e) {
+                logger.error("Something went wrong during I/O operations", e);
+            }
+            return response;
+        });
     }
 }

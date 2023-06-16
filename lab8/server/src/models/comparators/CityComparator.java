@@ -2,13 +2,14 @@ package models.comparators;
 
 import models.City;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
  * This class provides a comparator for the City class that compares two cities
  * based on their natural order using the compareTo method of the City class.
  */
-public class CityComparator implements Comparator<City> {
+public class CityComparator implements Comparator<City>, Serializable {
 
     /**
      * Compares two City objects based on their natural order using the compareTo method.

@@ -1,11 +1,11 @@
 package client;
 
 import models.City;
+import responses.BaseResponse;
 
 import java.util.TreeSet;
 
 public class DataHolder {
-    private static DataHolder instance;
     private TreeSet<City> collection;
 
     private String name;
@@ -18,13 +18,42 @@ public class DataHolder {
     private String government;
     private String standards;
     private String governor;
+    private City city;
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    public BaseResponse getBaseResponse() {
+        return response;
+    }
+
+    public void setBaseResponse(BaseResponse response) {
+        this.response = response;
+    }
+
+    private BaseResponse response;
+
     private DataHolder() {}
 
+    public void setCityObject(City city) {
+        this.city = city;
+    }
+
+    public City getCityObject() {
+        return city;
+    }
+
+    private static class Holder {
+        private static final DataHolder INSTANCE = new DataHolder();
+    }
+
     public static DataHolder getInstance() {
-        if (instance == null) {
-            instance = new DataHolder();
-        }
-        return instance;
+        return Holder.INSTANCE;
     }
 
     public TreeSet<City> getCollection() {

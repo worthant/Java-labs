@@ -3,6 +3,9 @@ package clientLogic;
 import collectionStorageManager.PostgreSQLManager;
 import exceptions.UserNotAuthenticatedException;
 
+/**
+ * Class for managing clients
+ */
 public class ClientHandler {
     private final String name;
     private final char[] passwd;
@@ -13,6 +16,10 @@ public class ClientHandler {
         this.passwd = passwd;
     }
 
+    /**
+     * Register user in database
+     * @return true, if registered
+     */
     public boolean regUser() {
         PostgreSQLManager manager = new PostgreSQLManager();
         long id = manager.regUser(name, passwd);
@@ -23,6 +30,10 @@ public class ClientHandler {
         return false;
     }
 
+    /**
+     * Authenticate user in database
+     * @return true, if authenticated
+     */
     public boolean authUser() {
         PostgreSQLManager manager = new PostgreSQLManager();
         long id = manager.authUser(name, passwd);

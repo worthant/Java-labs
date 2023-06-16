@@ -26,6 +26,7 @@ public class ShowCommand implements BaseCommand {
     private static final Logger logger = LogManager.getLogger("io.github.worthant.lab6.commands.show");
     private ShowResponse response;
 
+    @Deprecated
     private CommandStatusResponse oldResponse;
 
     @Override
@@ -38,23 +39,23 @@ public class ShowCommand implements BaseCommand {
         return "Shows every element of the collection in toString() interpretation.";
     }
 
+    /**
+     * New execute method, that just passes City collection from server to client
+     * @param args full array of entered line.
+     */
     @Override
     public void execute(String[] args) {
-        PostgreSQLManager manager = new PostgreSQLManager();
         CollectionHandler<TreeSet<City>, City> collectionHandler = CityHandler.getInstance();
-        List<City> cityList = new ArrayList<>(manager.getCollectionFromDatabase());
-        collectionHandler.addMissingCitiesToCollection(cityList);
 
         // Set the response as ShowResponse with the cityTreeSet
         response = ShowResponse.of("Command executed successfully.", collectionHandler.getCollection());
-        logger.info(response.getResponse());
     }
 
 
 
     /**
-     * old method, that executes old via cool pages logic
-     * T am proud of it, hence I don't want to delete it ^-^
+     * old method, that executes old cool pages logic
+     * I am proud of it, hence I don't want to delete it ^-^
      */
     @Deprecated
     public void executeOld(String[] args) {

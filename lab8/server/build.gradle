@@ -20,6 +20,7 @@ repositories {
     mavenCentral()
 }
 
+
 dependencies {
     implementation 'com.github.yangtu222:BeanUtils:1.0.11'
     implementation 'org.modelmapper:modelmapper-module-java8:1.2.2'
@@ -31,6 +32,9 @@ dependencies {
     implementation 'org.apache.commons:commons-csv:1.6'
     implementation project(":shared")
     implementation 'org.postgresql:postgresql:42.2.27'
+    implementation 'org.apache.tomcat:tomcat-jdbc:8.5.89'
+    implementation 'c3p0:c3p0:0.9.0.2'
+
 }
 
 test {

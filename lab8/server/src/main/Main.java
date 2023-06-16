@@ -67,6 +67,8 @@ public class Main {
         // Create thread pools for processing requests and sending responses
         ExecutorService requestProcessingThreadPool = MultithreadingManager.getRequestThreadPool();
 
+
+
         // connection
         logger.info("Creating a connection...");
         ServerConnection connection = new DatagramServerConnectionFactory().initializeServer(PORT);

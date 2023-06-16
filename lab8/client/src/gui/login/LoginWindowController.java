@@ -1,6 +1,7 @@
 package gui.login;
 
 import client.Client;
+import gui.AlertUtility;
 import gui.UTF8Control;
 import gui.collections.CollectionsWindow;
 import javafx.fxml.FXML;
@@ -18,7 +19,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class LoginWindowController {
-
     private ResourceBundle currentBundle;
 
     @FXML
@@ -61,6 +61,9 @@ public class LoginWindowController {
         updateUI();
     }
 
+    /**
+     * Update LoginWindow UI
+     */
     private void updateUI() {
         accountLabel.setText(currentBundle.getString("accountLabel"));
         welcomeLabel.setText(currentBundle.getString("welcomeLabel"));
@@ -88,22 +91,18 @@ public class LoginWindowController {
             AuthResponse response = rqSender.sendAuthData(username, password, ServerConnectionHandler.getCurrentConnection());
 
             if (response.isAuth()) {
-                // If authentication is successful, close the login window and open the collections window
                 Client.getInstance(username, password);
                 Stage stage = (Stage) signInButton.getScene().getWindow();
                 stage.close();
 
-                CollectionsWindow collectionsWindow = new CollectionsWindow();
+
+                CollectionsWindow collectionsWindow = new CollectionsWindow(currentLocaleIndex);
                 collectionsWindow.show();
             } else {
-                // If authentication fails, show an error message
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeaderText(null);
-                alert.setContentText("There is no user with this name, or password is incorrect");
-                alert.showAndWait();
+                AlertUtility.errorAlert("There is no user with this name, or password is incorrect");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            //errorAlert("Server is dead :(");
         }
     }
 
@@ -117,19 +116,10 @@ public class LoginWindowController {
             RegResponse response = rqSender.sendRegData(username, password, ServerConnectionHandler.getCurrentConnection());
 
             if (response.isReg()) {
-                // If authentication is successful, close the login window and open the collections window
                 Client.getInstance(username, password);
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText(null);
-                alert.setContentText("User successfully registered");
-                alert.showAndWait();
+                AlertUtility.infoAlert("User successfully registered");
             } else {
-                // If authentication fails, show an error message
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeaderText(null);
-                alert.setContentText("There is no user with this name, or password is incorrect");
-                alert.showAndWait();
+                AlertUtility.errorAlert("There is no user with this name, or password is incorrect");
             }
         } catch (Exception e) {
             e.printStackTrace();

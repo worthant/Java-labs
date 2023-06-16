@@ -11,20 +11,31 @@ import java.net.URL;
 public class CollectionsWindow {
 
     private Stage stage;
-    private Scene scene;
+    private CollectionsWindowController controller;
+    private int localeIndex;
 
-    public CollectionsWindow() {
+    public CollectionsWindow(int localeIndex) {
+        this.localeIndex = localeIndex;
         try {
             stage = new Stage();
             URL fxmlLocation = getClass().getResource("/collections/collectionsWindow.fxml");
             FXMLLoader loader = new FXMLLoader(fxmlLocation);
             Parent root = loader.load();
 
-            scene = new Scene(root, 920, 600);
+            controller = loader.getController();
+            setup();
+
+            Scene scene = new Scene(root, 1005, 578);
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setup() {
+        stage.setResizable(false);
+        controller.setLocale(localeIndex);
+        controller.setStage(stage);
     }
 
     public void show() {

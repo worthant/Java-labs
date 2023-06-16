@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My cities</title>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=4498e77b-8882-4c3b-b865-af0fdbe261a5&lang=en_US" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+        var citiesToAdd = [];
+        var myMap = null;
+        function addCity(lat, lng, color, size, name) {
+            var city = {
+                lat: lat,
+                lng: lng,
+                color: color,
+                size: size,
+                name: name
+            };
+            if (myMap) {
+                addCityToMap(city);
+            } else {
+                citiesToAdd.push(city);
+            }
+        }
+
+        var myCities = {};
+
+        function addCityToMap(city) {
+            var placemark = new ymaps.Placemark([55.76, 37.64], {
+                balloonContent: '<strong>' + city.name + '</strong>'
+            }, {
+                preset: 'islands#circleDotIcon',
+                iconColor: city.color
+            });
+
+            myMap.geoObjects.add(placemark);
+
+            // Add the city data and the placemark to our dictionary of cities
+            myCities[city.name] = {
+                data: city,
+                placemark: placemark
+            };
+        }
+
+        function init(){
+            myMap = new ymaps.Map("map", {
+                center: [55.76, 37.64], // Moscow
+                zoom: 7
+            });
+
+            // Add any cities that were added before the map was initialized
+            for (var i = 0; i < citiesToAdd.length; i++) {
+                addCityToMap(citiesToAdd[i]);
+            }
+            citiesToAdd = [];
+        }
+
+        function searchCity(query) {
+            var city = myCities[query];
+            if (city) {
+                // If the city exists, pan to it on the map
+                myMap.panTo([city.data.lat, city.data.lng]);
+            } else {
+                // If the city doesn't exist, fall back to the ymaps.suggest() method
+                ymaps.suggest(query).then(function(suggestions) {
+                    // This will return an array of suggested locations from the Yandex Maps database.
+                    // You can handle these suggestions however you like.
+                    console.log(suggestions);
+                });
+            }
+        }
+
+        ymaps.ready(init);
+    </script>
+</head>
+<body>
+<div id="map" style="width: 100%; height: 1500px"></div>
+</body>
+</html>

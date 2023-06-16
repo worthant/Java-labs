@@ -8,4 +8,4 @@
 | [Laboratory work №5](./lab5) | 100%  | `6/10`     | `8/10`     | [guide](./docs/guides/lab5_guide1.pdf) | [javadoc](https://worthant.github.io/Java_labs/) |
 | [Laboratory work №6](./lab6) | 100%  | `8/10`     | `5/10`     |                                        |                                                  |
 | [Laboratory work №7](./lab7) | 99%   | `10/10`    | `6/10`     |                                        |                                                  |
-| [Laboratory work №8](./lab8) |       |            |            |                                        |                                                  |
+| [Laboratory work №8](./lab8) | 95%   | `8/10`     | `7/10`     |                                        |                                                  |

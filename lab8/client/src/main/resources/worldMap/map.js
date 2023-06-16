@@ -17,7 +17,7 @@ function addCity(name, latitude, longitude, owner, iconName) {
         balloonContent: 'Owner: ' + owner
     }, {
         iconLayout: 'default#image',
-        iconImageHref: '../icons/svg/' + iconName,  // The path to the icon depends on how your project is structured
+        iconImageHref: '../icons/svg/' + iconName, 
         iconImageSize: [15, 15],
         iconImageOffset: [-24, -24],
         iconContentLayout: MyIconContentLayout

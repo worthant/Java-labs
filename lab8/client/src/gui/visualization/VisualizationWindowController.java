@@ -1,89 +1,147 @@
 package gui.visualization;
 
-import client.Client;
-import commandLogic.CommandDescription;
-import commandLogic.commandReceiverLogic.callers.ExternalBaseReceiverCaller;
+import gui.AlertUtility;
+import gui.create.CityManagementWindow;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
+import javafx.util.Duration;
 import models.City;
-import requestLogic.requestSenders.GetOwnershipRequestSender;
-import responses.GetOwnershipResponse;
-import serverLogic.ServerConnectionHandler;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.TreeSet;
 
 public class VisualizationWindowController {
     @FXML
     private Canvas canvas;
-
+    private Map<String, Color> colorMap = new HashMap<>();
     private Map<Long, String> ownershipMap; // Map of (city_id, client_name)
-    private Map<String, Paint> colorMap = new HashMap<>();
     private TreeSet<City> cities;
 
     public VisualizationWindowController(TreeSet<City> cities) {
         this.cities = cities;
     }
 
+    @FXML
     public void initialize() {
         canvas.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> cityClicked(event.getX(), event.getY()));
-        loadOwnershipMap();
-        drawCities();
+        drawMesh();
     }
+
+    private void drawMesh() {
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.setStroke(Color.web("#797979"));
+        gc.setLineWidth(1);
+        double cellSize = 20.0;
+        double width = canvas.getWidth(), height = canvas.getHeight();
+
+        for (double x = cellSize; x < width; x += cellSize) {
+            gc.strokeLine(x, 0, x, height);
+        }
+        for (double y = cellSize; y < height; y += cellSize) {
+            gc.strokeLine(0, height - y, width, height - y);
+        }
+    }
+
 
     public void setCities(TreeSet<City> cities) {
         this.cities = cities;
     }
 
-    private void loadOwnershipMap() {
-        Client client = Client.getInstance();
-        GetOwnershipRequestSender rqSender = new GetOwnershipRequestSender();
-        GetOwnershipResponse response = rqSender.sendCommand(client.getName(), client.getPasswd(),
-                new CommandDescription("get_ownership", new ExternalBaseReceiverCaller()), new String[]{"get_ownership"}, ServerConnectionHandler.getCurrentConnection());
-        this.ownershipMap = response.getOwnershipMap();
 
-        for (String user : new HashSet<>(ownershipMap.values())) {
-            if (user.equals(Client.getInstance().getName())) {
-                colorMap.put(user, Color.GREEN);
-            } else {
-                Color randomColor = generateRandomColor();
-                colorMap.put(user, randomColor);
+    private void cityClicked(double x, double y) {
+        City clickedCity = null;
+        for (City city : cities) {
+            double canvasX = (double) city.getCoordinates().getX() / 1000 * canvas.getWidth();
+            double canvasY = (1 - city.getCoordinates().getY() / 1000) * canvas.getHeight();
+            double size = Math.log(city.getPopulation()) * 2;
+            double distance = Math.sqrt(Math.pow(x - canvasX, 2) + Math.pow(y - canvasY, 2));
+
+            if (distance <= size / 2) {
+                clickedCity = city;
+                break;
             }
+        }
+
+        if (clickedCity != null) {
+            CityManagementWindow cityManagementWindow = new CityManagementWindow("Editing City");
+            cityManagementWindow.show();
+            cityManagementWindow.setCity(clickedCity);
+        } else {
+            AlertUtility.infoAlert("Please, select any city to edit it!");
         }
     }
 
-    private Color generateRandomColor() {
-        Random random = new Random();
-        float r = random.nextFloat();
-        float g = random.nextFloat();
-        float b = random.nextFloat();
-        return new Color(r, g, b, 1.0f);
-    }
-
-    private void cityClicked(double x, double y) {
-        // TODO: implement to show info of the clicked city in infoArea
-    }
 
     private void drawCities() {
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         for (City city : cities) {
-            String owner = ownershipMap.get(city.getId());
-            Paint color = colorMap.getOrDefault(owner, Color.BLACK);
-            double size = Math.log(city.getPopulation()); // or some other function to convert population to size
+            Color color = colorMap.getOrDefault(ownershipMap.get(city.getId()), Color.BLACK);
+            double size = Math.log(city.getPopulation()) * 2;
 
-            // Convert coordinates to pixels. This depends on the range of your coordinates and the size of your Canvas.
-            // The code below assumes your x and y are between -1000 and 1000.
-            double canvasX = (double) (city.getCoordinates().getX() + 1000) / 2000 * canvas.getWidth();
-            double canvasY = (city.getCoordinates().getY() + 1000) / 2000 * canvas.getHeight();
+            double canvasX = (double) city.getCoordinates().getX() / 1000 * canvas.getWidth();
+            double canvasY = (1 - city.getCoordinates().getY() / 1000) * canvas.getHeight();
 
-            gc.setFill(color);
-            gc.fillOval(canvasX - size / 2, canvasY - size / 2, size, size);
+            gc.setStroke(color);
+            gc.setLineWidth(2); // Adjust this to make your circle's border thicker or thinner
+            gc.strokeOval(canvasX - size / 2, canvasY - size / 2, size, size);
+
+            // Draw the icon inside the circle. This assumes that you have a method getCityIcon() that returns an Image object representing the city icon.
+            // You'll need to adjust this code to fit your actual method for getting the city icon.
+            Image cityIcon = getCityIcon();
+            int iconSize = (int) Math.round(size - 4); // Subtracting 4 to give some padding around the icon.
+            if (iconSize <= 0) {
+                iconSize = 1;
+            }
+
+            ImageView imageView = new ImageView(cityIcon);
+            imageView.setPreserveRatio(true);
+            imageView.setFitWidth(iconSize);
+            imageView.setFitHeight(iconSize);
+            SnapshotParameters sp = new SnapshotParameters();
+            sp.setFill(Color.TRANSPARENT);
+            Image scaledCityIcon = imageView.snapshot(sp, null);
+
+            PixelReader pr = scaledCityIcon.getPixelReader();
+            WritableImage coloredIcon = new WritableImage((int) iconSize, (int) iconSize);
+            PixelWriter pw = coloredIcon.getPixelWriter();
+            for (int y = 0; y < scaledCityIcon.getHeight(); y++) {
+                for (int x = 0; x < scaledCityIcon.getWidth(); x++) {
+                    Color pixelColor = pr.getColor(x, y);
+                    if (pixelColor.getOpacity() > 0) {
+                        pw.setColor(x, y, color);
+                    } else {
+                        pw.setColor(x, y, Color.TRANSPARENT);
+                    }
+                }
+            }
+            gc.drawImage(coloredIcon, canvasX - iconSize / 2, canvasY - iconSize / 2);
         }
+    }
+
+    public void loadColorMap(Map<String, Color> colorMap, Map<Long, String> ownershipMap) {
+        this.colorMap = colorMap;
+        this.ownershipMap = ownershipMap;
+        startTimer();
+    }
+
+    private void startTimer() {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(4), event -> drawCities()));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+    }
+
+    private Image getCityIcon() {
+        return new Image(Objects.requireNonNull(getClass().getResource("/icons/thick_building.png")).toExternalForm());
     }
 }
 

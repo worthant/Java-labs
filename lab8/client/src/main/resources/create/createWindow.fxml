@@ -74,7 +74,7 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <Button fx:id="createButton" layoutX="19.0" layoutY="417.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Save" onAction="#onCreateButtonClick" />
+      <Button fx:id="createButton" layoutX="19.0" layoutY="417.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Save" onAction="#onSaveButtonClick" />
       <Button fx:id="cancelButton" layoutX="183.0" layoutY="417.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Cancel" onAction="#onCancelButtonClick" />
    </children>
 </AnchorPane>

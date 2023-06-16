@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import models.City;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,6 +32,10 @@ public class CityManagementWindow {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setCity(City city) {
+        controller.setEditingCity(city);
     }
 
     public void show() {

@@ -1,9 +1,6 @@
 package gui.create;
 
-import client.Client;
 import client.DataHolder;
-import commandLogic.CommandDescription;
-import commandLogic.commandReceiverLogic.callers.ExternalBaseReceiverCaller;
 import commandManager.CommandDescriptionHolder;
 import commandManager.CommandMode;
 import commandManager.SingleCommandExecutor;
@@ -16,10 +13,7 @@ import javafx.stage.Stage;
 import main.utilities.Utilities;
 import models.*;
 import models.validators.*;
-import requestLogic.requestSenders.GetOwnershipRequestSender;
 import responses.CommandStatusResponse;
-import responses.GetOwnershipResponse;
-import serverLogic.ServerConnectionHandler;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -61,6 +55,7 @@ public class CityManagementWindowController {
     private Map<String, Boolean> validationState;
     private String actionText;
     private Map<Long, String> ownershipMap; // Map of (city_id, client_name)
+    private City selectedCity;
 
     @FXML
     public void initialize() {
@@ -68,22 +63,39 @@ public class CityManagementWindowController {
         Arrays.stream(Climate.values()).forEach(value -> climateChoiceBox.getItems().add(value.name()));
         Arrays.stream(Government.values()).forEach(value -> governmentChoiceBox.getItems().add(value.name()));
         Arrays.stream(StandardOfLiving.values()).forEach(value -> standardsChoiceBox.getItems().add(value.name()));
-        loadOwnershipMap();
-        checkOwnership();
         validationState = new HashMap<>();
         validation();
     }
 
-    private void loadOwnershipMap() {
-        Client client = Client.getInstance();
-        GetOwnershipRequestSender rqSender = new GetOwnershipRequestSender();
-        GetOwnershipResponse response = rqSender.sendCommand(client.getName(), client.getPasswd(),
-                new CommandDescription("get_ownership", new ExternalBaseReceiverCaller()), new String[]{"get_ownership"}, ServerConnectionHandler.getCurrentConnection());
-        this.ownershipMap = response.getOwnershipMap();
+    public void populateFields(City city) {
+        if (city != null) {
+            nameField.setText(city.getName());
+
+            // Convert numeric types to String before setting the text
+            coordXField.setText(String.valueOf(city.getCoordinates().getX()));
+            coordYField.setText(String.valueOf(city.getCoordinates().getY()));
+            areaField.setText(String.valueOf(city.getArea()));
+            populationField.setText(String.valueOf(city.getPopulation()));
+
+            // Check if metersAboveSeaLevel is not null before converting it to String
+            if (city.getMetersAboveSeaLevel() != null) {
+                metersAboveSeaLevelField.setText(String.valueOf(city.getMetersAboveSeaLevel()));
+            }
+
+            // Populate choice boxes
+            climateChoiceBox.setValue(city.getClimate().toString());
+            governmentChoiceBox.setValue(city.getGovernment().toString());
+            standardsChoiceBox.setValue(city.getStandardOfLiving().toString());
+
+            // Check if governor is not null before getting its name
+            if (city.getGovernor() != null) {
+                governorField.setText(city.getGovernor().getName());
+            }
+        }
     }
 
-    private void checkOwnership() {
-
+    private void updateUI() {
+        actionLabel.setText(actionText);
     }
 
     /**
@@ -92,16 +104,23 @@ public class CityManagementWindowController {
      * If the fields are not valid, it shows an error message.
      */
     @FXML
-    protected void onCreateButtonClick() {
+    protected void onSaveButtonClick() {
         if (validationState.values().stream().allMatch(valid -> valid) &&
                 climateChoiceBox.getValue() != null &&
                 governmentChoiceBox.getValue() != null &&
                 standardsChoiceBox.getValue() != null) {
 
-            long id = Utilities.generateId();
+            long id;
+            java.util.Date creationDate;
+            if (actionText.split(" ")[0].equals("Editing")) {
+                id = selectedCity.getId();
+                creationDate = selectedCity.getCreationDate();
+            } else {
+                id = Utilities.generateId();
+                creationDate = java.sql.Date.valueOf(LocalDate.now());
+            }
             String name = nameField.getText();
             Coordinates coordinates = new Coordinates(Integer.parseInt(coordXField.getText()), Double.parseDouble(coordYField.getText()));
-            java.util.Date creationDate = java.sql.Date.valueOf(LocalDate.now());
             Integer area = Integer.valueOf(areaField.getText());
             int population = Integer.parseInt(populationField.getText());
             Double metersAboveSeaLevel = Double.valueOf(metersAboveSeaLevelField.getText());
@@ -117,14 +136,27 @@ public class CityManagementWindowController {
 
             try {
                 SingleCommandExecutor executor = new SingleCommandExecutor(CommandDescriptionHolder.getInstance().getCommands(), System.in, CommandMode.GUIMode);
-                executor.executeCommand("add");
+                if (actionText.split(" ")[0].equals("Editing")) {
+                    executor.executeCommand("remove_by_id " + selectedCity.getId());
+                } else {
+                    executor.executeCommand("add");
+                }
             } catch (CommandsNotLoadedException e) {
                 AlertUtility.errorAlert("Can't load commands from server. Please wait until the server will come back");
             }
 
             Platform.runLater(() -> {
                 CommandStatusResponse response = (CommandStatusResponse) DataHolder.getInstance().getBaseResponse();
-                if (response != null) {
+                if (response != null && (response.getResponse().contains("you don't have permission") || response.getResponse().contains("Element added"))) {
+                    AlertUtility.infoAlert(response.getResponse());
+                } else if (response != null && response.getResponse().contains("Element removed")) {
+                    try {
+                        SingleCommandExecutor executor = new SingleCommandExecutor(CommandDescriptionHolder.getInstance().getCommands(), System.in, CommandMode.GUIMode);
+                        executor.executeCommand("add");
+                    } catch (CommandsNotLoadedException e) {
+                        AlertUtility.errorAlert("Can't load commands from server. Please wait until the server will come back");
+                    }
+                } else if (response != null) {
                     AlertUtility.infoAlert(response.getResponse());
                 } else {
                     AlertUtility.errorAlert("idk why but you're object is not added, or server is just taking a nap");
@@ -253,5 +285,11 @@ public class CityManagementWindowController {
 
     public void setActionText(String actionText) {
         this.actionText = actionText;
+        updateUI();
+    }
+
+    public void setEditingCity(City city) {
+        this.selectedCity = city;
+        populateFields(selectedCity);
     }
 }

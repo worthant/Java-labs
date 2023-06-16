@@ -27,7 +27,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -191,7 +190,10 @@ public class CollectionsWindowController {
                 new FileChooser.ExtensionFilter("All Files", "*.*"));
 
         // Set the initial directory
-        fileChooser.setInitialDirectory(new File("C:\\Users\\Admin\\Itmo\\Java_labs\\lab8\\client\\src\\main\\resources\\scripts"));
+        // for laptop:
+        // fileChooser.setInitialDirectory(new File("C:\\Users\\Admin\\Itmo\\Java_labs\\lab8\\client\\src\\main\\resources\\scripts"));
+        // for pc:
+        fileChooser.setInitialDirectory(new File("C:\\Users\\Boris\\Itmo\\Java_labs\\lab8\\client\\src\\main\\resources\\scripts"));
 
         // setup ownership logic
         loadOwnershipMap();
@@ -262,6 +264,7 @@ public class CollectionsWindowController {
         ShowResponse response = rqSender.sendCommand(client.getName(), client.getPasswd(),
                 new CommandDescription("show", new ExternalBaseReceiverCaller()), new String[]{"show"}, ServerConnectionHandler.getCurrentConnection());
         setCollection(response.getCityTreeSet());
+        loadOwnershipMap();
     }
 
     /**
@@ -339,20 +342,49 @@ public class CollectionsWindowController {
 
     @FXML
     protected void onEditButtonClick() {
-        CityManagementWindow cityManagementWindow = new CityManagementWindow("Editing City");
-        cityManagementWindow.show();
+        City selectedCity = table.getSelectionModel().getSelectedItem();
+        if (selectedCity != null) {
+            CityManagementWindow cityManagementWindow = new CityManagementWindow("Editing City");
+            cityManagementWindow.show();
+            cityManagementWindow.setCity(selectedCity);
+        } else {
+            AlertUtility.infoAlert("Please, select any city to edit it!)");
+        }
     }
 
     @FXML
     protected void onDeleteButtonClick() {
+        City selectedCity = table.getSelectionModel().getSelectedItem();
+
+        if (selectedCity != null) {
+            table.getItems().remove(selectedCity);
+            try {
+                SingleCommandExecutor executor = new SingleCommandExecutor(CommandDescriptionHolder.getInstance().getCommands(), System.in, CommandMode.GUIMode);
+                executor.executeCommand("remove_by_id " + selectedCity.getId());
+            } catch (CommandsNotLoadedException e) {
+                AlertUtility.errorAlert("Can't load commands from server. Please wait until the server will come back");
+            }
+
+            Platform.runLater(() -> {
+                CommandStatusResponse response = (CommandStatusResponse) DataHolder.getInstance().getBaseResponse();
+                if (response != null) {
+                    AlertUtility.infoAlert(response.getResponse());
+                } else {
+                    AlertUtility.errorAlert("something wrong with execute_script command. It's suddenly silent -_-");
+                }
+            });
+        } else {
+            AlertUtility.infoAlert("Please, select any city to delete it!)");
+        }
     }
 
     @FXML
     protected void onVisualizeButtonClick() {
         VisualizationWindow visualizationWindow = new VisualizationWindow(collection);
         visualizationWindow.show();
+        visualizationWindow.loadColorMap(clientColorMap, ownershipMap);
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(15), event -> loadCollectionToVisualizationWindow(visualizationWindow)));
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(4), event -> loadCollectionToVisualizationWindow(visualizationWindow)));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
@@ -448,12 +480,5 @@ public class CollectionsWindowController {
                 AlertUtility.errorAlert("idk why clearing the collection isn't done, maybe because there is no wage for that lab8");
             }
         });
-    }
-
-    private String colorToRgb(Color color) {
-        int red = (int) (color.getRed() * 255);
-        int green = (int) (color.getGreen() * 255);
-        int blue = (int) (color.getBlue() * 255);
-        return "rgb(" + red + ", " + green + ", " + blue + ")";
     }
 }

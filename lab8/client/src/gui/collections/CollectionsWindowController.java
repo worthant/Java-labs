@@ -33,6 +33,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import models.City;
+import models.Climate;
+import models.Government;
+import models.StandardOfLiving;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import requestLogic.requestSenders.GetOwnershipRequestSender;
@@ -44,7 +47,11 @@ import serverLogic.ServerConnectionHandler;
 
 import java.io.File;
 import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CollectionsWindowController {
     private static final Logger logger = LogManager.getLogger("lab8");
@@ -137,6 +144,8 @@ public class CollectionsWindowController {
 
     @FXML
     private ComboBox<String> comboBox;
+    @FXML
+    private TextField filterByText;
 
     @FXML
     public void initialize() {
@@ -211,6 +220,17 @@ public class CollectionsWindowController {
                             (int)(color.getBlue() * 255));
                     setStyle("-fx-border-color: " + rgb + ";");
                 }
+            }
+        });
+
+        // listener for filtering using Stream API
+        filterByText.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && !newValue.isEmpty()) {
+                String selectedValue = comboBox.getSelectionModel().getSelectedItem();
+                filterCities(selectedValue, newValue);
+            } else {
+                // If the TextField is empty, show all cities
+                table.setItems(FXCollections.observableArrayList(collection));
             }
         });
 
@@ -481,4 +501,83 @@ public class CollectionsWindowController {
             }
         });
     }
+
+    private void filterCities(String property, String value) {
+        Stream<City> cityStream = collection.stream();
+        switch (property) {
+            case "id":
+                long id = Long.parseLong(value);
+                cityStream = cityStream.filter(city -> city.getId() == id);
+                break;
+            case "creationDate":
+                DateTimeFormatter formatter;
+                switch (currentBundle.getLocale().toString()) {
+                    case "en_NZ":
+                        formatter = DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy", currentBundle.getLocale()); // for English (NZ) locale
+                        break;
+                    case "hr":
+                        formatter = DateTimeFormatter.ofPattern("EEEE, d. MMMM yyyy.", currentBundle.getLocale()); // for Croatian locale
+                        break;
+                    case "ru":
+                        formatter = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy 'г.'", currentBundle.getLocale()); // for Russian locale
+                        break;
+                    case "cs":
+                        formatter = DateTimeFormatter.ofPattern("EEEE, d. MMMM yyyy", currentBundle.getLocale()); // for Czech locale
+                        break;
+                    default:
+                        formatter = DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy", Locale.US); // default to US locale
+                        break;
+                }
+                LocalDate date = LocalDate.parse(value, formatter);
+                cityStream = cityStream.filter(city -> {
+                    String cityCreationDateString = getDate(city.getCreationDate());
+                    LocalDate cityCreationDate = LocalDate.parse(cityCreationDateString, formatter);
+                    return cityCreationDate.equals(date);
+                });
+                break;
+            case "population":
+                int population = Integer.parseInt(value);
+                cityStream = cityStream.filter(city -> city.getPopulation() == population);
+                break;
+            case "area":
+                int area = Integer.parseInt(value);
+                cityStream = cityStream.filter(city -> city.getArea() == area);
+                break;
+            case "metersAboveSeaLevel":
+                Double metersAboveSeaLevel = Double.parseDouble(value);
+                cityStream = cityStream.filter(city -> city.getMetersAboveSeaLevel().equals(metersAboveSeaLevel));
+                break;
+            case "name":
+                cityStream = cityStream.filter(city -> city.getName().equals(value));
+                break;
+            case "climate":
+                Climate climate = Climate.valueOf(value);
+                cityStream = cityStream.filter(city -> city.getClimate().equals(climate));
+                break;
+            case "government":
+                Government government = Government.valueOf(value);
+                cityStream = cityStream.filter(city -> city.getGovernment().equals(government));
+                break;
+            case "standards":
+                StandardOfLiving standards = StandardOfLiving.valueOf(value);
+                cityStream = cityStream.filter(city -> city.getStandardOfLiving().equals(standards));
+                break;
+            case "governor":
+                cityStream = cityStream.filter(city -> city.getGovernor().getName().equals(value));
+                break;
+            case "coord X":
+                int coordX = Integer.parseInt(value);
+                cityStream = cityStream.filter(city -> city.getCoordinates().getX() == coordX);
+                break;
+            case "coord Y":
+                double coordY = Double.parseDouble(value);
+                cityStream = cityStream.filter(city -> city.getCoordinates().getY() == coordY);
+                break;
+            default:
+                break;
+        }
+        table.setItems(FXCollections.observableArrayList(cityStream.collect(Collectors.toList())));
+    }
+
+
 }

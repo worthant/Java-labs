@@ -2,13 +2,14 @@ package models.comparators;
 
 import models.City;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
  * This class provides a comparator for the City class that compares two cities
  * based on their elevation in meters above sea level.
  */
-public class CityComparatorByMetersAboveSeaLevel implements Comparator<City> {
+public class CityComparatorByMetersAboveSeaLevel implements Comparator<City>, Serializable {
     /**
      * Compares two City objects based on their elevation in meters above sea level.
      * @param o1 the first City object to be compared

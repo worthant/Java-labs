@@ -8,10 +8,13 @@ package models.validators;
  */
 public class CoordinateXValidator implements Validator<Integer> {
     public String getDescr() {
-        return "x <= 499";
+        return "Constraints: 0 <= x <= 1000";
     }
-    @Override
-    public boolean validate(Integer value) {
+    @Deprecated
+    public boolean validateOld(Integer value) {
         return value <= 499;
     }
+
+    @Override
+    public boolean validate(Integer value) {return value >= 0 & value <= 1000;}
 }

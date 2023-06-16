@@ -8,7 +8,7 @@ package models.validators;
  */
 public class AreaValidator implements Validator<Integer> {
     public String getDescr() {
-        return "Should be greater than 0";
+        return "Constraints: should be greater than 0";
     }
     @Override
     public boolean validate(Integer value) {

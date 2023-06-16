@@ -2,18 +2,15 @@ package models.handlers.nonUserMode;
 
 
 import exceptions.BuildObjectException;
-import main.Utilities;
+import main.utilities.Utilities;
 import models.*;
 import models.handlers.ModeManager;
 import models.validators.CityValidator;
 import models.validators.Validator;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

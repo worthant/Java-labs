@@ -1,4 +1,4 @@
-# Java_labs [![CodeFactor](https://www.codefactor.io/repository/github/worthant/java_labs/badge)](https://www.codefactor.io/repository/github/worthant/java_labs)
+# Java-labs [![CodeFactor](https://www.codefactor.io/repository/github/worthant/java-labs/badge)](https://www.codefactor.io/repository/github/worthant/java-labs)
 
 | Laboratory works             | grade | difficulty | time_spend | materials                                                                                                     | javadoc                                          |
 | ---------------------------- | ----- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
